@@ -1,0 +1,62 @@
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import auth from './routes/auth.js';
+import cities from './routes/cities.js';
+import activities from './routes/tours_and_activities.js';
+import connectDB from './config/db.js';
+import user from './routes/user.js';
+
+
+dotenv.config();
+await connectDB();
+
+const app = express();
+const PORT = process.env.PORT;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4000';
+
+
+app.use(cors({ 
+  origin: FRONTEND_URL,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
+app.use(express.json());
+app.use(cookieParser());
+
+app.use("/api/auth", auth);
+app.use("/api/cities", cities);
+app.use("/api/activities", activities);
+app.use("/api/user", user);
+
+app.get("/api/proxy-image", async (req, res) => {
+  const imageUrl = req.query.url;
+  if (!imageUrl) {
+    return res.status(400).json({ error: "URL required" });
+  }
+  try {
+    const response = await fetch(imageUrl);
+    const buffer = await response.arrayBuffer();
+    res.set('Content-Type', response.headers.get('content-type'));
+    res.send(Buffer.from(buffer));
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch image" });
+  }
+});
+
+// app.get("/", async (req, res) => {
+//   await getAllCities(req, res);
+//   const cityData = await getCityData("Berlin");
+//   const cityId = cityData._id;
+//   const activities = await getActivitiesByCityId(cityId);
+//   console.log("Activities for Berlin from controller:", activities);
+//   //const activities = await fetchActivities(cityData.lat, cityData.lon);
+//   //console.log("Sample activities for Berlin:", activities);
+
+// });
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}/`);
+});

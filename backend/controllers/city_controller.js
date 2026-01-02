@@ -1,0 +1,94 @@
+import City from "../models/city.js";
+import { fetchCityGeoapify } from "../services/geoapify.js";
+import { fetchCityImage } from "../services/unsplash.js";
+
+export async function getAllCities(req, res) {
+  const cities = await City.find();
+  res.json(cities);
+  console.log("Top cities:", cities);
+}
+
+export async function getCityLonLat(cityName) {
+  const city = await City.findOne({ city: cityName });
+
+  if (!city) {
+    throw new Error("City not found");
+  }
+
+  console.log(`City ${cityName} found: lat=${city.lat}, lon=${city.lon}`);
+
+  return { lat: city.lat, lon: city.lon };
+}
+
+export async function saveCity(cityData) {
+  const existing = await City.findOne({ city: cityData.city });
+
+  if (existing) {
+    console.log(`City ${cityData.city} already exists in the database.`);
+    return existing;
+  }
+
+  const city = new City(cityData);
+  await city.save();
+
+  console.log(`City ${cityData.city} saved to the database.`);
+  return city;
+}
+
+export async function getCityData(cityName) {
+  
+  const city = await City.findOne({ city: new RegExp(`^${cityName}$`, 'i') });
+
+  if (!city) {
+    console.log(`City ${cityName} not found in database. Fetching data...`);
+
+    try {
+      console.log(`Fetching Geoapify data for ${cityName}...`);
+      const geoapify = await fetchCityGeoapify(cityName);
+      console.log(`Geoapify success for ${cityName}:`, geoapify);
+      
+      console.log(`Fetching Unsplash data for ${cityName}...`);
+      const unsplash = await fetchCityImage(cityName);
+      console.log(`Unsplash success for ${cityName}:`, unsplash);
+
+      // check again before saving in case another request saved it simultaneously
+      const existingCity = await City.findOne({ 
+        city: new RegExp(`^${geoapify.city}$`, 'i') 
+      });
+      
+      if (existingCity) {
+        console.log(`City ${geoapify.city} was already saved by another request.`);
+        return existingCity;
+      }
+
+      const cityData = {
+        city: geoapify.city,
+        country: geoapify.country,
+        lat: geoapify.lat,
+        lon: geoapify.lon,
+        popularity: geoapify.popularity,
+        state: geoapify.state,
+        timezone: geoapify.timezone,
+        formatted: geoapify.formatted,
+        country_code: geoapify.country_code,
+        imageUrl: unsplash.imageUrl,
+        imageAuthor: unsplash.imageAuthor,
+        imageAuthorLink: unsplash.imageAuthorLink,
+        imageDescription: unsplash.imageDescription,
+        imageAltDescription: unsplash.imageAltDescription,
+      };
+
+      const newCity = new City(cityData);
+      await newCity.save();
+      console.log(`City ${geoapify.city} saved successfully`);
+      return newCity;
+    } catch (error) {
+      console.error(`Error fetching city ${cityName}:`, error.message);
+      console.error(`Full error:`, error);
+      throw new Error(`Failed to fetch city data: ${error.message}`);
+    }
+  } else {
+    console.log(`City ${cityName} found in database.`);
+    return city;
+  }
+}
