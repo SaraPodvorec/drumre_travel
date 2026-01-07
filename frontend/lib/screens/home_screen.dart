@@ -260,6 +260,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     userProvider.addFavorite(city.id);
                                   }
                                 },
+                                onBookmarkToggle: () {
+                                  final isWishlisted = userProvider
+                                      .wishlistedCities
+                                      .contains(city.id);
+                                  if (isWishlisted) {
+                                    userProvider.removeWishlist(city.id);
+                                  } else {
+                                    userProvider.addWishlist(city.id);
+                                  }
+                                },
                                 onDelete: () {
                                   userProvider.deleteCity(city.id);
                                   ScaffoldMessenger.of(context).showSnackBar(

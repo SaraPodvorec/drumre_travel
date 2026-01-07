@@ -123,6 +123,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               const SizedBox(height: 32),
               Text(
+                'Wishlist Cities (${userProvider.wishlistedCities.length})',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (userProvider.wishlistedCities.isEmpty)
+                Text(
+                  'No wishlist cities yet',
+                  style: TextStyle(color: Colors.grey[600]),
+                )
+              else
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    mainAxisExtent: 240,
+                  ),
+                  itemCount: userProvider.wishlistedCities.length,
+                  itemBuilder: (context, index) {
+                    final cityId = userProvider.wishlistedCities[index];
+                    final cityIndex =
+                        cityProvider.cities.indexWhere((c) => c.id == cityId);
+
+                    if (cityIndex == -1) return const SizedBox.shrink();
+
+                    final city = cityProvider.cities[cityIndex];
+
+                    return CityCard(
+                      city: city,
+                      imageHeight: 100,
+                      cardHeight: 240,
+                      showFavoriteButton: false,
+                      showBookmarkButton: true,
+                      onBookmarkToggle: () {
+                        userProvider.removeWishlist(city.id);
+                      },
+                      onViewActivities: () {
+                        context.read<CityProvider>().setSelectedCity(city);
+                        Navigator.pushNamed(context, '/city-activities');
+                      },
+                    );
+                  },
+                ),
+              const SizedBox(height: 32),
+              Text(
                 'Hidden Cities (${userProvider.deletedCities.length})',
                 style: const TextStyle(
                   fontSize: 18,

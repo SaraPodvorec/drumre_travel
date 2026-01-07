@@ -2,6 +2,8 @@ import express from 'express';
 import { authenticate } from '../middleware/auth_middleware.js';
 import {
   getUserData,
+  addWishlistCity,
+  removeWishlistCity,
   addFavoriteCity,
   removeFavoriteCity,
   deleteCity,
@@ -11,6 +13,8 @@ import {
 const router = express.Router();
 
 router.get('/data', authenticate, getUserData);
+router.post('/wishlist/add', authenticate, addWishlistCity);
+router.delete('/wishlist/remove/:cityId', authenticate, removeWishlistCity);
 router.post('/favorites/add', authenticate, addFavoriteCity);
 router.delete('/favorites/remove/:cityId', authenticate, removeFavoriteCity);
 router.post('/deleted-cities/add', authenticate, deleteCity);

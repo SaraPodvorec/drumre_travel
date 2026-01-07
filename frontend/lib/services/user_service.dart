@@ -53,6 +53,36 @@ class UserService {
       rethrow;
     }
   }
+  static Future<void> addWishlistCity(String cityId) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$baseUrl/user/wishlist/add'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'cityId': cityId}),
+      );
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Error adding to wishlist: $e');
+      rethrow;
+    }
+  }
+  static Future<void> removeWishlistCity(String cityId) async {
+    try {
+      final response = await _client.delete(
+        Uri.parse('$baseUrl/user/wishlist/remove/$cityId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   static Future<void> deleteCity(String cityId) async {
     try {

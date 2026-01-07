@@ -6,10 +6,12 @@ import 'package:provider/provider.dart';
 class CityCard extends StatelessWidget {
   final City city;
   final VoidCallback? onFavoriteToggle;
+  final VoidCallback? onBookmarkToggle;
   final VoidCallback? onDelete;
   final VoidCallback? onViewActivities;
   final bool showDeleteButton;
   final bool showFavoriteButton;
+  final bool showBookmarkButton;
   final double imageHeight;
   final double cardHeight;
 
@@ -17,10 +19,12 @@ class CityCard extends StatelessWidget {
     super.key,
     required this.city,
     this.onFavoriteToggle,
+    this.onBookmarkToggle,
     this.onDelete,
     this.onViewActivities,
     this.showDeleteButton = true,
     this.showFavoriteButton = true,
+    this.showBookmarkButton = true,
     this.imageHeight = 100,
     this.cardHeight = 240,
   });
@@ -29,6 +33,7 @@ class CityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
     final isFavorite = userProvider.favoriteCities.contains(city.id);
+    final isWishlisted = userProvider.wishlistedCities.contains(city.id);
 
     return Card(
       child: Column(
@@ -73,6 +78,14 @@ class CityCard extends StatelessWidget {
                               color: isFavorite ? Colors.red : Colors.grey,
                             ),
                             onPressed: onFavoriteToggle,
+                          ),
+                        if (showBookmarkButton)
+                          IconButton(
+                            icon: Icon(
+                              isWishlisted ? Icons.bookmark : Icons.bookmark_border,
+                              color: isWishlisted ? Colors.amber : Colors.grey,
+                            ),
+                            onPressed: onBookmarkToggle,
                           ),
                         if (showDeleteButton)
                           IconButton(

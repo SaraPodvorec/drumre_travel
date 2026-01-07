@@ -3,12 +3,40 @@ import User from '../models/user.js';
 export const getUserData = async (req, res) => {
   try {
     const user = await User.findOne({ googleId: req.user.googleId })
-      .select('favoriteCities deletedCities');
+      .select('wishlistCities favoriteCities deletedCities');
     
     res.json({
+      wishlistedCities: user?.wishlistCities || [],
       favoriteCities: user?.favoriteCities || [],
       deletedCities: user?.deletedCities || []
     });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const addWishlistCity = async (req, res) => {
+  const { cityId } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { googleId: req.user.googleId },
+      { $addToSet: { wishlistCities: cityId } },
+      { new: true }
+    ).populate('wishlistCities');
+    res.json({ success: true, wishlistCities: user.wishlistCities });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+export const removeWishlistCity = async (req, res) => {
+  const { cityId } = req.params;
+  try {
+    const user = await User.findOneAndUpdate(
+      { googleId: req.user.googleId },
+      { $pull: { wishlistCities: cityId } },
+      { new: true }
+    ).populate('wishlistCities');
+    res.json({ success: true, wishlistCities: user.wishlistCities });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
