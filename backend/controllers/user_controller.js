@@ -102,3 +102,33 @@ export const undeleteCity = async (req, res) => {
   }
 };
 
+export const addFollowing = async (req, res) => {
+  const { userId } = req.body; // ID of the user to follow
+  try {
+    const user = await User.findOneAndUpdate(
+      { googleId: req.user.googleId },
+      { $addToSet: { following: userId } },
+      { new: true }
+    ).populate('following');
+    res.json({ success: true, following: user.following });
+  }
+  catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const removeFollowing = async (req, res) => {
+  const { userId } = req.params; // ID of the user to unfollow
+  try {
+    const user = await User.findOneAndUpdate(
+      { googleId: req.user.googleId },
+      { $pull: { following: userId } },
+      { new: true } 
+    ).populate('following');
+    res.json({ success: true, following: user.following });
+  }
+  catch (e) {
+    res.status(500).json({ error: e.message });
+  } 
+};
+

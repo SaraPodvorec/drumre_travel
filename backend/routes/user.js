@@ -8,7 +8,10 @@ import {
   removeFavoriteCity,
   deleteCity,
   undeleteCity,
+  addFollowing,
+  removeFollowing,
 } from '../controllers/user_controller.js';
+import { mockAuthenticate } from '../middleware/mockAuthenticate.js';
 
 const router = express.Router();
 
@@ -19,5 +22,7 @@ router.post('/favorites/add', authenticate, addFavoriteCity);
 router.delete('/favorites/remove/:cityId', authenticate, removeFavoriteCity);
 router.post('/deleted-cities/add', authenticate, deleteCity);
 router.delete('/deleted-cities/remove/:cityId', authenticate, undeleteCity);
+router.post('/follow/add', mockAuthenticate, addFollowing);
+router.delete('/follow/remove/:userId', mockAuthenticate, removeFollowing);
 
 export default router;

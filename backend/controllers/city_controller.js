@@ -98,3 +98,42 @@ export async function getCityData(cityName) {
     return city;
   }
 }
+
+//Funkcija filtrira po drzavi (country_code), temperaturi i ratingu
+//Korisnim moze odabrati jedanu ili više opcija za filtriranje npr svi gradovi iz HR, sortirani po temperaturi ili avgImpression 
+export const cityFilters = async (req, res) => {
+  try {
+    const {
+      country,
+      sort,   
+      order = "asc",
+      //limit = 20
+    } = req.query;
+
+    const filter = {};
+
+    if (country) {
+      filter.country_code = country;
+      sortOptions = { "city": order === "desc" ? -1 : 1 };
+    }
+
+    const sortOptions = {};
+    if (sort) {
+      const sortFields = sort.split(",");       // npr. ['avgImpression', 'popularity', 'temperature'] -> redosljed je bitan zbog prioritera (najveci ima avgImpression)
+      const sortOrders = (order || "").split(","); // npr. ['desc','asc']
+
+      sortFields.forEach((field, i) => {
+        const dir = sortOrders[i] === "desc" ? -1 : 1; 
+        sortOptions[field] = dir;
+      });
+    }
+
+    const cities = await City.find(filter)
+      .sort(sortOptions);
+      //.limit(Number(limit));
+
+    res.json({ cities });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

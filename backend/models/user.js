@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
     favoriteCities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'City' }],
     deletedCities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'City' }],
     deletedActivities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }],
   },
   { timestamps: true }
 );

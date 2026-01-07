@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllCities, getCityData } from '../controllers/city_controller.js';
+import { getAllCities, getCityData, cityFilters } from '../controllers/city_controller.js';
 
 const router = express.Router();
 
@@ -20,5 +20,7 @@ router.get('/search', async (req, res) => {
     res.status(500).json({ error: 'Failed to search city: ' + error.message });
   }
 });
+
+router.get('/filters', cityFilters);
 
 export default router;

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import auth from './routes/auth.js';
 import cities from './routes/cities.js';
 import activities from './routes/tours_and_activities.js';
+import review from './routes/review.js';
 import connectDB from './config/db.js';
 import user from './routes/user.js';
 
@@ -30,6 +31,7 @@ app.use("/api/auth", auth);
 app.use("/api/cities", cities);
 app.use("/api/activities", activities);
 app.use("/api/user", user);
+app.use("/api/review", review);
 
 app.get("/api/proxy-image", async (req, res) => {
   const imageUrl = req.query.url;

@@ -21,6 +21,9 @@ const CitySchema = new mongoose.Schema({
     imageAuthorLink: { type: String },
     imageDescription: { type: String },
     imageAltDescription: { type: String },
+
+    numOfReviews: { type: Number, default: 0 },
+    avgImpression: { type: Number, default: 0 },
 });
 
 export default mongoose.model("City", CitySchema);
