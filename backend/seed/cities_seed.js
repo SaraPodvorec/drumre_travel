@@ -6,6 +6,7 @@ import City from "../models/city.js";
 
 import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
+import { fetchCityWeather } from "../services/openWeather.js";
 
 await connectDB();
 
@@ -34,6 +35,7 @@ async function seed() {
 
       const geoapify = await fetchCityGeoapify(cityName);
       const unsplash = await fetchCityImage(cityName);
+      const openweather = await fetchCityWeather(geoapify.lat, geoapify.lon);
 
       await City.findOneAndUpdate(
         { city: geoapify.city },
@@ -47,6 +49,7 @@ async function seed() {
           timezone: geoapify.timezone,
           formatted: geoapify.formatted,
           country_code: geoapify.country_code,
+          temperature: openweather.temperature,
           imageUrl: unsplash.imageUrl,
           imageAuthor: unsplash.imageAuthor,
           imageAuthorLink: unsplash.imageAuthorLink,

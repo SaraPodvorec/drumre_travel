@@ -84,10 +84,22 @@ class CityCard extends StatelessWidget {
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.location_on, size: 16),
-                    const SizedBox(width: 4),
-                    Text(city.country),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, size: 16),
+                        const SizedBox(width: 4),
+                        Text(city.country),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.thermostat, size: 16),
+                        const SizedBox(width: 4),
+                        Text('${city.temperature.toStringAsFixed(1)}°C'),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 15),

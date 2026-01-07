@@ -1,6 +1,7 @@
 import City from "../models/city.js";
 import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
+import { fetchCityWeather } from "../services/openWeather.js";
 
 export async function getAllCities(req, res) {
   const cities = await City.find();
@@ -51,6 +52,10 @@ export async function getCityData(cityName) {
       const unsplash = await fetchCityImage(cityName);
       console.log(`Unsplash success for ${cityName}:`, unsplash);
 
+      console.log(`Fetching OpenWeather data for ${cityName}...`);
+      const openweather = await fetchCityWeather(geoapify.lat, geoapify.lon);
+      console.log(`OpenWeather success for ${cityName}:`, openweather);
+
       // check again before saving in case another request saved it simultaneously
       const existingCity = await City.findOne({ 
         city: new RegExp(`^${geoapify.city}$`, 'i') 
@@ -71,6 +76,7 @@ export async function getCityData(cityName) {
         timezone: geoapify.timezone,
         formatted: geoapify.formatted,
         country_code: geoapify.country_code,
+        temperature: openweather.temperature,
         imageUrl: unsplash.imageUrl,
         imageAuthor: unsplash.imageAuthor,
         imageAuthorLink: unsplash.imageAuthorLink,

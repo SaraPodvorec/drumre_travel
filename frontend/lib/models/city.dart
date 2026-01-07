@@ -5,6 +5,7 @@ class City {
   final double lat;
   final double lon;
   final String timezone;
+  final double temperature;
   final String imageUrl;
   final String imageAuthor;
   final String imageAuthorLink;
@@ -18,6 +19,7 @@ class City {
     required this.lat,
     required this.lon,
     required this.timezone,
+    required this.temperature,
     required this.imageUrl,
     required this.imageAuthor,
     required this.imageAuthorLink,
@@ -33,6 +35,7 @@ class City {
       lat: (json['lat'] as num?)?.toDouble() ?? 0.0,
       lon: (json['lon'] as num?)?.toDouble() ?? 0.0,
       timezone: json['timezone'] as String? ?? '',
+      temperature: (json['temperature'] as num?)?.toDouble() ?? 0.0,
       imageUrl: json['imageUrl'] as String? ?? '',
       imageAuthor: json['imageAuthor'] as String? ?? '',
       imageAuthorLink: json['imageAuthorLink'] as String? ?? '',
@@ -50,6 +53,7 @@ class City {
       'lat': lat,
       'lon': lon,
       'timezone': timezone,
+      'temperature': temperature,
       'imageAuthor': imageAuthor,
       'imageAuthorLink': imageAuthorLink,
       'imageDescription': imageDescription,

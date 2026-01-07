@@ -12,6 +12,9 @@ const CitySchema = new mongoose.Schema({
     formatted: { type: String },
     country_code: { type: String },
 
+    //openWeather
+    temperature: { type: Number, required: true },
+
     //unsplash
     imageUrl: { type: String, required: true }, 
     imageAuthor: { type: String },
