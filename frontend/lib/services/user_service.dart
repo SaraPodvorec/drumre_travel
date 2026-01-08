@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:http/browser_client.dart';
 import 'dart:convert';
 
@@ -115,4 +118,30 @@ class UserService {
     }
   }
 
+  static Future<void> completeOnboarding({
+    required String climate,
+    required String citySize,
+    required List<String> continents,
+  }) async {
+    try {
+      log('UserService: Completing onboarding with climate=$climate, citySize=$citySize, continents=$continents');
+      final response = await _client.post(
+        Uri.parse('$baseUrl/user/onboarding/complete'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'climate': climate,
+          'citySize': citySize,
+          'continents': continents
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Failed to complete onboarding: ${response.statusCode} - ${response.body}',
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

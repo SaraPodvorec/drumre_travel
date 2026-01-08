@@ -142,4 +142,21 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> initialize() async {
+    // Wait until _initializeGoogleSignIn completes
+    if (_isInitialized) return;
+
+    final completer = Completer<void>();
+
+    void listener() {
+      if (_isInitialized) {
+        completer.complete();
+        removeListener(listener);
+      }
+    }
+
+    addListener(listener);
+    await completer.future;
+  }
 }

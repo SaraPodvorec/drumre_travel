@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             await authProvider.signOut();
                             if (context.mounted) {
                               Navigator.of(context)
-                                  .pushReplacementNamed('/login');
+                                  .pushReplacementNamed('/');
                             }
                           },
                         ),

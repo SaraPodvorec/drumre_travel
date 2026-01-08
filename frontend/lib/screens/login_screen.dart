@@ -13,14 +13,6 @@ class LoginScreen extends StatelessWidget {
       body: Center(
         child: Consumer<AuthProvider>(
           builder: (context, authProvider, _) {
-            if (authProvider.isAuthenticated) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (context.mounted) {
-                  Navigator.of(context).pushReplacementNamed('/home');
-                }
-              });
-            }
-
             return Center(
               child: Card(
               elevation: 8,

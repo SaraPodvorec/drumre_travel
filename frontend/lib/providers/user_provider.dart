@@ -5,10 +5,18 @@ class UserProvider extends ChangeNotifier {
   List<String> favoriteCities = [];
   List<String> deletedCities = [];
   List<String> wishlistedCities = [];
+  String selecetedClimate = '';
+  String selectedCitySize = '';
+  Set<String> selectedContinents = {};
   bool isLoading = false;
   String? error;
 
-  // load user data when user logs in
+  bool _onboardingCompleted = false;
+  bool _initialized = false;
+
+  bool get onboardingCompleted => _onboardingCompleted;
+  bool get isInitialized => _initialized;
+
   Future<void> loadUserData() async {
     isLoading = true;
     notifyListeners();
@@ -24,12 +32,14 @@ class UserProvider extends ChangeNotifier {
       deletedCities = List<String>.from(
         (data['deletedCities'] as List?)?.map((c) => c.toString()) ?? []
       );
+      _onboardingCompleted = data['onboardingCompleted'] == true;
       error = null;
     } catch (e) {
       error = e.toString();
     }
     
     isLoading = false;
+    _initialized = true;
     notifyListeners();
   }
 
@@ -101,10 +111,39 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> completeOnboarding({
+    required String climate,
+    required String citySize,
+    required Set<String> continents,
+  }) async {
+    try {
+      await UserService.completeOnboarding(
+        climate: climate,
+        citySize: citySize,
+        continents: continents.toList(),
+      );
+
+      selecetedClimate = climate;
+      selectedCitySize = citySize;
+      selectedContinents = continents;
+
+      _onboardingCompleted = true;
+      notifyListeners();
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+    }
+  }
+
   void clearUserData() {
     wishlistedCities = [];
     favoriteCities = [];
     deletedCities = [];
+    selecetedClimate = '';
+    selectedCitySize = '';
+    selectedContinents.clear();
+    _onboardingCompleted = false;
+    _initialized = false;
     error = null;
     notifyListeners();
   }

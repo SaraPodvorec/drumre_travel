@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_activities_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
+import 'package:frontend/screens/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/city_provider.dart';
@@ -115,6 +118,7 @@ class App extends StatelessWidget {
       routes: {
         '/': (context) => const AuthWrapper(),
         '/login': (context) => const LoginScreen(),
+        '/onboarding': (context) => const OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
         '/city-activities': (context) {
           final selectedCity = context.read<CityProvider>().selectedCity;
@@ -128,25 +132,63 @@ class App extends StatelessWidget {
   }
 }
 
-class AuthWrapper extends StatelessWidget {
+
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
-      builder: (context, authProvider, _) {
-        if (!authProvider.isInitialized) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
 
-        return authProvider.isAuthenticated
-            ? const HomeScreen()
-            : const LoginScreen();
-      },
-    );
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    final authProvider = context.read<AuthProvider>();
+    final userProvider = context.read<UserProvider>();
+
+    // Wait for auth initialization
+    await authProvider.initialize();
+
+    // If authenticated, load user data
+    if (authProvider.isAuthenticated) {
+      await userProvider.loadUserData();
+    }
+
+    if (mounted) {
+      setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+    final userProvider = context.watch<UserProvider>();
+
+    if (_loading) {
+      log('AuthWrapper: Loading...');
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (!authProvider.isAuthenticated) {
+      log('AuthWrapper: User not authenticated, navigating to LoginScreen');
+      return const LoginScreen();
+    }
+
+    if (!userProvider.onboardingCompleted) {
+      log('AuthWrapper: Onboarding not completed, navigating to OnboardingScreen');
+      return const OnboardingScreen();
+    }
+
+    log('AuthWrapper: User authenticated and onboarding completed, navigating to HomeScreen');
+    return const HomeScreen();
   }
 }
