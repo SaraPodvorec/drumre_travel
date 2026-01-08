@@ -10,6 +10,7 @@ import {
   undeleteCity,
   addFollowing,
   removeFollowing,
+  completeOnboarding
 } from '../controllers/user_controller.js';
 import { mockAuthenticate } from '../middleware/mockAuthenticate.js';
 
@@ -24,5 +25,7 @@ router.post('/deleted-cities/add', authenticate, deleteCity);
 router.delete('/deleted-cities/remove/:cityId', authenticate, undeleteCity);
 router.post('/follow/add', mockAuthenticate, addFollowing);
 router.delete('/follow/remove/:userId', mockAuthenticate, removeFollowing);
+
+router.post('/onboarding/complete', authenticate, completeOnboarding);
 
 export default router;
