@@ -1,5 +1,5 @@
 import User from '../models/user.js';
-
+import City from '../models/city.js';
 
 export const getUserData = async (req, res) => {
   try {
@@ -35,6 +35,11 @@ export const addWishlistCity = async (req, res) => {
       { $addToSet: { wishlistCities: cityId } },
       { new: true }
     ).populate('wishlistCities');
+
+    const city = await City.findOne({ _id: cityId });
+    city.onWishlists += 1;
+    await city.save();
+
     res.json({ success: true, wishlistCities: user.wishlistCities });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -49,6 +54,11 @@ export const removeWishlistCity = async (req, res) => {
       { $pull: { wishlistCities: cityId } },
       { new: true }
     ).populate('wishlistCities');
+
+    const city = await City.findOne({ _id: cityId });
+    city.onWishlists = Math.max(0, city.onWishlists - 1);
+    await city.save();
+
     res.json({ success: true, wishlistCities: user.wishlistCities });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -114,7 +124,7 @@ export const undeleteCity = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
-
+//needs fix bcs we dont have userId on frontend (userId is mongoDB id)
 export const addFollowing = async (req, res) => {
   const { userId } = req.body; // ID of the user to follow
   try {
@@ -129,7 +139,7 @@ export const addFollowing = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
-
+//needs fix bcs we dont have userId on frontend (userId is mongoDB id)
 export const removeFollowing = async (req, res) => {
   const { userId } = req.params; // ID of the user to unfollow
   try {

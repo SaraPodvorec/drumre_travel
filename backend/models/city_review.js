@@ -10,6 +10,8 @@ const cityReview = new mongoose.Schema(
     safety: { type: Number, required: true, min: 0, max: 5 },
     affordability: { type: Number, required: true, min: 0, max: 5 },
     comments: { type: String },
-},);
+},
+  { timestamps: true }
+);
 
 export default mongoose.model('CityReview', cityReview);

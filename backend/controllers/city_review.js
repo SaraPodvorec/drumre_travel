@@ -88,19 +88,14 @@ export async function submitReview(req, res) {
 }
 
 export async function deleteReview(req, res) {
-    const { cityName } = req.params;
-    const city = await City.findOne({ 
-            city: new RegExp(`^${cityName.trim()}$`, 'i') });
-    if (!city) {
-        return res.status(404).json({ error: 'City not found' });
-    }
+    const { cityId } = req.params;
     const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
         return res.status(404).json({ error: 'User not found' });
     }
     const review = await CityReview.findOneAndDelete({
         userId: user._id,
-        cityId: city._id
+        cityId: cityId
     });
     if (!review) {
         return res.status(404).json({ error: 'Review not found' });
@@ -108,3 +103,50 @@ export async function deleteReview(req, res) {
     res.status(200).json({ message: 'Review deleted successfully' });
 }
 
+export async function getReviewsByCity(req, res) {
+    const { cityId } = req.body;
+    console.log("Fetching reviews for cityId:", cityId);
+    try {
+    const reviews = await CityReview.find({ cityId: cityId }).populate('userId', 'name picture');
+    const response = reviews.map(review => ({
+      id: review._id,
+      name: review.userId?.name ?? null,
+      picture: review.userId?.picture ?? null,
+      impression: review.impression,
+      people: review.people,
+      sights: review.sights,
+      safety: review.safety,
+      affordability: review.affordability,
+      comments: review.comments
+    }));
+    res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch reviews', details: error.message });
+    }
+}
+export async function getReviewsByUser(req, res) {
+    const { userId } = req.body; // googleId of the user -> needs fix, must be object id from mongoDB
+    const user = await User.findOne({ googleId: userId });
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    try{
+        const reviews = await CityReview.find({ userId: user._id }).populate('cityId', 'city country imageUrl');
+        const response = reviews.map(review => ({
+            id: review._id,
+            city: review.cityId?.city ?? null,
+            country: review.cityId?.country ?? null,
+            imageUrl: review.cityId?.imageUrl ?? null,
+            impression: review.impression,  
+            people: review.people,
+            sights: review.sights,
+            safety: review.safety,
+            affordability: review.affordability,
+            comments: review.comments
+        }));
+    res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch user reviews', details: error.message });
+    }
+
+}

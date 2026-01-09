@@ -25,6 +25,7 @@ const CitySchema = new mongoose.Schema({
 
     numOfReviews: { type: Number, default: 0 },
     avgImpression: { type: Number, default: 0 },
+    onWishlists: { type: Number, default: 0 },
 });
 
 export default mongoose.model("City", CitySchema);
