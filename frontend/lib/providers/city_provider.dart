@@ -13,6 +13,10 @@ class CityProvider extends ChangeNotifier {
   String? error;
   bool isSearching = false;
 
+  CityProvider() {
+    _restoreSelectedCity();
+  }
+
   Future<void> loadCities() async {
     isLoading = true;
     error = null;
@@ -67,6 +71,7 @@ class CityProvider extends ChangeNotifier {
     if (city != null) {
       try {
         selectedCity = City.fromJson(jsonDecode(city));
+        notifyListeners();
       } catch (e) {
         print('Error restoring city: $e');
       }

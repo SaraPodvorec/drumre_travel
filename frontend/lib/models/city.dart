@@ -12,6 +12,13 @@ class City {
   final String imageAuthorLink;
   final String imageDescription;
   final String imageAltDescription;
+  final double numOfReviews;
+  final double averageImpression;
+  final double onWishlists;
+  final String? description;
+  final int? population;
+  final String? currency;
+  final String? language;
 
   City({
     required this.id,
@@ -27,12 +34,20 @@ class City {
     required this.imageAuthorLink,
     required this.imageDescription,
     required this.imageAltDescription,
+    required this.numOfReviews,
+    required this.averageImpression,
+    required this.onWishlists,
+    this.description,
+    this.population,
+    this.currency,
+    this.language,
   });
 
   factory City.fromJson(Map<String, dynamic> json) {
+    final dynamicId = json['_id'] ?? json['id'] ?? '';
     return City(
-      id: json['_id'] as String? ?? '', 
-      name: json['city'] as String? ?? '', 
+      id: dynamicId.toString(),
+      name: json['city'] as String? ?? '',
       country: json['country'] as String? ?? '',
       continent: json['continent'] as String? ?? '',
       lat: (json['lat'] as num?)?.toDouble() ?? 0.0,
@@ -44,13 +59,21 @@ class City {
       imageAuthorLink: json['imageAuthorLink'] as String? ?? '',
       imageDescription: json['imageDescription'] as String? ?? '',
       imageAltDescription: json['imageAltDescription'] as String? ?? '',
+      numOfReviews: (json['numOfReviews'] as num?)?.toDouble() ?? 0.0,
+      averageImpression: (json['averageImpression'] as num?)?.toDouble() ?? 0.0,
+      onWishlists: (json['onWishlists'] as num?)?.toDouble() ?? 0.0,
+      description: json['description'] as String? ??
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', // MOCK
+      population: (json['population'] as num?)?.toInt(), 
+      currency: json['currency'] as String?,              
+      language: json['language'] as String?,        
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name,
+      '_id': id,
+      'city': name,
       'country': country,
       'imageUrl': imageUrl,
       'lat': lat,
@@ -61,6 +84,13 @@ class City {
       'imageAuthorLink': imageAuthorLink,
       'imageDescription': imageDescription,
       'imageAltDescription': imageAltDescription,
+      'numOfReviews': numOfReviews,
+      'averageImpression': averageImpression,
+      'onWishlists': onWishlists,
+      'description': description, 
+      'population': population, 
+      'currency': currency, 
+      'language': language, 
     };
   }
 }

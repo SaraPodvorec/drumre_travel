@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onFavoriteToggle: () {
                         userProvider.removeFavorite(city.id);
                       },
-                      onViewActivities: () {
+                      onViewCityDetails: () {
                         context.read<CityProvider>().setSelectedCity(city);
                         Navigator.pushNamed(context, '/city-activities');
                       },
@@ -164,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onBookmarkToggle: () {
                         userProvider.removeWishlist(city.id);
                       },
-                      onViewActivities: () {
+                      onViewCityDetails: () {
                         context.read<CityProvider>().setSelectedCity(city);
                         Navigator.pushNamed(context, '/city-activities');
                       },
@@ -213,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onDelete: () {
                         userProvider.restoreCity(city.id);
                       },
-                      onViewActivities: () {
+                      onViewCityDetails: () {
                         context.read<CityProvider>().setSelectedCity(city);
                         Navigator.pushNamed(context, '/city-activities');
                       },

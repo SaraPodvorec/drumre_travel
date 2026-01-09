@@ -8,7 +8,7 @@ class CityCard extends StatelessWidget {
   final VoidCallback? onFavoriteToggle;
   final VoidCallback? onBookmarkToggle;
   final VoidCallback? onDelete;
-  final VoidCallback? onViewActivities;
+  final VoidCallback? onViewCityDetails;
   final bool showDeleteButton;
   final bool showFavoriteButton;
   final bool showBookmarkButton;
@@ -21,7 +21,7 @@ class CityCard extends StatelessWidget {
     this.onFavoriteToggle,
     this.onBookmarkToggle,
     this.onDelete,
-    this.onViewActivities,
+    this.onViewCityDetails,
     this.showDeleteButton = true,
     this.showFavoriteButton = true,
     this.showBookmarkButton = true,
@@ -34,7 +34,7 @@ class CityCard extends StatelessWidget {
     final userProvider = context.watch<UserProvider>();
     final isFavorite = userProvider.favoriteCities.contains(city.id);
     final isWishlisted = userProvider.wishlistedCities.contains(city.id);
-
+    
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,9 +119,9 @@ class CityCard extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: onViewActivities,
+                    onPressed: onViewCityDetails,
                     child: const Text(
-                      'View Activities',
+                      'View Details',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

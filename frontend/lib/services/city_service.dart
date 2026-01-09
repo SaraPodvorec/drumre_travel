@@ -14,4 +14,5 @@ class CityService {
     final res = await Api.getRequest('/cities/search?query=$cityName');
     return City.fromJson(res);
   }
+
 }

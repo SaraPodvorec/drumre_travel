@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/city_provider.dart';
-import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
-import 'package:frontend/screens/profile_screen.dart';
-import 'package:frontend/services/api_service.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/widgets/main_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final cityProvider = context.watch<CityProvider>();
-    final authProvider = context.watch<AuthProvider>();
     final userProvider = context.watch<UserProvider>();
 
     // update filteredCities to include search filtering
@@ -53,64 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Traveler Cities',
-        ),
-        actions: [
-          if (authProvider.isAuthenticated && authProvider.userData != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Center(
-                child: Row(
-                  children: [
-                    if (authProvider.userData!['picture'] != null)
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(
-                          Api.getProxyImageUrl(
-                            authProvider.userData!['picture'],
-                          ),
-                        ),
-                      ),
-                    const SizedBox(width: 12),
-                    Text(
-                      authProvider.userData!['name'] ?? 'User',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    const SizedBox(width: 16),
-                    PopupMenuButton(
-                      child: const Icon(Icons.more_vert, color: Colors.white),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: const Text('Profile'),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const ProfileScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        PopupMenuItem(
-                          child: const Text('Logout'),
-                          onTap: () async {
-                            await authProvider.signOut();
-                            if (context.mounted) {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/');
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
+      appBar: const MainAppBar(title: 'Traveler Cities'),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 100.0,
@@ -277,11 +217,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         content: Text('City hidden')),
                                   );
                                 },
-                                onViewActivities: () {
-                                  context.read<CityProvider>().setSelectedCity(
-                                      city);
-                                  Navigator.pushNamed(context,
-                                      '/city-activities');
+                                onViewCityDetails: () {
+                                  context.read<CityProvider>().setSelectedCity(city);
+                                  Navigator.pushNamed(context,'/city-details');
                                 },
                               );
                             },

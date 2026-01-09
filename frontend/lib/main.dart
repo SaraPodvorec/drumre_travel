@@ -6,6 +6,7 @@ import 'package:frontend/screens/city_activities_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/onboarding_screen.dart';
+import 'package:frontend/screens/city_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/city_provider.dart';
@@ -120,12 +121,23 @@ class App extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
+        '/city-details': (context) {
+          final selectedCity = context.watch<CityProvider>().selectedCity;
+          if (selectedCity != null) {
+            return CityDetailsScreen(city: selectedCity);
+          }
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        },
         '/city-activities': (context) {
-          final selectedCity = context.read<CityProvider>().selectedCity;
+          final selectedCity = context.watch<CityProvider>().selectedCity;
           if (selectedCity != null) {
             return CityActivitiesScreen(city: selectedCity);
           }
-          return const HomeScreen();
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         },
       },
     );
