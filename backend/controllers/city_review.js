@@ -90,6 +90,11 @@ export async function deleteReview(req, res) {
     if (!review) {
         return res.status(404).json({ error: 'Review not found' });
     }
+    const city = await City.findById(cityId);
+    city.numOfReviews = Math.max(0, city.numOfReviews - 1);
+    city.avgImpression = city.numOfReviews == 0 ? 0 : (city.avgImpression * (city.numOfReviews + 1) - review.impression) / city.numOfReviews;
+    await city.save();
+
     res.status(200).json({ message: 'Review deleted successfully' });
 }
 
