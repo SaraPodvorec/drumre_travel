@@ -25,11 +25,7 @@ const CitySchema = new mongoose.Schema({
 
     numOfReviews: { type: Number, default: 0 },
     avgImpression: { type: Number, default: 0 },
-<<<<<<< Updated upstream
     onWishlists: { type: Number, default: 0 },
-=======
-
->>>>>>> Stashed changes
 });
 
 export default mongoose.model("City", CitySchema);
