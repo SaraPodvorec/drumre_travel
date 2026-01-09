@@ -1,5 +1,6 @@
 import User from '../models/user.js';
 
+
 export const getUserData = async (req, res) => {
   try {
     const user = await User.findOne({ googleId: req.user.googleId })
@@ -12,6 +13,15 @@ export const getUserData = async (req, res) => {
       onboardingCompleted: user?.onboardingCompleted || false,
       onboardingPreferences: user?.onboardingPreferences || {},
     });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json({users});
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -30,6 +40,7 @@ export const addWishlistCity = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+
 export const removeWishlistCity = async (req, res) => {
   const { cityId } = req.params;
   try {

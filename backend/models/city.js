@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const CitySchema = new mongoose.Schema({
     //geoapify 
     city: { type: String, required: true },           
-    country: { type: String, required: true },        
+    country: { type: String, required: true },
+    continent: { type: String },    
     lat: { type: Number, required: true },
     lon: { type: Number, required: true },   
     popularity: { type: Number, required: true }, 

@@ -10,7 +10,7 @@ export async function fetchCityImage(cityName) {
     },
   });
 
-  console.log("Unsplash image data:", res.data);
+  //console.log("Unsplash image data:", res.data);
 
 
   //console.log(`Photo by ${authorName} (${authorLink}) on Unsplash`);

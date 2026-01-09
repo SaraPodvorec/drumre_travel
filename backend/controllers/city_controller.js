@@ -6,7 +6,7 @@ import { fetchCityWeather } from "../services/openWeather.js";
 export async function getAllCities(req, res) {
   const cities = await City.find();
   res.json(cities);
-  console.log("Top cities:", cities);
+ //console.log("Top cities:", cities);
 }
 
 export async function getCityLonLat(cityName) {
@@ -44,17 +44,17 @@ export async function getCityData(cityName) {
     console.log(`City ${cityName} not found in database. Fetching data...`);
 
     try {
-      console.log(`Fetching Geoapify data for ${cityName}...`);
+      //console.log(`Fetching Geoapify data for ${cityName}...`);
       const geoapify = await fetchCityGeoapify(cityName);
-      console.log(`Geoapify success for ${cityName}:`, geoapify);
+      //console.log(`Geoapify success for ${cityName}:`, geoapify);
       
-      console.log(`Fetching Unsplash data for ${cityName}...`);
+      //console.log(`Fetching Unsplash data for ${cityName}...`);
       const unsplash = await fetchCityImage(cityName);
-      console.log(`Unsplash success for ${cityName}:`, unsplash);
+      //console.log(`Unsplash success for ${cityName}:`, unsplash);
 
-      console.log(`Fetching OpenWeather data for ${cityName}...`);
+      //console.log(`Fetching OpenWeather data for ${cityName}...`);
       const openweather = await fetchCityWeather(geoapify.lat, geoapify.lon);
-      console.log(`OpenWeather success for ${cityName}:`, openweather);
+     // console.log(`OpenWeather success for ${cityName}:`, openweather);
 
       // check again before saving in case another request saved it simultaneously
       const existingCity = await City.findOne({ 
@@ -76,6 +76,7 @@ export async function getCityData(cityName) {
         timezone: geoapify.timezone,
         formatted: geoapify.formatted,
         country_code: geoapify.country_code,
+        continent: geoapify.continent,
         temperature: openweather.temperature,
         imageUrl: unsplash.imageUrl,
         imageAuthor: unsplash.imageAuthor,
@@ -105,16 +106,21 @@ export const cityFilters = async (req, res) => {
   try {
     const {
       country,
+      continent,
       sort,   
       order = "asc",
       //limit = 20
-    } = req.query;
+    } = req.query; //Trenutno je napravljeno da se parametri salju kao query parametri npr. /cities/filters?country=US&sort=temperature&order=desc
 
     const filter = {};
 
     if (country) {
       filter.country_code = country;
-      sortOptions = { "city": order === "desc" ? -1 : 1 };
+    }
+
+    if (continent) {
+      filter.continent = continent;
+
     }
 
     const sortOptions = {};
@@ -128,6 +134,9 @@ export const cityFilters = async (req, res) => {
       });
     }
 
+    if (!sort && (country || continent)) {
+      sortOptions.city = order === "desc" ? -1 : 1;
+    }
     const cities = await City.find(filter)
       .sort(sortOptions);
       //.limit(Number(limit));

@@ -2,6 +2,7 @@ class City {
   final String id;
   final String name; 
   final String country;
+  final String continent;
   final double lat;
   final double lon;
   final String timezone;
@@ -16,6 +17,7 @@ class City {
     required this.id,
     required this.name,
     required this.country,
+    required this.continent,
     required this.lat,
     required this.lon,
     required this.timezone,
@@ -32,6 +34,7 @@ class City {
       id: json['_id'] as String? ?? '', 
       name: json['city'] as String? ?? '', 
       country: json['country'] as String? ?? '',
+      continent: json['continent'] as String? ?? '',
       lat: (json['lat'] as num?)?.toDouble() ?? 0.0,
       lon: (json['lon'] as num?)?.toDouble() ?? 0.0,
       timezone: json['timezone'] as String? ?? '',
