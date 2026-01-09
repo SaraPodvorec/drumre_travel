@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       onViewCityDetails: () {
                         context.read<CityProvider>().setSelectedCity(city);
-                        Navigator.pushNamed(context, '/city-activities');
+                        Navigator.pushNamed(context, '/city-details');
                       },
                     );
                   },
