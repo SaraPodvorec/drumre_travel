@@ -3,7 +3,7 @@ import City from '../models/city.js';
 
 export const getUserData = async (req, res) => {
   try {
-    const user = await User.findOne({ googleId: req.user.googleId })
+    const user = await User.findOne({ _id: req.user.id })
       .select('wishlistCities favoriteCities deletedCities onboardingCompleted onboardingPreferences');
     
     res.json({
@@ -20,9 +20,31 @@ export const getUserData = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select('name email picture');
     res.json({users});
   } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findOne({ _id: userId })
+    .select('name picture wishlistCities favoriteCities');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const currentUser = await User.findById(req.user.id).select('following');
+    const isFollowing = currentUser.following.includes(userId);
+    res.json({
+      name: user.name,
+      picture: user.picture,
+      wishlistedCities: user.wishlistCities,
+      favoriteCities: user.favoriteCities,
+      isFollowing: isFollowing
+    });
+  }catch (e) {
     res.status(500).json({ error: e.message });
   }
 };
@@ -31,7 +53,7 @@ export const addWishlistCity = async (req, res) => {
   const { cityId } = req.body;
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $addToSet: { wishlistCities: cityId } },
       { new: true }
     ).populate('wishlistCities');
@@ -50,7 +72,7 @@ export const removeWishlistCity = async (req, res) => {
   const { cityId } = req.params;
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $pull: { wishlistCities: cityId } },
       { new: true }
     ).populate('wishlistCities');
@@ -70,7 +92,7 @@ export const addFavoriteCity = async (req, res) => {
   
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $addToSet: { favoriteCities: cityId } },
       { new: true }
     ).populate('favoriteCities');
@@ -85,7 +107,7 @@ export const removeFavoriteCity = async (req, res) => {
   
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $pull: { favoriteCities: cityId } },
       { new: true }
     ).populate('favoriteCities');
@@ -100,7 +122,7 @@ export const deleteCity = async (req, res) => {
   
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $addToSet: { deletedCities: cityId } },
       { new: true }
     );
@@ -115,7 +137,7 @@ export const undeleteCity = async (req, res) => {
   
   try {
     await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $pull: { deletedCities: cityId } },
       { new: true }
     );
@@ -124,12 +146,11 @@ export const undeleteCity = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
-//needs fix bcs we dont have userId on frontend (userId is mongoDB id)
 export const addFollowing = async (req, res) => {
   const { userId } = req.body; // ID of the user to follow
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $addToSet: { following: userId } },
       { new: true }
     ).populate('following');
@@ -144,7 +165,7 @@ export const removeFollowing = async (req, res) => {
   const { userId } = req.params; // ID of the user to unfollow
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       { $pull: { following: userId } },
       { new: true } 
     ).populate('following');
@@ -164,7 +185,7 @@ export const completeOnboarding = async (req, res) => {
 
   try {
     const user = await User.findOneAndUpdate(
-      { googleId: req.user.googleId },
+      { _id: req.user.id },
       {
         onboardingCompleted: true,
         onboardingPreferences: { climate, citySize, continents },

@@ -3,6 +3,7 @@ import { authenticate } from '../middleware/auth_middleware.js';
 import {
   getUserData,
   getAllUsers,
+  getUserProfile,
   addWishlistCity,
   removeWishlistCity,
   addFavoriteCity,
@@ -13,11 +14,11 @@ import {
   removeFollowing,
   completeOnboarding
 } from '../controllers/user_controller.js';
-
 const router = express.Router();
 
 router.get('/data', authenticate, getUserData);
 router.get('/all', authenticate, getAllUsers);
+router.get('/:userId', authenticate, getUserProfile);
 router.post('/wishlist/add', authenticate, addWishlistCity);
 router.delete('/wishlist/remove/:cityId', authenticate, removeWishlistCity);
 router.post('/favorites/add', authenticate, addFavoriteCity);

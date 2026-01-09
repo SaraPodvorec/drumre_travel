@@ -1,5 +1,4 @@
 import CityReview from '../models/city_review.js';
-import User from "../models/user.js";
 import City from "../models/city.js";
 
 export async function submitReview(req, res) {
@@ -54,13 +53,8 @@ export async function submitReview(req, res) {
         city.avgImpression = ((city.avgImpression * (city.numOfReviews - 1)) + impression) / city.numOfReviews;
         await city.save();
 
-        const user = await User.findOne({ googleId: req.user.googleId });
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
         const existingReview = await CityReview.findOne({
-            userId: user._id, 
+            userId: req.user.id, 
             cityId: city._id
         });
         if (existingReview) {
@@ -68,7 +62,7 @@ export async function submitReview(req, res) {
         }
 
         const newReview = new CityReview({
-            userId: user._id,
+            userId: req.user.id,
             cityId: city._id,
             impression,
             people: peopleVal,
@@ -89,12 +83,8 @@ export async function submitReview(req, res) {
 
 export async function deleteReview(req, res) {
     const { cityId } = req.params;
-    const user = await User.findOne({ googleId: req.user.googleId });
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
     const review = await CityReview.findOneAndDelete({
-        userId: user._id,
+        userId: req.user.id,
         cityId: cityId
     });
     if (!review) {
@@ -105,7 +95,6 @@ export async function deleteReview(req, res) {
 
 export async function getReviewsByCity(req, res) {
     const { cityId } = req.body;
-    console.log("Fetching reviews for cityId:", cityId);
     try {
     const reviews = await CityReview.find({ cityId: cityId }).populate('userId', 'name picture');
     const response = reviews.map(review => ({
@@ -125,13 +114,9 @@ export async function getReviewsByCity(req, res) {
     }
 }
 export async function getReviewsByUser(req, res) {
-    const { userId } = req.body; // googleId of the user -> needs fix, must be object id from mongoDB
-    const user = await User.findOne({ googleId: userId });
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
+    const { userId } = req.body; // MongoDB _id of the user
     try{
-        const reviews = await CityReview.find({ userId: user._id }).populate('cityId', 'city country imageUrl');
+        const reviews = await CityReview.find({ userId: userId }).populate('cityId', 'city country imageUrl');
         const response = reviews.map(review => ({
             id: review._id,
             city: review.cityId?.city ?? null,

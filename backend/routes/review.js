@@ -5,8 +5,7 @@ import {
     deleteReview, 
     getReviewsByCity,
     getReviewsByUser 
-} from '../controllers/city_review.js';
-
+} from '../controllers/city_review.js';  
 
 const router = express.Router();
 

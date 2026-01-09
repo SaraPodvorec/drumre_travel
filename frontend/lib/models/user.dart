@@ -1,11 +1,11 @@
 class User {
-  final String googleId;
+  final String id;
   final String email;
   final String name;
   final String picture;
 
   User({
-    required this.googleId,
+    required this.id,
     required this.email,
     required this.name,
     required this.picture,
@@ -13,7 +13,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      googleId: json['googleId'],
+      id: json['id'],
       email: json['email'],
       name: json['name'],
       picture: json['picture'],

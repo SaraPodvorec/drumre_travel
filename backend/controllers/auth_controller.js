@@ -39,10 +39,18 @@ export const googleAuth = async (req, res) => {
 
     console.log('Authenticated user:', db_user);
 
-    const jwtToken = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Create JWT with _id from database
+    const tokenPayload = {
+      id: db_user._id.toString(),
+      email: db_user.email,
+      name: db_user.name,
+      picture: db_user.picture
+    };
+
+    const jwtToken = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.cookie('token', jwtToken, { httpOnly: true, secure: false, sameSite: 'lax' });
-    return res.json({ user });
+    return res.json({ user: tokenPayload });
   } catch (error) {
     console.error('Token exchange or verification failed:', error);
     res.status(401).json({ message: 'Invalid or expired code' });
