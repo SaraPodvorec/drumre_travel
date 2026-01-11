@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_activities_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/onboarding_screen.dart';
 import 'package:frontend/screens/city_details_screen.dart';
@@ -139,6 +140,7 @@ class App extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         },
+        '/leave-review': (context) => const LeaveReviewScreen(),
       },
     );
   }

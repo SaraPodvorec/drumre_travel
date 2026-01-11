@@ -25,6 +25,12 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Center(
               child: Row(
                 children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/leave-review');
+                    },
+                    child: Text('Leave review', style: TextStyle(color: Colors.white)),
+                  ),
                   if (authProvider.userData!['picture'] != null)
                     CircleAvatar(
                       radius: 20,
