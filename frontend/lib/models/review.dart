@@ -1,5 +1,6 @@
 class CityReview {
   final String id;
+  final String? city;
   final String? userName;
   final String? userPicture;
   final int impression;
@@ -12,6 +13,7 @@ class CityReview {
 
   CityReview({
     required this.id,
+    required this.city,
     this.userName,
     this.userPicture,
     required this.impression,
@@ -26,6 +28,7 @@ class CityReview {
   factory CityReview.fromJson(Map<String, dynamic> json) {
     return CityReview(
       id: json['id'],
+      city: json['city'] ?? 'Unknown city',
       userName: json['name'],
       userPicture: json['picture'],
       impression: (json['impression'] as num).toInt(),

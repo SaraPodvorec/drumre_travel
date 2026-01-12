@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/models/review.dart';
 import 'package:frontend/providers/user_provider.dart';
@@ -317,8 +315,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       children: [
                         Text(
-                          'City name',
-                          // review.cityName ?? 'Unknown city',
+                          review.city ?? 'Unknown city',
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
