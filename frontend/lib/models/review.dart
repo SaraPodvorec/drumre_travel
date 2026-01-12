@@ -13,7 +13,7 @@ class CityReview {
 
   CityReview({
     required this.id,
-    required this.city,
+    this.city,
     this.userName,
     this.userPicture,
     required this.impression,
@@ -28,7 +28,11 @@ class CityReview {
   factory CityReview.fromJson(Map<String, dynamic> json) {
     return CityReview(
       id: json['_id'] ?? json['id'] ?? '',
-      city: json['city'] ?? json['cityId']['city'] ??'Unknown city',
+      city: json['city'] is String
+        ? json['city']
+        : json['cityId'] is Map<String, dynamic>
+            ? json['cityId']['city']
+            : null,
       userName: json['name'],
       userPicture: json['picture'],
       impression: (json['impression'] as num).toInt(),
