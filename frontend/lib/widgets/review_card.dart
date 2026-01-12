@@ -5,12 +5,16 @@ class ReviewCard extends StatelessWidget {
   final CityReview review;
   final bool canDelete;
   final VoidCallback? onDelete;
+  final bool canEdit;
+  final VoidCallback? onEdit;
 
   const ReviewCard({
     super.key,
     required this.review,
     this.canDelete = false,
     this.onDelete,
+    this.canEdit = false,
+    this.onEdit,
   });
 
   @override
@@ -105,6 +109,11 @@ class ReviewCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (canEdit)
+                IconButton(
+                  icon: const Icon(Icons.edit, color: Color.fromARGB(255, 54, 174, 244)),
+                  onPressed: onEdit,
+                ),
               if (canDelete)
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),

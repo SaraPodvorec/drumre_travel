@@ -102,7 +102,6 @@ export async function deleteReview(req, res) {
     res.status(200).json({ message: 'Review deleted successfully' });
 }
 
-
 export async function getReviewsByCity(req, res) {
     const { cityId } = req.body;
     try {
@@ -123,6 +122,7 @@ export async function getReviewsByCity(req, res) {
         res.status(500).json({ error: 'Failed to fetch reviews', details: error.message });
     }
 }
+
 export async function getReviewsByUser(req, res) {
     const { userId } = req.body; // MongoDB _id of the user
     try{
@@ -144,4 +144,36 @@ export async function getReviewsByUser(req, res) {
         res.status(500).json({ error: 'Failed to fetch user reviews', details: error.message });
     }
 
+}
+
+export async function updateReview(req, res) {
+    const { reviewId } = req.params;
+    const {
+        cityName,
+        impression,
+        people,
+        sights,
+        safety, 
+        affordability, 
+        comments
+    } = req.body;
+    try {
+        console.log("Updating review:", reviewId);
+        const review = await CityReview.findByIdAndUpdate(
+        reviewId,
+        {
+            impression,
+            people,
+            sights,
+            safety,
+            affordability,
+            comments,
+        },
+        { new: true }
+        );
+        res.status(200).json({ success: true, review });
+    } catch (error) {
+        console.error('Review update error:', error);
+        res.status(500).json({ error: 'Failed to update review', details: error.message });
+    }
 }

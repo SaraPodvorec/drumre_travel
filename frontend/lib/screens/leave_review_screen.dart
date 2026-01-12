@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/review.dart';
 import 'package:frontend/services/review_service.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class LeaveReviewScreen extends StatefulWidget {
   final String? initialCityName;
+  final CityReview? review;
 
-  const LeaveReviewScreen({super.key, this.initialCityName});
+  const LeaveReviewScreen({super.key, this.initialCityName, this.review});
+  bool get isEdit => review != null;
 
   @override
   State<LeaveReviewScreen> createState() => _LeaveReviewScreenState();
@@ -28,8 +29,17 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialCityName != null) {
-      _cityController.text = widget.initialCityName!;
+
+    if (widget.review != null) {
+      final r = widget.review!;
+      _cityController.text = r.city ?? '';
+      _commentController.text = r.comments;
+
+      _impression = r.impression;
+      _people = r.people;
+      _sights = r.sights;
+      _safety = r.safety;
+      _affordability = r.affordability;
     }
   }
 
@@ -37,34 +47,43 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSubmitting = true);
-
+    
     try {
-      await ReviewService.submitReview(
-        cityName: _cityController.text,
-        impression: _impression,
-        people: _people,
-        sights: _sights,
-        safety: _safety,
-        affordability: _affordability,
-        comments: _commentController.text,
-      );
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Recenzija uspješno poslana!')),
+      if (widget.isEdit) {
+        print('Updating review ${widget.review!.id}');
+        await ReviewService.updateReview(
+          reviewId: widget.review!.id,
+          impression: _impression,
+          people: _people,
+          sights: _sights,
+          safety: _safety,
+          affordability: _affordability,
+          comments: _commentController.text,
         );
-        Navigator.pop(context);
+      } else {
+        await ReviewService.submitReview(
+          cityName: _cityController.text,
+          impression: _impression,
+          people: _people,
+          sights: _sights,
+          safety: _safety,
+          affordability: _affordability,
+          comments: _commentController.text,
+        );
       }
+
+      if (mounted) Navigator.pop(context, true);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Greška: ${e.toString()}')),
+          SnackBar(content: Text('Error: $e')),
         );
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +99,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Leave a Review", 
+                  Text(widget.isEdit ? "Edit Review" : "Leave Review",
                     style: Theme.of(context).textTheme.headlineLarge),
                   const SizedBox(height: 30),
                   
@@ -122,7 +141,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                       onPressed: _isSubmitting ? null : _submitReview,
                       child: _isSubmitting 
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("SUBMIT REVIEW", style: TextStyle(fontSize: 16)),
+                        : Text(widget.isEdit ? "Edit review" : "Submit review", style: TextStyle(fontSize: 16)),
                     ),
                   ),
                 ],

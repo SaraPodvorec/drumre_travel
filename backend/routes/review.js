@@ -4,7 +4,8 @@ import {
     submitReview, 
     deleteReview, 
     getReviewsByCity,
-    getReviewsByUser 
+    getReviewsByUser,
+    updateReview
 } from '../controllers/city_review.js';  
 
 const router = express.Router();
@@ -17,4 +18,5 @@ router.post('/', authenticate, submitReview);
 router.delete('/:reviewId', authenticate, deleteReview);
 router.post('/city', getReviewsByCity);
 router.post('/user', getReviewsByUser);
+router.put('/:reviewId', authenticate, updateReview);
 export default router;

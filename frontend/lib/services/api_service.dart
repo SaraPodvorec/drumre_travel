@@ -60,6 +60,29 @@ class Api {
     }
   }
 
+  static Future<dynamic> putRequest(String endpoint, Map data) async {
+    final client = http.Client();
+    if (client is BrowserClient) {
+      client.withCredentials = true;
+    }
+    try {
+      final res = await client.put(
+        Uri.parse("$baseUrl$endpoint"),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(data),
+      );
+      if (res.statusCode != 200) {
+        throw Exception('Failed to update data: ${res.statusCode}');
+      }
+      final responseData = json.decode(res.body);
+      return responseData;
+    } catch (e) {
+      throw Exception('Network error: $e');
+    } finally {
+      client.close();
+    }
+  }
+
   // proxy image URL through backend to avoid CORS issues
   static String getProxyImageUrl(String imageUrl) {
     return "$baseUrl/proxy-image?url=${Uri.encodeComponent(imageUrl)}";

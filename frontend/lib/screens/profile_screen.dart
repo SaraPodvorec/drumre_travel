@@ -3,6 +3,7 @@ import 'package:frontend/models/review.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
+import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/services/user_service.dart';
@@ -75,6 +76,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
   }
+
+  Future<void> _editReview(CityReview review) async {
+    final updated = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LeaveReviewScreen(review: review),
+      ),
+    );
+
+    if (updated == true) {
+      await _fetchReviews();
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(color: Colors.grey[600]),
                   )
                 else
-                  ..._reviews.map((r) => ReviewCard(review: r, canDelete: true, onDelete: () => _deleteReview(r))),
+                  ..._reviews.map((r) => ReviewCard(review: r, canDelete: true, onDelete: () => _deleteReview(r), onEdit: () => _editReview(r), canEdit: true,))
               ]),
             ),
           ),
