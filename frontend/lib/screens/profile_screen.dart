@@ -19,6 +19,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   List<CityReview> _reviews = [];
   bool _isReviewsLoading = true;
+  int followersCount = 0;
+  int followingCount = 0;
 
   Future<void> _fetchReviews() async {
     try {
@@ -36,10 +38,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _loadFollowStats() async {
+    try {
+      final stats = await UserService.getFollowStats();
+      setState(() {
+        followersCount = stats['followers'] ?? 0;
+        followingCount = stats['following'] ?? 0;
+      });
+    } catch (e) {
+      print('Error loading follow stats: $e');
+    }
+  }
   @override
   void initState() {
     super.initState();
     _fetchReviews();
+    _loadFollowStats();
   }
 
   @override
@@ -98,6 +112,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        followersCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text('Followers'),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        followingCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text('Following'),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
               const SizedBox(height: 24),
               Text(
                 'Favorite Cities (${userProvider.favoriteCities.length})',

@@ -40,7 +40,7 @@ class UsersScreen extends StatelessWidget {
                           : Colors.blue,
                     ),
                     child: Text(
-                      user.isFollowing ? 'Following' : 'Follow',
+                      user.isFollowing ? 'Unfollow' : 'Follow',
                     ),
                   ),
                 );

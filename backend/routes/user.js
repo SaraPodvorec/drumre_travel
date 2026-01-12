@@ -11,6 +11,7 @@ import {
   deleteCity,
   undeleteCity,
   addFollowing,
+  getUserFollowStats,
   removeFollowing,
   completeOnboarding
 } from '../controllers/user_controller.js';
@@ -27,6 +28,7 @@ router.post('/deleted-cities/add', authenticate, deleteCity);
 router.delete('/deleted-cities/remove/:cityId', authenticate, undeleteCity);
 router.post('/follow/add', authenticate, addFollowing);
 router.delete('/follow/remove/:userId', authenticate, removeFollowing);
+router.get('/follow/stats', authenticate, getUserFollowStats);
 
 router.post('/onboarding/complete', authenticate, completeOnboarding);
 

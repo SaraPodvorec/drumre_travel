@@ -16,6 +16,19 @@ class UserProvider extends ChangeNotifier {
 
   bool get onboardingCompleted => _onboardingCompleted;
   bool get isInitialized => _initialized;
+  int followersCount = 0;
+  int followingCount = 0;
+
+  Future<void> loadFollowStats() async {
+    try {
+      final stats = await UserService.getFollowStats();
+      followersCount = stats['followers'] ?? 0;
+      followingCount = stats['following'] ?? 0;
+      notifyListeners();
+    } catch (e) {
+      print('Error loading follow stats: $e');
+    }
+  }
 
   Future<void> loadUserData() async {
     isLoading = true;

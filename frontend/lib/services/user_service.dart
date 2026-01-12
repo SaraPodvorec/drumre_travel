@@ -24,6 +24,22 @@ class UserService {
       rethrow;
     }
   }
+  
+  static Future<Map<String, int>> getFollowStats() async {
+    final response = await _client.get(
+      Uri.parse('$baseUrl/user/follow/stats'),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load follow stats');
+    }
+
+    final data = jsonDecode(response.body);
+    return {
+      'followers': data['followersCount'],
+      'following': data['followingCount'],
+    };
+  }
 
   static Future<void> addFavoriteCity(String cityId) async {
     try {

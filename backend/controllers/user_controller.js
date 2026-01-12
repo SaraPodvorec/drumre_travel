@@ -177,7 +177,7 @@ export const addFollowing = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
-//needs fix bcs we dont have userId on frontend (userId is mongoDB id)
+//needs fix bcs we dont have userId on frontend (userId is mongoDB id) - solved?
 export const removeFollowing = async (req, res) => {
   const { userId } = req.params; // ID of the user to unfollow
   try {
@@ -191,6 +191,22 @@ export const removeFollowing = async (req, res) => {
   catch (e) {
     res.status(500).json({ error: e.message });
   } 
+};
+
+export const getUserFollowStats = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select('following');
+    const followingCount = user?.following.length || 0;
+
+    const followersCount = await User.countDocuments({ following: userId });
+    console.log('Followers count:', followersCount);
+    console.log('Following count:', followingCount);
+    res.json({ followersCount, followingCount });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const completeOnboarding = async (req, res) => {
