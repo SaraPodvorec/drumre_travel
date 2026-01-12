@@ -1,7 +1,7 @@
 import City from "../models/city.js";
 import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
-import { fetchCityWeather } from "../services/openWeather.js";
+import { fetchCityWeather } from "../services/openweather.js";
 
 export async function getAllCities(req, res) {
   const cities = await City.find();
