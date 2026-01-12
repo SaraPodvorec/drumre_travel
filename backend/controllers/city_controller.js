@@ -100,8 +100,6 @@ export async function getCityData(cityName) {
   }
 }
 
-//Funkcija filtrira po drzavi (country_code), temperaturi i ratingu
-//Korisnim moze odabrati jedanu ili više opcija za filtriranje npr svi gradovi iz HR, sortirani po temperaturi ili avgImpression 
 export const cityFilters = async (req, res) => {
   try {
     const {
@@ -110,12 +108,12 @@ export const cityFilters = async (req, res) => {
       sort,   
       order = "asc",
       //limit = 20
-    } = req.query; //Trenutno je napravljeno da se parametri salju kao query parametri npr. /cities/filters?country=US&sort=temperature&order=desc
+    } = req.query; 
 
     const filter = {};
 
     if (country) {
-      filter.country_code = country;
+      filter.country= country;
     }
 
     if (continent) {
@@ -124,14 +122,9 @@ export const cityFilters = async (req, res) => {
     }
 
     const sortOptions = {};
-    if (sort) {
-      const sortFields = sort.split(",");       // npr. ['avgImpression', 'popularity', 'temperature'] -> redosljed je bitan zbog prioritera (najveci ima avgImpression)
-      const sortOrders = (order || "").split(","); // npr. ['desc','asc']
 
-      sortFields.forEach((field, i) => {
-        const dir = sortOrders[i] === "desc" ? -1 : 1; 
-        sortOptions[field] = dir;
-      });
+    if(sort){
+      sortOptions[sort] = order === "desc" ? -1 : 1;
     }
 
     if (!sort && (country || continent)) {

@@ -34,6 +34,22 @@ class CityProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadCitiesWithFilters(Map<String, dynamic> filters) async {
+    isLoading = true;
+    error = null;
+    notifyListeners();
+
+    try {
+      cities = await _cityService.fetchCitiesWithFilters(filters);
+    } catch (e) {
+      error = 'Failed to load cities with filters: $e';
+      print('Error loading cities with filters: $e');
+    }
+
+    isLoading = false;
+    notifyListeners();
+  }
+
   Future<City?> searchCity(String cityName) async {
     isSearching = true;
     error = null;

@@ -4,6 +4,7 @@ import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
+import 'package:frontend/widgets/city_filter_panel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String? _searchQuery; // Add this line
+  bool _showFilters = false;
+  Map<String, dynamic> _activeFilters = {};
 
   @override
   void initState() {
@@ -161,9 +164,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: const Text('Search'),
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  SizedBox(
+                    height: 56,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          _showFilters = !_showFilters;
+                        });
+                      },
+                      icon: Icon(_showFilters ? Icons.filter_alt_off : Icons.filter_alt),
+                      label: Text(_showFilters ? 'Hide Filters' : 'Show Filters'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _activeFilters.isEmpty ? null : Colors.blue,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+            
+            // Filter Panel
+            if (_showFilters)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: CityFilterPanel(
+                  onFiltersApplied: (filters) async {
+                    setState(() {
+                      _activeFilters = filters;
+                    });
+                    await context.read<CityProvider>().loadCitiesWithFilters(filters);
+                  },
+                  onFiltersCleared: () async {
+                    setState(() {
+                      _activeFilters = {};
+                    });
+                    await context.read<CityProvider>().loadCities();
+                  },
+                ),
+              ),
             // Cities Grid
             Expanded(
               child: cityProvider.isLoading

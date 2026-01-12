@@ -20,14 +20,6 @@ export const getUserData = async (req, res) => {
   }
 };
 
-// export const getAllUsers = async (req, res) => {
-//   try {
-//     const users = await User.find().select('name email picture');
-//     res.json({users});
-//   } catch (e) {
-//     res.status(500).json({ error: e.message });
-//   }
-// };
 export const getAllUsers = async (req, res) => {
   try {
     const currentUser = await User.findById(req.user.id)
@@ -41,28 +33,6 @@ export const getAllUsers = async (req, res) => {
       following: currentUser.following
     });
   } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-};
-
-export const getUserProfile = async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const user = await User.findOne({ _id: userId })
-    .select('name picture wishlistCities favoriteCities');
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    const currentUser = await User.findById(req.user.id).select('following');
-    const isFollowing = currentUser.following.includes(userId);
-    res.json({
-      name: user.name,
-      picture: user.picture,
-      wishlistedCities: user.wishlistCities,
-      favoriteCities: user.favoriteCities,
-      isFollowing: isFollowing
-    });
-  }catch (e) {
     res.status(500).json({ error: e.message });
   }
 };
@@ -178,7 +148,7 @@ export const addFollowing = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
-//needs fix bcs we dont have userId on frontend (userId is mongoDB id) - solved?
+
 export const removeFollowing = async (req, res) => {
   const { userId } = req.params; // ID of the user to unfollow
   try {
