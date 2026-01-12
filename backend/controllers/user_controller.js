@@ -4,9 +4,10 @@ import City from '../models/city.js';
 export const getUserData = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.user.id })
-      .select('wishlistCities favoriteCities deletedCities onboardingCompleted onboardingPreferences');
+      .select('_id wishlistCities favoriteCities deletedCities onboardingCompleted onboardingPreferences');
     
     res.json({
+      user_id: user._id,
       wishlistedCities: user?.wishlistCities || [],
       favoriteCities: user?.favoriteCities || [],
       deletedCities: user?.deletedCities || [],

@@ -16,5 +16,5 @@ router.get('/', (req, res) => {
 router.post('/', authenticate, submitReview);
 router.delete('/:cityId', authenticate, deleteReview);
 router.post('/city', getReviewsByCity);
-router.get('/user', getReviewsByUser);
+router.post('/user', getReviewsByUser);
 export default router;

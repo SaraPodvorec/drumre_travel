@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/models/review.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/services/api_service.dart';
+import 'package:frontend/services/review_service.dart';
+import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +19,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  List<CityReview> _reviews = [];
+  bool _isReviewsLoading = true;
+
+  Future<void> _fetchReviews() async {
+    try {
+      final data = await UserService.getUserData();
+      final List<dynamic> reviews = await ReviewService.getReviewsByUser(
+        data['user_id'].toString(),
+      );
+      setState(() {
+        _reviews = reviews.map((json) => CityReview.fromJson(json)).toList();
+        _isReviewsLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isReviewsLoading = false);
+      print("Error fetching reviews: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchReviews();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
@@ -21,9 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final cityProvider = context.watch<CityProvider>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-      ),
+      appBar: AppBar(title: const Text('My Profile')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -99,8 +127,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   itemCount: userProvider.favoriteCities.length,
                   itemBuilder: (context, index) {
                     final cityId = userProvider.favoriteCities[index];
-                    final cityIndex =
-                        cityProvider.cities.indexWhere((c) => c.id == cityId);
+                    final cityIndex = cityProvider.cities.indexWhere(
+                      (c) => c.id == cityId,
+                    );
 
                     if (cityIndex == -1) return const SizedBox.shrink();
 
@@ -148,8 +177,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   itemCount: userProvider.wishlistedCities.length,
                   itemBuilder: (context, index) {
                     final cityId = userProvider.wishlistedCities[index];
-                    final cityIndex =
-                        cityProvider.cities.indexWhere((c) => c.id == cityId);
+                    final cityIndex = cityProvider.cities.indexWhere(
+                      (c) => c.id == cityId,
+                    );
 
                     if (cityIndex == -1) return const SizedBox.shrink();
 
@@ -198,8 +228,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   itemCount: userProvider.deletedCities.length,
                   itemBuilder: (context, index) {
                     final cityId = userProvider.deletedCities[index];
-                    final cityIndex =
-                        cityProvider.cities.indexWhere((c) => c.id == cityId);
+                    final cityIndex = cityProvider.cities.indexWhere(
+                      (c) => c.id == cityId,
+                    );
 
                     if (cityIndex == -1) return const SizedBox.shrink();
 
@@ -220,10 +251,157 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
+              const SizedBox(height: 32),
+
+              Text(
+                'My Reviews (${_reviews.length})',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              if (_isReviewsLoading)
+                const Center(child: CircularProgressIndicator())
+              else if (_reviews.isEmpty)
+                Text(
+                  'You haven’t written any reviews yet',
+                  style: TextStyle(color: Colors.grey[600]),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _reviews.length,
+                  itemBuilder: (context, index) {
+                    return _profileReviewItem(_reviews[index]);
+                  },
+                ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _profileReviewItem(CityReview review) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.location_city,
+                  size: 18,
+                  color: Colors.blue,
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'City name',
+                          // review.cityName ?? 'Unknown city',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _formatDate(review.createdAt),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    Wrap(
+                      spacing: 16,
+                      children: [
+                        _iconValue(
+                          Icons.favorite,
+                          Colors.red,
+                          review.impression,
+                        ),
+                        _iconValue(
+                          Icons.people,
+                          Colors.blueGrey,
+                          review.people,
+                        ),
+                        _iconValue(
+                          Icons.account_balance,
+                          Colors.indigo,
+                          review.sights,
+                        ),
+                        _iconValue(Icons.shield, Colors.green, review.safety),
+                        _iconValue(
+                          Icons.attach_money,
+                          Colors.teal,
+                          review.affordability,
+                        ),
+                      ],
+                    ),
+
+                    if (review.comments.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        review.comments,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.45,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
+      ],
+    );
+  }
+
+  Widget _iconValue(IconData icon, Color color, int value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: color),
+        const SizedBox(width: 4),
+        Text(
+          value.toString(),
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day}.${date.month}.${date.year}.";
   }
 }
