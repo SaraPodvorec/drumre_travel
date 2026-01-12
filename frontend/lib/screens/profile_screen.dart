@@ -57,6 +57,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (_) {}
   }
 
+  Future<void> _deleteReview(CityReview review) async {
+    try {
+      print('Deleting review with id: ${review.id}');
+      await ReviewService.deleteReview(review.id);
+
+      setState(() {
+        _reviews.removeWhere((r) => r.id == review.id);
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Review deleted')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete review $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
@@ -201,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(color: Colors.grey[600]),
                   )
                 else
-                  ..._reviews.map((r) => ReviewCard(review: r)),
+                  ..._reviews.map((r) => ReviewCard(review: r, canDelete: true, onDelete: () => _deleteReview(r))),
               ]),
             ),
           ),

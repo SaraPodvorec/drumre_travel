@@ -3,10 +3,14 @@ import 'package:frontend/models/review.dart';
 
 class ReviewCard extends StatelessWidget {
   final CityReview review;
+  final bool canDelete;
+  final VoidCallback? onDelete;
 
   const ReviewCard({
     super.key,
     required this.review,
+    this.canDelete = false,
+    this.onDelete,
   });
 
   @override
@@ -101,6 +105,11 @@ class ReviewCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (canDelete)
+                IconButton(
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: onDelete,
+                ),
             ],
           ),
         ),

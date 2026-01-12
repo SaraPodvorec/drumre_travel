@@ -35,7 +35,7 @@ class ReviewService {
     return response as List<dynamic>;
   }
 
-  static Future<Map<String, dynamic>> deleteReview(String cityId) async {
-    return await Api.postRequest('/reviews/delete/$cityId', {});
+  static Future<Map<String, dynamic>> deleteReview(String reviewId) async {
+    return await Api.deleteRequest('/review/$reviewId');
   }
 }

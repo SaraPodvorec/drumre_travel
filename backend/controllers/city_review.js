@@ -82,21 +82,26 @@ export async function submitReview(req, res) {
 }
 
 export async function deleteReview(req, res) {
-    const { cityId } = req.params;
+    const { reviewId } = req.params;
     const review = await CityReview.findOneAndDelete({
-        userId: req.user.id,
-        cityId: cityId
+        _id: reviewId,
     });
     if (!review) {
         return res.status(404).json({ error: 'Review not found' });
     }
-    const city = await City.findById(cityId);
-    city.numOfReviews = Math.max(0, city.numOfReviews - 1);
-    city.avgImpression = city.numOfReviews == 0 ? 0 : (city.avgImpression * (city.numOfReviews + 1) - review.impression) / city.numOfReviews;
-    await city.save();
+    const city = await City.findById(review.cityId);
+    if (city) {
+        city.numOfReviews = Math.max(0, city.numOfReviews - 1);
+        city.avgImpression =
+            city.numOfReviews === 0
+                ? 0
+                : (city.avgImpression * (city.numOfReviews + 1) - review.impression) / city.numOfReviews;
 
+        await city.save();
+    }
     res.status(200).json({ message: 'Review deleted successfully' });
 }
+
 
 export async function getReviewsByCity(req, res) {
     const { cityId } = req.body;

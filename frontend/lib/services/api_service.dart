@@ -42,8 +42,12 @@ class Api {
   }
 
   static Future<dynamic> deleteRequest(String endpoint) async {
+    final client = http.Client();
+    if (client is BrowserClient) {
+      client.withCredentials = true;
+    }
     try {
-      final res = await http.delete(Uri.parse("$baseUrl$endpoint"));
+      final res = await client.delete(Uri.parse("$baseUrl$endpoint"));
       if (res.statusCode != 200 && res.statusCode != 204) {
         throw Exception('Failed to delete data: ${res.statusCode}');
       }
@@ -51,6 +55,8 @@ class Api {
       return data;
     } catch (e) {
       throw Exception('Network error: $e');
+    } finally {
+      client.close();
     }
   }
 
