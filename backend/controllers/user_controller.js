@@ -19,10 +19,26 @@ export const getUserData = async (req, res) => {
   }
 };
 
+// export const getAllUsers = async (req, res) => {
+//   try {
+//     const users = await User.find().select('name email picture');
+//     res.json({users});
+//   } catch (e) {
+//     res.status(500).json({ error: e.message });
+//   }
+// };
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('name email picture');
-    res.json({users});
+    const currentUser = await User.findById(req.user.id)
+      .select('following');
+
+    const users = await User.find({ _id: { $ne: req.user.id } })
+      .select('name email picture');
+
+    res.json({
+      users,
+      following: currentUser.following
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

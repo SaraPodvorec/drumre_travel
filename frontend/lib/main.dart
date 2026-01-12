@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_activities_screen.dart';
+import 'package:frontend/screens/discover_users_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
@@ -141,11 +142,11 @@ class App extends StatelessWidget {
           );
         },
         '/leave-review': (context) => const LeaveReviewScreen(),
+        '/discover-users': (context) => const UsersScreen(),
       },
     );
   }
 }
-
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});

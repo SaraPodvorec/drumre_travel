@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/discover_users_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../screens/profile_screen.dart';
@@ -25,19 +26,27 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Center(
               child: Row(
                 children: [
+                  IconButton(
+                    icon: const Icon(Icons.people, color: Colors.white,),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/discover-users');
+                    },
+                  ),
+
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/leave-review');
                     },
-                    child: Text('Leave review', style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      'Leave review',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   if (authProvider.userData!['picture'] != null)
                     CircleAvatar(
                       radius: 20,
                       backgroundImage: NetworkImage(
-                        Api.getProxyImageUrl(
-                          authProvider.userData!['picture'],
-                        ),
+                        Api.getProxyImageUrl(authProvider.userData!['picture']),
                       ),
                     ),
                   const SizedBox(width: 12),
