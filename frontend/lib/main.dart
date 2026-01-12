@@ -143,7 +143,11 @@ class App extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         },
-        '/leave-review': (context) => const LeaveReviewScreen(),
+        '/leave-review': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          final initialCity = args is String ? args : null;
+          return LeaveReviewScreen(initialCityName: initialCity);
+        },
         '/discover-users': (context) => const UsersScreen(),
       },
     );

@@ -274,11 +274,32 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                             thickness: 5,
                             color: Color.fromARGB(255, 0, 96, 175),
                           ),
-                          textBuilder(
-                            'Reviews:',
-                            responsiveFontSize(context, 18),
-                            FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 96, 175),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textBuilder(
+                                'Reviews:',
+                                responsiveFontSize(context, 18),
+                                FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 96, 175),
+                              ),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/leave-review',
+                                    arguments: widget.city.name,
+                                  );
+                                },
+                                icon: const Icon(Icons.rate_review),
+                                label: const Text('Leave a review'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 0, 96, 175),
+                                  foregroundColor: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
 
                           if (_isReviewsLoading)

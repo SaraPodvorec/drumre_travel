@@ -24,9 +24,8 @@ class _CityFilterPanelState extends State<CityFilterPanel> {
     'Europe',
     'Asia',
     'Africa',
-    'North America',
-    'South America',
-    'Oceania',
+    'America',
+    'Australia',
   ];
 
   final Map<String, String> sortOptions = {

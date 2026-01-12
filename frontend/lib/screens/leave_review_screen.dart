@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class LeaveReviewScreen extends StatefulWidget {
-  const LeaveReviewScreen({super.key});
+  final String? initialCityName;
+
+  const LeaveReviewScreen({super.key, this.initialCityName});
 
   @override
   State<LeaveReviewScreen> createState() => _LeaveReviewScreenState();
@@ -22,6 +24,14 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
   int _affordability = 0;
 
   bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialCityName != null) {
+      _cityController.text = widget.initialCityName!;
+    }
+  }
 
   Future<void> _submitReview() async {
     if (!_formKey.currentState!.validate()) return;
