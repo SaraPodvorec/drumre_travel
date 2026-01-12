@@ -294,8 +294,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                             )
                           else
                             ListView.builder(
-                              shrinkWrap:
-                                  true, 
+                              shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: _reviews.length,
                               itemBuilder: (context, index) {
@@ -428,133 +427,118 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
   }
 
   Widget reviewCard(CityReview review) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(2),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.blue.shade100,
-                  backgroundImage: review.userPicture != null
-                      ? NetworkImage(Api.getProxyImageUrl(review.userPicture!))
-                      : null,
-                  child: review.userPicture == null
-                      ? const Icon(Icons.person, color: Colors.blue)
-                      : null,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        review.userName ?? 'Anonymous',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.blue.shade100,
+                backgroundImage: review.userPicture != null
+                    ? NetworkImage(Api.getProxyImageUrl(review.userPicture!))
+                    : null,
+                child: review.userPicture == null
+                    ? const Icon(Icons.person, size: 18, color: Colors.blue)
+                    : null,
+              ),
+
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          review.userName ?? 'Anonymous',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _formatDate(review.createdAt),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        Spacer(),
+                        Wrap(
+                          spacing: 16,
+                          children: [
+                            _iconValue(
+                              Icons.favorite,
+                              Colors.red,
+                              review.impression,
+                            ),
+                            _iconValue(
+                              Icons.people,
+                              Colors.blueGrey,
+                              review.people,
+                            ),
+                            _iconValue(
+                              Icons.attractions,
+                              Colors.yellow,
+                              review.sights,
+                            ),
+                            _iconValue(
+                              Icons.security,
+                              Colors.green,
+                              review.safety,
+                            ),
+                            _iconValue(
+                              Icons.attach_money,
+                              Colors.teal,
+                              review.affordability,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    if (review.comments.isNotEmpty) ...[
+                      const SizedBox(height: 8),
                       Text(
-                        _formatDate(review.createdAt),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                        review.comments,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.45,
+                          color: Colors.black87,
                         ),
                       ),
                     ],
-                  ),
-                ),
-                _overallRating(review.impression),
-              ],
-            ),
-
-            const SizedBox(height: 14),
-
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _ratingChip('👥 People', review.people),
-                _ratingChip('🏛️ Sights', review.sights),
-                _ratingChip('🛡️ Safety', review.safety),
-                _ratingChip('💰 Cost', review.affordability),
-              ],
-            ),
-
-            if (review.comments.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              Text(
-                review.comments,
-                style: const TextStyle(
-                  fontSize: 15,
-                  height: 1.5,
-                  color: Colors.black87,
+                  ],
                 ),
               ),
             ],
-          ],
+          ),
         ),
-      ),
+
+        Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
+      ],
     );
   }
 
-  Widget _overallRating(int rating) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.amber.shade50,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: List.generate(
-          5,
-          (i) => Icon(
-            i < rating ? Icons.star : Icons.star_border,
-            size: 16,
-            color: Colors.amber,
-          ),
+  Widget _iconValue(IconData icon, Color color, int value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 18, color: color),
+        const SizedBox(width: 4),
+        Text(
+          value.toString(),
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
         ),
-      ),
-    );
-  }
-
-  Widget _ratingChip(String label, int value) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 12)),
-          const SizedBox(width: 6),
-          Text(
-            value.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-          const SizedBox(width: 2),
-          const Icon(Icons.star, size: 12, color: Colors.amber),
-        ],
-      ),
+      ],
     );
   }
 }
