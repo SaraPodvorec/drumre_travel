@@ -6,6 +6,7 @@ import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
+import 'package:frontend/widgets/review_card.dart';
 import 'package:provider/provider.dart';
 
 class CityDetailsScreen extends StatefulWidget {
@@ -92,18 +93,18 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ratingItem(
-                              Icons.favorite,
-                              Colors.red,
+                              Icons.star,
+                              Colors.amber.shade600,
                               '4.5',
                             ), //MOCK VALUE
                             ratingItem(
                               Icons.attractions,
-                              Colors.amber,
+                              Colors.deepPurpleAccent,
                               '4.5',
                             ), //MOCK VALUE
                             ratingItem(
                               Icons.people,
-                              Colors.lightBlueAccent,
+                              Colors.cyan.shade600,
                               '4.5',
                             ), //MOCK VALUE
                           ],
@@ -495,28 +496,28 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                           spacing: 16,
                           children: [
                             _iconValue(
-                              Icons.favorite,
-                              Colors.red,
+                              Icons.star,
+                              Colors.amber.shade600,
                               review.impression,
                             ),
                             _iconValue(
                               Icons.people,
-                              Colors.blueGrey,
+                              Colors.cyan.shade600,
                               review.people,
                             ),
                             _iconValue(
                               Icons.attractions,
-                              Colors.yellow,
+                              Colors.deepPurpleAccent,
                               review.sights,
                             ),
                             _iconValue(
                               Icons.security,
-                              Colors.green,
+                              Colors.green.shade600,
                               review.safety,
                             ),
                             _iconValue(
                               Icons.attach_money,
-                              Colors.teal,
+                              Colors.orange.shade600,
                               review.affordability,
                             ),
                           ],

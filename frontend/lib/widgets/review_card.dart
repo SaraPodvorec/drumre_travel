@@ -61,28 +61,28 @@ class ReviewCard extends StatelessWidget {
                       spacing: 16,
                       children: [
                         _ReviewRating(
-                          icon: Icons.favorite,
-                          color: Colors.red,
+                          icon: Icons.star,
+                          color: Colors.amber.shade600,
                           value: review.impression,
                         ),
                         _ReviewRating(
                           icon: Icons.people,
-                          color: Colors.blueGrey,
+                          color: Colors.cyan.shade600,
                           value: review.people,
                         ),
                         _ReviewRating(
                           icon: Icons.account_balance,
-                          color: Colors.indigo,
+                          color: Colors.deepPurpleAccent,
                           value: review.sights,
                         ),
                         _ReviewRating(
                           icon: Icons.shield,
-                          color: Colors.green,
+                          color: Colors.green.shade600,
                           value: review.safety,
                         ),
                         _ReviewRating(
                           icon: Icons.attach_money,
-                          color: Colors.teal,
+                          color: Colors.orange.shade600,
                           value: review.affordability,
                         ),
                       ],
