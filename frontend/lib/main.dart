@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_activities_screen.dart';
 import 'package:frontend/screens/discover_users_screen.dart';
@@ -22,6 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => CityProvider()),
         ChangeNotifierProvider(create: (_) => ActivityProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => SocialProvider()),
       ],
       child: const App(),
     ),

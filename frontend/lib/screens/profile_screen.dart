@@ -7,6 +7,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/city_card.dart';
+import 'package:frontend/widgets/review_card.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -318,7 +319,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _reviews.length,
                   itemBuilder: (context, index) {
-                    return _profileReviewItem(_reviews[index]);
+                    return ReviewCard(review: _reviews[index]);
                   },
                 ),
             ],
@@ -326,124 +327,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
-  }
-
-  Widget _profileReviewItem(CityReview review) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.location_city,
-                  size: 18,
-                  color: Colors.blue,
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          review.city ?? 'Unknown city',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _formatDate(review.createdAt),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 6),
-
-                    Wrap(
-                      spacing: 16,
-                      children: [
-                        _iconValue(
-                          Icons.favorite,
-                          Colors.red,
-                          review.impression,
-                        ),
-                        _iconValue(
-                          Icons.people,
-                          Colors.blueGrey,
-                          review.people,
-                        ),
-                        _iconValue(
-                          Icons.account_balance,
-                          Colors.indigo,
-                          review.sights,
-                        ),
-                        _iconValue(Icons.shield, Colors.green, review.safety),
-                        _iconValue(
-                          Icons.attach_money,
-                          Colors.teal,
-                          review.affordability,
-                        ),
-                      ],
-                    ),
-
-                    if (review.comments.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Text(
-                        review.comments,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          height: 1.45,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
-      ],
-    );
-  }
-
-  Widget _iconValue(IconData icon, Color color, int value) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 14, color: color),
-        const SizedBox(width: 4),
-        Text(
-          value.toString(),
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-        ),
-      ],
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    return "${date.day}.${date.month}.${date.year}.";
   }
 }

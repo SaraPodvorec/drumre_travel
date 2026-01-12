@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/social_provider.dart';
+import 'package:frontend/screens/other_user_profile_screen.dart';
 import 'package:provider/provider.dart';
 
 class UsersScreen extends StatelessWidget {
@@ -27,22 +28,32 @@ class UsersScreen extends StatelessWidget {
                 final user = provider.users[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage(user.picture),
+                    backgroundImage: (user.picture.isNotEmpty)
+                        ? NetworkImage(user.picture)
+                        : null,
+                    child: (user.picture.isEmpty)
+                        ? const Icon(Icons.person)
+                        : null,
                   ),
                   title: Text(user.name),
                   subtitle: Text(user.email),
                   trailing: ElevatedButton(
-                    onPressed: () =>
-                        provider.toggleFollow(user),
+                    onPressed: () => provider.toggleFollow(user),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: user.isFollowing
                           ? Colors.grey
                           : Colors.blue,
                     ),
-                    child: Text(
-                      user.isFollowing ? 'Unfollow' : 'Follow',
-                    ),
+                    child: Text(user.isFollowing ? 'Unfollow' : 'Follow'),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => OtherUserProfileScreen(userId: user.id),
+                      ),
+                    );
+                  },
                 );
               },
             );

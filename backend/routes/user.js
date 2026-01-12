@@ -13,7 +13,8 @@ import {
   addFollowing,
   getUserFollowStats,
   removeFollowing,
-  completeOnboarding
+  completeOnboarding,
+  getUsersProfile
 } from '../controllers/user_controller.js';
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.delete('/deleted-cities/remove/:cityId', authenticate, undeleteCity);
 router.post('/follow/add', authenticate, addFollowing);
 router.delete('/follow/remove/:userId', authenticate, removeFollowing);
 router.get('/follow/stats', authenticate, getUserFollowStats);
+router.get('/:id/profile', authenticate, getUsersProfile);
 
 router.post('/onboarding/complete', authenticate, completeOnboarding);
 

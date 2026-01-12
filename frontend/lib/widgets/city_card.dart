@@ -99,19 +99,33 @@ class CityCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on, size: 16),
-                        const SizedBox(width: 4),
-                        Text(city.country),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(Icons.location_on, size: 16),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              city.country,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        const Icon(Icons.thermostat, size: 16),
-                        const SizedBox(width: 4),
-                        Text('${city.temperature.toStringAsFixed(1)}°C'),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(Icons.thermostat, size: 16),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              '${city.temperature.toStringAsFixed(1)}°C',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

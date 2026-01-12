@@ -27,8 +27,8 @@ class CityReview {
 
   factory CityReview.fromJson(Map<String, dynamic> json) {
     return CityReview(
-      id: json['id'],
-      city: json['city'] ?? 'Unknown city',
+      id: json['_id'] ?? json['id'] ?? '',
+      city: json['city'] ?? json['cityId']['city'] ??'Unknown city',
       userName: json['name'],
       userPicture: json['picture'],
       impression: (json['impression'] as num).toInt(),

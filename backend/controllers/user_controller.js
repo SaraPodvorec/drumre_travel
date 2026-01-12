@@ -1,5 +1,6 @@
 import User from '../models/user.js';
 import City from '../models/city.js';
+import City_review from '../models/city_review.js';
 
 export const getUserData = async (req, res) => {
   try {
@@ -236,4 +237,37 @@ export const completeOnboarding = async (req, res) => {
   }
 };
 
+export const getUsersProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const user = await User.findById(id)
+      .select('name email picture following favoriteCities wishlistedCities');
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const followersCount = await User.countDocuments({ following: id });
+    const followingCount = user.following.length;
+    const favoriteCities = await City.find({ _id: { $in: user.favoriteCities } })
+      .select('city country imageUrl');
+
+    const wishlistedCities = await City.find({ _id: { $in: user.wishlistedCities } })
+      .select('city country imageUrl');
+    const reviews = await City_review.find({ userId: id }).populate('cityId', 'city country imageUrl');;
+
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        followersCount,
+        followingCount,
+        favoriteCities,
+        wishlistedCities,
+      },
+      reviews,
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
