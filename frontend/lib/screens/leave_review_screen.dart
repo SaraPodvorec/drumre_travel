@@ -29,7 +29,6 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
   @override
   void initState() {
     super.initState();
-
     if (widget.review != null) {
       final r = widget.review!;
       _cityController.text = r.city ?? '';
@@ -40,6 +39,8 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
       _sights = r.sights;
       _safety = r.safety;
       _affordability = r.affordability;
+    } else if (widget.initialCityName != null) {
+      _cityController.text = widget.initialCityName!;
     }
   }
 
@@ -126,11 +127,23 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                     controller: _commentController,
                     maxLines: 4,
                     maxLength: 1000,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Comments (Optional)",
                       alignLabelWithHint: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                      ),
                     ),
                   ),
+
                   
                   const SizedBox(height: 32),
                   

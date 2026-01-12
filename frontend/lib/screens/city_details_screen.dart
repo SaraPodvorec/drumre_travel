@@ -3,6 +3,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/review.dart';
 import 'package:frontend/providers/activity_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
+import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
@@ -286,11 +287,14 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                               ),
                               ElevatedButton.icon(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/leave-review',
-                                    arguments: widget.city.name,
-                                  );
+                                  Navigator.push(context,
+                                    MaterialPageRoute(
+                                    builder: (context) {
+                                      return LeaveReviewScreen(
+                                        initialCityName: widget.city.name,
+                                      );
+                                    },
+                                  )).then((_) => _fetchReviews());
                                 },
                                 icon: const Icon(Icons.rate_review),
                                 label: const Text('Leave a review'),
