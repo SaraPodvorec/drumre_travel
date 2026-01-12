@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 onBookmarkToggle: () {
                                   final isWishlisted = userProvider
-                                      .wishlistedCities
+                                      .wishlistCities
                                       .contains(city.id);
                                   if (isWishlisted) {
                                     userProvider.removeWishlist(city.id);

@@ -9,7 +9,7 @@ export const getUserData = async (req, res) => {
     
     res.json({
       user_id: user._id,
-      wishlistedCities: user?.wishlistCities || [],
+      wishlistCities: user?.wishlistCities || [],
       favoriteCities: user?.favoriteCities || [],
       deletedCities: user?.deletedCities || [],
       onboardingCompleted: user?.onboardingCompleted || false,
@@ -212,7 +212,7 @@ export const getUsersProfile = async (req, res) => {
     const { id } = req.params;
 
     const user = await User.findById(id)
-      .select('name email picture following favoriteCities wishlistedCities');
+      .select('name email picture following favoriteCities wishlistCities');
 
     if (!user) return res.status(404).json({ error: 'User not found' });
     const followersCount = await User.countDocuments({ following: id });
@@ -220,7 +220,7 @@ export const getUsersProfile = async (req, res) => {
     const favoriteCities = await City.find({ _id: { $in: user.favoriteCities } })
       .select('city country imageUrl');
 
-    const wishlistedCities = await City.find({ _id: { $in: user.wishlistedCities } })
+    const wishlistCities = await City.find({ _id: { $in: user.wishlistCities } })
       .select('city country imageUrl');
     const reviews = await City_review.find({ userId: id }).populate('cityId', 'city country imageUrl');;
 
@@ -233,7 +233,7 @@ export const getUsersProfile = async (req, res) => {
         followersCount,
         followingCount,
         favoriteCities,
-        wishlistedCities,
+        wishlistCities,
       },
       reviews,
     });

@@ -33,7 +33,7 @@ class CityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
     final isFavorite = userProvider.favoriteCities.contains(city.id);
-    final isWishlisted = userProvider.wishlistedCities.contains(city.id);
+    final isWishlisted = userProvider.wishlistCities.contains(city.id);
     
     return Card(
       child: Column(

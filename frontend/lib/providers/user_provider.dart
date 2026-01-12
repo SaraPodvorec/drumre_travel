@@ -4,7 +4,7 @@ import '../services/user_service.dart';
 class UserProvider extends ChangeNotifier {
   List<String> favoriteCities = [];
   List<String> deletedCities = [];
-  List<String> wishlistedCities = [];
+  List<String> wishlistCities = [];
   String selecetedClimate = '';
   String selectedCitySize = '';
   Set<String> selectedContinents = {};
@@ -36,8 +36,8 @@ class UserProvider extends ChangeNotifier {
     
     try {
       final data = await UserService.getUserData();
-      wishlistedCities = List<String>.from(
-        (data['wishlistedCities'] as List?)?.map((c) => c.toString()) ?? []
+      wishlistCities = List<String>.from(
+        (data['wishlistCities'] as List?)?.map((c) => c.toString()) ?? []
       );
       favoriteCities = List<String>.from(
         (data['favoriteCities'] as List?)?.map((c) => c.toString()) ?? []
@@ -82,8 +82,8 @@ class UserProvider extends ChangeNotifier {
   Future<void> addWishlist(String cityId) async {
     try {
       await UserService.addWishlistCity(cityId);
-      if (!wishlistedCities.contains(cityId)) {
-        wishlistedCities.add(cityId);
+      if (!wishlistCities.contains(cityId)) {
+        wishlistCities.add(cityId);
       }
       notifyListeners();
     } catch (e) {
@@ -94,7 +94,7 @@ class UserProvider extends ChangeNotifier {
   Future<void> removeWishlist(String cityId) async {
     try {
       await UserService.removeWishlistCity(cityId);
-      wishlistedCities.remove(cityId);
+      wishlistCities.remove(cityId);
       notifyListeners();
     } catch (e) {
       error = e.toString();
@@ -149,7 +149,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   void clearUserData() {
-    wishlistedCities = [];
+    wishlistCities = [];
     favoriteCities = [];
     deletedCities = [];
     selecetedClimate = '';

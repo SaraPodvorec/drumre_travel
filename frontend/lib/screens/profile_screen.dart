@@ -8,6 +8,7 @@ import 'package:frontend/services/review_service.dart';
 import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:frontend/widgets/review_card.dart';
+import 'package:frontend/widgets/profile.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -23,19 +24,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int followersCount = 0;
   int followingCount = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchReviews();
+    _loadFollowStats();
+  }
+
   Future<void> _fetchReviews() async {
     try {
       final data = await UserService.getUserData();
-      final List<dynamic> reviews = await ReviewService.getReviewsByUser(
+      final reviews = await ReviewService.getReviewsByUser(
         data['user_id'].toString(),
       );
+
       setState(() {
-        _reviews = reviews.map((json) => CityReview.fromJson(json)).toList();
+        _reviews = reviews.map((e) => CityReview.fromJson(e)).toList();
         _isReviewsLoading = false;
       });
-    } catch (e) {
+    } catch (_) {
       setState(() => _isReviewsLoading = false);
-      print("Error fetching reviews: $e");
     }
   }
 
@@ -46,285 +54,158 @@ class _ProfileScreenState extends State<ProfileScreen> {
         followersCount = stats['followers'] ?? 0;
         followingCount = stats['following'] ?? 0;
       });
-    } catch (e) {
-      print('Error loading follow stats: $e');
-    }
-  }
-  @override
-  void initState() {
-    super.initState();
-    _fetchReviews();
-    _loadFollowStats();
+    } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthProvider>();
+    final auth = context.watch<AuthProvider>();
     final userProvider = context.watch<UserProvider>();
     final cityProvider = context.watch<CityProvider>();
 
+    final profile = auth.userData;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('My Profile')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (authProvider.userData != null)
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        if (authProvider.userData!['picture'] != null)
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage: NetworkImage(
-                              Api.getProxyImageUrl(
-                                authProvider.userData!['picture'],
-                              ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 220,
+            pinned: true,
+            backgroundColor: Theme.of(context).primaryColor,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                padding: const EdgeInsets.fromLTRB(16, 80, 16, 24),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF0060AF), Color(0xFF4FA3FF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    CircleAvatar(
+                      radius: 42,
+                      backgroundImage: profile?['picture'] != null
+                          ? NetworkImage(
+                              Api.getProxyImageUrl(profile!['picture']),
+                            )
+                          : null,
+                      child: profile?['picture'] == null
+                          ? const Icon(Icons.person, size: 40)
+                          : null,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            profile?['name'] ?? 'User',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                authProvider.userData!['name'] ?? 'User',
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                authProvider.userData!['email'] ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(height: 4),
+                          Text(
+                            profile?['email'] ?? '',
+                            style: const TextStyle(color: Colors.white70),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        followersCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text('Followers'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        followingCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text('Following'),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-
-              const SizedBox(height: 24),
-              Text(
-                'Favorite Cities (${userProvider.favoriteCities.length})',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                    Spacer(),
+                    StatsRow(
+                      followers: followersCount,
+                      following: followingCount,
+                      reviews: _reviews.length,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 12),
-              if (userProvider.favoriteCities.isEmpty)
-                Text(
-                  'No favorite cities yet',
-                  style: TextStyle(color: Colors.grey[600]),
-                )
-              else
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    mainAxisExtent: 240,
-                  ),
-                  itemCount: userProvider.favoriteCities.length,
-                  itemBuilder: (context, index) {
-                    final cityId = userProvider.favoriteCities[index];
-                    final cityIndex = cityProvider.cities.indexWhere(
-                      (c) => c.id == cityId,
-                    );
-
-                    if (cityIndex == -1) return const SizedBox.shrink();
-
-                    final city = cityProvider.cities[cityIndex];
-
-                    return CityCard(
-                      city: city,
-                      imageHeight: 100,
-                      cardHeight: 240,
-                      showDeleteButton: false,
-                      onFavoriteToggle: () {
-                        userProvider.removeFavorite(city.id);
-                      },
-                      onViewCityDetails: () {
-                        context.read<CityProvider>().setSelectedCity(city);
-                        Navigator.pushNamed(context, '/city-details');
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(height: 32),
-              Text(
-                'Wishlist Cities (${userProvider.wishlistedCities.length})',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (userProvider.wishlistedCities.isEmpty)
-                Text(
-                  'No wishlist cities yet',
-                  style: TextStyle(color: Colors.grey[600]),
-                )
-              else
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    mainAxisExtent: 240,
-                  ),
-                  itemCount: userProvider.wishlistedCities.length,
-                  itemBuilder: (context, index) {
-                    final cityId = userProvider.wishlistedCities[index];
-                    final cityIndex = cityProvider.cities.indexWhere(
-                      (c) => c.id == cityId,
-                    );
-
-                    if (cityIndex == -1) return const SizedBox.shrink();
-
-                    final city = cityProvider.cities[cityIndex];
-
-                    return CityCard(
-                      city: city,
-                      imageHeight: 100,
-                      cardHeight: 240,
-                      showFavoriteButton: false,
-                      showBookmarkButton: true,
-                      onBookmarkToggle: () {
-                        userProvider.removeWishlist(city.id);
-                      },
-                      onViewCityDetails: () {
-                        context.read<CityProvider>().setSelectedCity(city);
-                        Navigator.pushNamed(context, '/city-activities');
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(height: 32),
-              Text(
-                'Hidden Cities (${userProvider.deletedCities.length})',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (userProvider.deletedCities.isEmpty)
-                Text(
-                  'No hidden cities',
-                  style: TextStyle(color: Colors.grey[600]),
-                )
-              else
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    mainAxisExtent: 240,
-                  ),
-                  itemCount: userProvider.deletedCities.length,
-                  itemBuilder: (context, index) {
-                    final cityId = userProvider.deletedCities[index];
-                    final cityIndex = cityProvider.cities.indexWhere(
-                      (c) => c.id == cityId,
-                    );
-
-                    if (cityIndex == -1) return const SizedBox.shrink();
-
-                    final city = cityProvider.cities[cityIndex];
-
-                    return CityCard(
-                      city: city,
-                      imageHeight: 100,
-                      cardHeight: 240,
-                      showFavoriteButton: false,
-                      onDelete: () {
-                        userProvider.restoreCity(city.id);
-                      },
-                      onViewCityDetails: () {
-                        context.read<CityProvider>().setSelectedCity(city);
-                        Navigator.pushNamed(context, '/city-activities');
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(height: 32),
-
-              Text(
-                'My Reviews (${_reviews.length})',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              if (_isReviewsLoading)
-                const Center(child: CircularProgressIndicator())
-              else if (_reviews.isEmpty)
-                Text(
-                  'You haven’t written any reviews yet',
-                  style: TextStyle(color: Colors.grey[600]),
-                )
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _reviews.length,
-                  itemBuilder: (context, index) {
-                    return ReviewCard(review: _reviews[index]);
-                  },
-                ),
-            ],
+            ),
           ),
-        ),
+
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                CitySection(
+                  title:
+                      'Favorite Cities (${userProvider.favoriteCities.length})',
+                  emptyText: 'No favorite cities yet',
+                  cityIds: userProvider.favoriteCities,
+                  cityProvider: cityProvider,
+
+                  onCityTap: (context, city) {
+                    context.read<CityProvider>().setSelectedCity(city);
+                    Navigator.pushNamed(context, '/city-details');
+                  },
+
+                  onFavoriteToggle: (city) {
+                    userProvider.removeFavorite(city.id);
+                  },
+                ),
+
+                CitySection(
+                  title:
+                      'Wishlist Cities (${userProvider.wishlistCities.length})',
+                  emptyText: 'No wishlist cities yet',
+                  cityIds: userProvider.wishlistCities,
+                  cityProvider: cityProvider,
+
+                  onCityTap: (context, city) {
+                    context.read<CityProvider>().setSelectedCity(city);
+                    Navigator.pushNamed(context, '/city-details');
+                  },
+
+                  onBookmarkToggle: (city) {
+                    userProvider.removeWishlist(city.id);
+                  },
+                ),
+
+                CitySection(
+                  title: 'Hidden Cities (${userProvider.deletedCities.length})',
+                  emptyText: 'No hidden cities',
+                  cityIds: userProvider.deletedCities,
+                  cityProvider: cityProvider,
+                  isHidden: true,
+
+                  onCityTap: (context, city) {
+                    context.read<CityProvider>().setSelectedCity(city);
+                    Navigator.pushNamed(context, '/city-details');
+                  },
+
+                  onDelete: (city) {
+                    userProvider.restoreCity(city.id);
+                  },
+                ),
+
+                const SizedBox(height: 32),
+
+                Text(
+                  'My Reviews',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 12),
+
+                if (_isReviewsLoading)
+                  const Center(child: CircularProgressIndicator())
+                else if (_reviews.isEmpty)
+                  Text(
+                    'You haven’t written any reviews yet',
+                    style: TextStyle(color: Colors.grey[600]),
+                  )
+                else
+                  ..._reviews.map((r) => ReviewCard(review: r)),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -9,7 +9,7 @@ class SocialUser {
   final List<String> following; // IDs of users this user follows
   int followersCount;
   final List<City> favoriteCities;
-  final List<City> wishlistedCities;
+  final List<City> wishlistCities;
   final List<CityReview> reviews;
 
   bool isFollowing;
@@ -22,7 +22,7 @@ class SocialUser {
     this.following = const [],
     this.followersCount = 0,
     this.favoriteCities = const [],
-    this.wishlistedCities = const [],
+    this.wishlistCities = const [],
     this.reviews = const [],
     this.isFollowing = false,
   });
@@ -42,7 +42,7 @@ class SocialUser {
       favoriteCities: (userJson['favoriteCities'] as List? ?? [])
           .map((c) => City.fromJson(c))
           .toList(),
-      wishlistedCities: (userJson['wishlistedCities'] as List? ?? [])
+      wishlistCities: (userJson['wishlistCities'] as List? ?? [])
           .map((c) => City.fromJson(c))
           .toList(),
       reviews: (json['reviews'] as List? ?? [])
