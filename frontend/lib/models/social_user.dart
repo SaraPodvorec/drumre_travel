@@ -47,6 +47,8 @@ class SocialUser {
           .toList(),
       reviews: (json['reviews'] as List? ?? [])
           .map((r) => CityReview.fromJson(r))
-          .toList(),    );
+          .toList(), 
+      isFollowing: followingIds.contains(id));
+      
   }
 }

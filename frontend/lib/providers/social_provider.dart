@@ -3,14 +3,16 @@ import '../models/social_user.dart';
 import '../services/social_service.dart';
 
 class SocialProvider extends ChangeNotifier {
+  SocialProvider() {
+    loadUsers();
+  }
   List<SocialUser> users = [];
   bool isLoading = false;
   String? error;
 
-  /// Convenience getter: set of IDs the logged-in user is following
-  Set<String> get followingIds => users.where((u) => u.isFollowing).map((u) => u.id).toSet();
+  Set<String> get followingIds =>
+      users.where((u) => u.isFollowing).map((u) => u.id).toSet();
 
-  /// Load all users for discovery
   Future<void> loadUsers() async {
     isLoading = true;
     notifyListeners();
@@ -18,9 +20,15 @@ class SocialProvider extends ChangeNotifier {
     try {
       final data = await SocialService.fetchAllUsers();
       final List usersJson = data['users'] ?? [];
-      final Set<String> currentFollowingIds = Set<String>.from(data['following'] ?? []);
+      final Set<String> currentFollowingIds = Set<String>.from(
+        data['following'] ?? [],
+      );
 
-      users = usersJson.map((u) => SocialUser.fromJson(u, currentFollowingIds)).toList();
+      users = usersJson.map((u) {
+        final user = SocialUser.fromJson(u, currentFollowingIds);
+        return user;
+      }).toList();
+
       error = null;
     } catch (e) {
       error = e.toString();
@@ -30,11 +38,16 @@ class SocialProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Toggle follow/unfollow
   Future<void> toggleFollow(SocialUser user) async {
     final previous = user.isFollowing;
     user.isFollowing = !previous;
     user.followersCount += user.isFollowing ? 1 : -1;
+
+    final index = users.indexWhere((u) => u.id == user.id);
+    if (index != -1) {
+      users[index] = user;
+    }
+
     notifyListeners();
 
     try {
@@ -44,14 +57,15 @@ class SocialProvider extends ChangeNotifier {
         await SocialService.unfollow(user.id);
       }
     } catch (e) {
-      // Rollback if network fails
       user.isFollowing = previous;
       user.followersCount += user.isFollowing ? 1 : -1;
+
+      if (index != -1) users[index] = user;
+
       notifyListeners();
     }
   }
 
-  /// Fetch another user's profile for viewing
   Future<SocialUser> fetchUserProfile(String userId) async {
     return SocialService.getUserProfile(userId, followingIds);
   }

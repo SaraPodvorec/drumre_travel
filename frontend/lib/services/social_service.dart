@@ -6,7 +6,6 @@ class SocialService {
   static const baseUrl = "http://localhost:3000/api";
   static final _client = BrowserClient()..withCredentials = true;
 
-  /// Fetch all users and the current user's following IDs
   static Future<Map<String, dynamic>> fetchAllUsers() async {
     final res = await _client.get(Uri.parse('$baseUrl/user/all'));
 
