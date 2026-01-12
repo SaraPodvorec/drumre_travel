@@ -26,22 +26,54 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Center(
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.people, color: Colors.white,),
+                  TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/discover-users');
                     },
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.white,
+                            width: 2.5, 
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Discover users',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
 
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/leave-review');
                     },
-                    child: Text(
-                      'Leave review',
-                      style: TextStyle(color: Colors.white),
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.white,
+                            width: 2.5, 
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Leave review',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
+                  const SizedBox(width: 16),
                   if (authProvider.userData!['picture'] != null)
                     CircleAvatar(
                       radius: 20,
