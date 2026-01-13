@@ -3,6 +3,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/review.dart';
 import 'package:frontend/providers/activity_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
@@ -53,297 +54,339 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final activityProvider = context.watch<ActivityProvider>();
+    final userProvider = context.watch<UserProvider>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth > 900;
+    final cardHeight = MediaQuery.of(context).size.height * 0.4;
+    final isFavorite = userProvider.favoriteCities.contains(widget.city.id);
+    final isWishlisted = userProvider.wishlistCities.contains(widget.city.id);
 
-    final screenHeight = MediaQuery.of(context).size.height;
-    final cardHeight = screenHeight * 0.4;
-
-    return Scaffold(
-      appBar: MainAppBar(title: widget.city.name),
-      body: Row(
-        children: [
-          // Side panel with city image and stats
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.blue.shade50,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(13),
-                        border: Border.all(
-                          color: Color.fromARGB(255, 0, 96, 175),
-                          width: 5,
-                        ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          widget.city.imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+    Widget sidePanel() {
+      return Container(
+        width: isWide ? screenWidth * 0.25 : double.infinity,
+        margin: const EdgeInsets.only(bottom: 24),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.network(
+                    widget.city.imageUrl,
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  bottom: 12,
+                  left: 12,
+                  child: Text(
+                    widget.city.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      shadows: [Shadow(blurRadius: 4, color: Colors.black45)],
                     ),
-                    const SizedBox(height: 12),
-                    // City stats
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ratingItem(
-                              Icons.star,
-                              Colors.amber.shade600,
-                              '4.5',
-                            ), //MOCK VALUE
-                            ratingItem(
-                              Icons.attractions,
-                              Colors.deepPurpleAccent,
-                              '4.5',
-                            ), //MOCK VALUE
-                            ratingItem(
-                              Icons.people,
-                              Colors.cyan.shade600,
-                              '4.5',
-                            ), //MOCK VALUE
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Column(
-                          children: [
-                            richTextBuilder(
-                              'Visited by: ',
-                              '${widget.city.numOfReviews} users',
-                              responsiveFontSize(context, 18),
-                            ),
-                            const SizedBox(height: 16),
-                            richTextBuilder(
-                              'Wishlisted by: ',
-                              '${widget.city.onWishlists} users',
-                              responsiveFontSize(context, 18),
-                            ),
-                          ],
-                        ),
-                      ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ratingItem(Icons.star, Colors.amber.shade600, '4.5'),
+                ratingItem(Icons.people, Colors.cyan.shade600, '4.5'),
+                ratingItem(Icons.attractions, Colors.deepPurpleAccent, '4.5'),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Column(
+              children: [
+                richTextBuilder(
+                  'Visited by: ',
+                  '${widget.city.numOfReviews} users',
+                  responsiveFontSize(context, 16),
+                ),
+                const SizedBox(height: 12),
+                richTextBuilder(
+                  'Wishlisted by: ',
+                  '${widget.city.onWishlists} users',
+                  responsiveFontSize(context, 16),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget mainContent() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              textBuilder(
+                '${widget.city.name}, ${widget.city.country}',
+                responsiveFontSize(context, 26),
+                FontWeight.bold,
+                color: const Color.fromARGB(255, 0, 96, 175),
+              ),
+              Spacer(),
+              IconButton(
+                onPressed: () {
+                  if (isFavorite) {
+                    userProvider.removeFavorite(widget.city.id);
+                  } else {
+                    userProvider.addFavorite(widget.city.id);
+                  }
+                },
+                icon: Icon(
+                  Icons.favorite,
+                  color: isFavorite ? Colors.red : Colors.grey,
+                  size: isWide ? 32 : 28,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  if (isWishlisted) {
+                    userProvider.removeWishlist(widget.city.id);
+                  } else {
+                    userProvider.addWishlist(widget.city.id);
+                  }
+                },
+                icon: Icon(
+                  Icons.bookmark,
+                  color: isWishlisted ? Colors.amber : Colors.grey,
+                  size: isWide ? 32 : 28,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          textBuilder(
+            widget.city.description ?? '',
+            responsiveFontSize(context, 16),
+            FontWeight.normal,
+          ),
+          const SizedBox(height: 24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    richTextBuilder(
+                      'Population: ',
+                      '${widget.city.population ?? 'N/A'}',
+                      responsiveFontSize(context, 16),
+                    ),
+                    richTextBuilder(
+                      'Currency: ',
+                      widget.city.currency ?? 'N/A',
+                      responsiveFontSize(context, 16),
+                    ),
+                    richTextBuilder(
+                      'Temperature: ',
+                      '${widget.city.temperature}°C',
+                      responsiveFontSize(context, 16),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-          // Main city content area
-          Expanded(
-            flex: 2,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    richTextBuilder(
+                      'Timezone: ',
+                      widget.city.timezone,
+                      responsiveFontSize(context, 16),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                    richTextBuilder(
+                      'Language: ',
+                      widget.city.language ?? 'N/A',
+                      responsiveFontSize(context, 16),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          textBuilder(
+            'Activities:',
+            responsiveFontSize(context, 18),
+            FontWeight.bold,
+            color: const Color.fromARGB(255, 0, 96, 175),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: cardHeight,
+            child: activityProvider.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : activityProvider.activities.isEmpty
+                ? const Center(child: Text('No activities available'))
+                : Builder(
+                    builder: (context) {
+                      final activities = activityProvider.activities;
+                      final maxCount = activities.length < 5
+                          ? activities.length
+                          : 5;
+                      return Row(
                         children: [
-                          textBuilder(
-                            '${widget.city.name}, ${widget.city.country}',
-                            responsiveFontSize(context, 26),
-                            FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 96, 175),
-                          ),
-                          textBuilder(
-                            widget.city.description ?? '',
-                            responsiveFontSize(context, 16),
-                            FontWeight.normal,
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    richTextBuilder(
-                                      'Population: ',
-                                      '${widget.city.population ?? 'N/A'}',
-                                      responsiveFontSize(context, 16),
-                                    ),
-                                    richTextBuilder(
-                                      'Currency: ',
-                                      widget.city.currency ?? 'N/A',
-                                      responsiveFontSize(context, 16),
-                                    ),
-                                    richTextBuilder(
-                                      'Temperature: ',
-                                      '${widget.city.temperature}°C',
-                                      responsiveFontSize(context, 16),
-                                    ),
-                                  ],
+                          for (var i = 0; i < 5; i++)
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  right: i < 3 ? 16.0 : 0,
                                 ),
+                                child: i < maxCount
+                                    ? activityCard(activities[i])
+                                    : const SizedBox.shrink(),
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    richTextBuilder(
-                                      'Timezone: ',
-                                      widget.city.timezone,
-                                      responsiveFontSize(context, 16),
-                                    ),
-                                    richTextBuilder(
-                                      'Language: ',
-                                      widget.city.language ?? 'N/A',
-                                      responsiveFontSize(context, 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          const Divider(
-                            thickness: 5,
-                            color: Color.fromARGB(255, 0, 96, 175),
-                          ),
-                          textBuilder(
-                            'Activities:',
-                            responsiveFontSize(context, 18),
-                            FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 96, 175),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: cardHeight,
-                            child: activityProvider.isLoading
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : activityProvider.activities.isEmpty
-                                ? const Center(
-                                    child: Text('No activities available'),
-                                  )
-                                : Builder(
-                                    builder: (context) {
-                                      final activities =
-                                          activityProvider.activities;
-                                      final maxCount = activities.length < 4
-                                          ? activities.length
-                                          : 4;
-
-                                      return Row(
-                                        children: [
-                                          for (var i = 0; i < 4; i++)
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  right: i < 3 ? 12.0 : 0,
-                                                ),
-                                                child: i < maxCount
-                                                    ? activityCard(
-                                                        activities[i],
-                                                      )
-                                                    : const SizedBox.shrink(),
-                                              ),
-                                            ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.read<CityProvider>().setSelectedCity(
-                                  widget.city,
-                                );
-                                Navigator.pushNamed(
-                                  context,
-                                  '/city-activities',
-                                );
-                              },
-                              child: const Text(
-                                'View Activities',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const Divider(
-                            thickness: 5,
-                            color: Color.fromARGB(255, 0, 96, 175),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              textBuilder(
-                                'Reviews:',
-                                responsiveFontSize(context, 18),
-                                FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 96, 175),
-                              ),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  Navigator.push(context,
-                                    MaterialPageRoute(
-                                    builder: (context) {
-                                      return LeaveReviewScreen(
-                                        initialCityName: widget.city.name,
-                                      );
-                                    },
-                                  )).then((_) => _fetchReviews());
-                                },
-                                icon: const Icon(Icons.rate_review),
-                                label: const Text('Leave a review'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 0, 96, 175),
-                                  foregroundColor: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          if (_isReviewsLoading)
-                            const Center(child: CircularProgressIndicator())
-                          else if (_reviews.isEmpty)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: Center(
-                                child: Text(
-                                  'No reviews yet. Be the first to leave one!',
-                                ),
-                              ),
-                            )
-                          else
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _reviews.length,
-                              itemBuilder: (context, index) {
-                                return reviewCard(_reviews[index]);
-                              },
                             ),
                         ],
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () {
+                context.read<CityProvider>().setSelectedCity(widget.city);
+                Navigator.pushNamed(context, '/city-activities');
               },
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 0, 96, 175),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 32,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'View Activities',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textBuilder(
+                'Reviews:',
+                responsiveFontSize(context, 18),
+                FontWeight.bold,
+                color: const Color.fromARGB(255, 0, 96, 175),
+              ),
+              FilledButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return LeaveReviewScreen(
+                          initialCityName: widget.city.name,
+                        );
+                      },
+                    ),
+                  ).then((_) => _fetchReviews());
+                },
+                icon: const Icon(Icons.rate_review),
+                label: const Text('Leave a review'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 0, 96, 175),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (_isReviewsLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (_reviews.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Center(
+                child: Text('No reviews yet. Be the first to leave one!'),
+              ),
+            )
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _reviews.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) => reviewCard(_reviews[index]),
+            ),
+          const SizedBox(height: 24),
         ],
-      ),
+      );
+    }
+
+    return Scaffold(
+      appBar: MainAppBar(title: widget.city.name),
+      body: isWide
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                sidePanel(),
+                const SizedBox(width: 24),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: mainContent(),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [sidePanel(), mainContent()],
+                ),
+              ),
+            ),
     );
   }
 
   double responsiveFontSize(BuildContext context, double baseSize) {
     final width = MediaQuery.of(context).size.width;
     if (width < 1200) return baseSize * (width / 1024);
-    return baseSize * (width / 1440);
+    return baseSize * (width / 1600);
   }
 
   Widget ratingItem(IconData icon, Color iconColor, String value) {
@@ -425,7 +468,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -457,7 +500,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
