@@ -138,13 +138,13 @@ export async function getReviewsByUser(req, res) {
             sights: review.sights,
             safety: review.safety,
             affordability: review.affordability,
-            comments: review.comments
+            comments: review.comments,
+            createdAt: review.createdAt,
         }));
     res.status(200).json(response);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch user reviews', details: error.message });
     }
-
 }
 
 export async function updateReview(req, res) {

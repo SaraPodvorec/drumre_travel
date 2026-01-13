@@ -7,7 +7,6 @@ import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/services/user_service.dart';
-import 'package:frontend/widgets/city_card.dart';
 import 'package:frontend/widgets/review_card.dart';
 import 'package:frontend/widgets/profile.dart';
 import 'package:provider/provider.dart';
