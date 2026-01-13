@@ -118,17 +118,9 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             const SizedBox(height: 16),
             Column(
               children: [
-                richTextBuilder(
-                  'Visited by: ',
-                  '${widget.city.numOfReviews} users',
-                  responsiveFontSize(context, 16),
-                ),
+                Text('Visited by ${widget.city.numOfReviews} users', style: TextStyle( fontSize: 18)),
                 const SizedBox(height: 12),
-                richTextBuilder(
-                  'Wishlisted by: ',
-                  '${widget.city.onWishlists} users',
-                  responsiveFontSize(context, 16),
-                ),
+                Text('Wishlisted by ${widget.city.onWishlists} users', style: TextStyle( fontSize: 18)),
               ],
             ),
           ],
@@ -142,12 +134,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
         children: [
           Row(
             children: [
-              textBuilder(
-                '${widget.city.name}, ${widget.city.country}',
-                responsiveFontSize(context, 26),
-                FontWeight.bold,
-                color: const Color.fromARGB(255, 0, 96, 175),
-              ),
+              Text('${widget.city.name}, ${widget.city.country}', style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 0, 96, 175), fontSize: 26),),
               Spacer(),
               IconButton(
                 onPressed: () {
@@ -180,11 +167,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          textBuilder(
-            widget.city.description ?? '',
-            responsiveFontSize(context, 16),
-            FontWeight.normal,
-          ),
+          Text(widget.city.description ?? '<No description available>',  style: TextStyle(fontSize: 16)),
           const SizedBox(height: 24),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,21 +176,9 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    richTextBuilder(
-                      'Population: ',
-                      '${widget.city.population ?? 'N/A'}',
-                      responsiveFontSize(context, 16),
-                    ),
-                    richTextBuilder(
-                      'Currency: ',
-                      widget.city.currency ?? 'N/A',
-                      responsiveFontSize(context, 16),
-                    ),
-                    richTextBuilder(
-                      'Temperature: ',
-                      '${widget.city.temperature}°C',
-                      responsiveFontSize(context, 16),
-                    ),
+                    Text('Population: ${widget.city.population ?? 'N/A'}', style: TextStyle(fontSize: 16),),
+                    Text('Currency: ${widget.city.currency ?? 'N/A'}',  style: TextStyle(fontSize: 16)),
+                    Text('Temperature: ${widget.city.temperature}°C',  style: TextStyle(fontSize: 16))
                   ],
                 ),
               ),
@@ -215,28 +186,15 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    richTextBuilder(
-                      'Timezone: ',
-                      widget.city.timezone,
-                      responsiveFontSize(context, 16),
-                    ),
-                    richTextBuilder(
-                      'Language: ',
-                      widget.city.language ?? 'N/A',
-                      responsiveFontSize(context, 16),
-                    ),
+                    Text('Timezone: ${widget.city.timezone}',  style: TextStyle(fontSize: 16)),
+                    Text('Language: ${widget.city.language ?? 'N/A'}',  style: TextStyle(fontSize: 16)),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 24),
-          textBuilder(
-            'Activities:',
-            responsiveFontSize(context, 18),
-            FontWeight.bold,
-            color: const Color.fromARGB(255, 0, 96, 175),
-          ),
+          Text('Activities',  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color.fromARGB(255, 0, 96, 175))),
           const SizedBox(height: 12),
           SizedBox(
             height: cardHeight,
@@ -251,12 +209,13 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                           ? activities.length
                           : 5;
                       return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           for (var i = 0; i < 5; i++)
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.only(
-                                  right: i < 3 ? 16.0 : 0,
+                                  right: 16,
                                 ),
                                 child: i < maxCount
                                     ? activityCard(activities[i])
@@ -296,12 +255,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              textBuilder(
-                'Reviews:',
-                responsiveFontSize(context, 18),
-                FontWeight.bold,
-                color: const Color.fromARGB(255, 0, 96, 175),
-              ),
+              Text('Reviews', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color.fromARGB(255, 0, 96, 175)),),
               FilledButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -382,12 +336,6 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
               ),
             ),
     );
-  }
-
-  double responsiveFontSize(BuildContext context, double baseSize) {
-    final width = MediaQuery.of(context).size.width;
-    if (width < 1200) return baseSize * (width / 1024);
-    return baseSize * (width / 1600);
   }
 
   Widget ratingItem(IconData icon, Color iconColor, String value) {
@@ -478,7 +426,6 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                       maxLines: 3,
                       overflow: TextOverflow.visible,
                       style: TextStyle(
-                        fontSize: responsiveFontSize(context, 14),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

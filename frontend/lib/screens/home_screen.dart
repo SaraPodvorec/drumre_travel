@@ -38,6 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final cityProvider = context.watch<CityProvider>();
     final userProvider = context.watch<UserProvider>();
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     // update filteredCities to include search filtering
     var filteredCities = cityProvider.cities
@@ -228,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               return CityCard(
                                 city: city,
-                                imageHeight: 220,
+                                imageHeight: screenHeight * 0.2,
                                 cardHeight: 340,
                                 onFavoriteToggle: () {
                                   final isFavorite = userProvider.favoriteCities
