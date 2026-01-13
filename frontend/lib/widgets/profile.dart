@@ -92,6 +92,7 @@ class CitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -101,49 +102,59 @@ class CitySection extends StatelessWidget {
         if (cityIds.isEmpty)
           Text(emptyText, style: TextStyle(color: Colors.grey[600]))
         else
-          SizedBox(
-            height: 260,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: cityIds.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                final cityIndex = cityProvider.cities.indexWhere(
-                  (c) => c.id == cityIds[index],
-                );
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final double spacing = 12;
+              final int columns = constraints.maxWidth > 1200
+                  ? 5
+                  : constraints.maxWidth > 900
+                  ? 4
+                  : constraints.maxWidth > 600
+                  ? 3
+                  : 2;
 
-                if (cityIndex == -1) return const SizedBox.shrink();
-                final city = cityProvider.cities[cityIndex];
+              final double itemWidth =
+                  (constraints.maxWidth - (spacing * (columns - 1))) / columns;
 
-                return SizedBox(
-                  width: 200,
-                  child: CityCard(
-                    city: city,
-                    imageHeight: 110,
-                    cardHeight: 250,
+              return Wrap(
+                spacing: spacing,
+                runSpacing: spacing,
+                children: cityIds.map((cityId) {
+                  final cityIndex = cityProvider.cities.indexWhere(
+                    (c) => c.id == cityId,
+                  );
 
-                    showFavoriteButton: onFavoriteToggle != null && !isHidden,
-                    showBookmarkButton: onBookmarkToggle != null,
-                    showDeleteButton: onDelete != null || isHidden,
+                  if (cityIndex == -1) return const SizedBox.shrink();
+                  final city = cityProvider.cities[cityIndex];
 
-                    onFavoriteToggle: onFavoriteToggle != null
-                        ? () => onFavoriteToggle!(city)
-                        : null,
+                  return SizedBox(
+                    width: itemWidth,
+                    child: CityCard(
+                      city: city,
+                      imageHeight: 110,
+                      cardHeight: 250,
 
-                    onBookmarkToggle: onBookmarkToggle != null
-                        ? () => onBookmarkToggle!(city)
-                        : null,
+                      showFavoriteButton: onFavoriteToggle != null && !isHidden,
+                      showBookmarkButton: onBookmarkToggle != null,
+                      showDeleteButton: onDelete != null || isHidden,
 
-                    onDelete: onDelete != null ? () => onDelete!(city) : null,
+                      onFavoriteToggle: onFavoriteToggle != null
+                          ? () => onFavoriteToggle!(city)
+                          : null,
 
-                    onViewCityDetails: () => onCityTap(context, city),
-                  ),
-                );
-              },
-            ),
+                      onBookmarkToggle: onBookmarkToggle != null
+                          ? () => onBookmarkToggle!(city)
+                          : null,
+
+                      onDelete: onDelete != null ? () => onDelete!(city) : null,
+
+                      onViewCityDetails: () => onCityTap(context, city),
+                    ),
+                  );
+                }).toList(),
+              );
+            },
           ),
-
-        const SizedBox(height: 32),
       ],
     );
   }

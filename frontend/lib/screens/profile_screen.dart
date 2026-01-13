@@ -90,7 +90,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
@@ -184,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     userProvider.removeFavorite(city.id);
                   },
                 ),
-
+                const SizedBox(height: 32),
                 CitySection(
                   title:
                       'Wishlist Cities (${userProvider.wishlistCities.length})',
@@ -201,7 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     userProvider.removeWishlist(city.id);
                   },
                 ),
-
+                const SizedBox(height: 32),
                 CitySection(
                   title: 'Hidden Cities (${userProvider.deletedCities.length})',
                   emptyText: 'No hidden cities',
