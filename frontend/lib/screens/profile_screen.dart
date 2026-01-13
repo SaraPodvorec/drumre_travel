@@ -67,22 +67,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _reviews.removeWhere((r) => r.id == review.id);
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Review deleted')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Review deleted')));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete review $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to delete review $e')));
     }
   }
 
   Future<void> _editReview(CityReview review) async {
     final updated = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
-        builder: (_) => LeaveReviewScreen(review: review),
-      ),
+      MaterialPageRoute(builder: (_) => LeaveReviewScreen(review: review)),
     );
 
     if (updated == true) {
@@ -173,7 +171,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   emptyText: 'No favorite cities yet',
                   cityIds: userProvider.favoriteCities,
                   cityProvider: cityProvider,
-
                   onCityTap: (context, city) {
                     context.read<CityProvider>().setSelectedCity(city);
                     Navigator.pushNamed(context, '/city-details');
@@ -190,12 +187,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   emptyText: 'No wishlist cities yet',
                   cityIds: userProvider.wishlistCities,
                   cityProvider: cityProvider,
-
                   onCityTap: (context, city) {
                     context.read<CityProvider>().setSelectedCity(city);
                     Navigator.pushNamed(context, '/city-details');
                   },
-
                   onBookmarkToggle: (city) {
                     userProvider.removeWishlist(city.id);
                   },
@@ -207,12 +202,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   cityIds: userProvider.deletedCities,
                   cityProvider: cityProvider,
                   isHidden: true,
-
                   onCityTap: (context, city) {
                     context.read<CityProvider>().setSelectedCity(city);
                     Navigator.pushNamed(context, '/city-details');
                   },
-
                   onDelete: (city) {
                     userProvider.restoreCity(city.id);
                   },
@@ -234,7 +227,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(color: Colors.grey[600]),
                   )
                 else
-                  ..._reviews.map((r) => ReviewCard(review: r, canDelete: true, onDelete: () => _deleteReview(r), onEdit: () => _editReview(r), canEdit: true,))
+                  ..._reviews.map(
+                    (r) => ReviewCard(
+                      review: r,
+                      canDelete: true,
+                      onDelete: () => _deleteReview(r),
+                      onEdit: () => _editReview(r),
+                      canEdit: true,
+                    ),
+                  ),
               ]),
             ),
           ),

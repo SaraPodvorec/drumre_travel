@@ -33,6 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _searchController.dispose();
     super.dispose();
   }
+      int _calculateColumns(double width) {
+      // if (width >= 1900) return 5; // ultrawide
+      if (width >= 1500) return 4; // 27"
+      if (width >= 1200) return 3; // 24"
+      if (width >= 900) return 2; // tablet
+      return 1; // mobile
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -40,28 +47,28 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = context.watch<UserProvider>();
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final columns = _calculateColumns(screenWidth);
 
-    // update filteredCities to include search filtering
     var filteredCities = cityProvider.cities
         .where((city) => !userProvider.deletedCities.contains(city.id))
         .toList();
 
     if (_searchQuery != null && _searchQuery!.isNotEmpty) {
       filteredCities = filteredCities
-          .where((city) =>
-              city.name.toLowerCase().contains(_searchQuery!.toLowerCase()) ||
-              city.country.toLowerCase().contains(_searchQuery!.toLowerCase()))
+          .where(
+            (city) =>
+                city.name.toLowerCase().contains(_searchQuery!.toLowerCase()) ||
+                city.country.toLowerCase().contains(
+                  _searchQuery!.toLowerCase(),
+                ),
+          )
           .toList();
     }
 
     return Scaffold(
       appBar: const MainAppBar(title: 'Traveler Cities'),
       body: Padding(
-        padding: const EdgeInsets.only(
-          left: 100.0,
-          right: 100.0,
-          bottom: 25.0,
-        ),
+        padding: const EdgeInsets.only(left: 100.0, right: 100.0, bottom: 25.0),
         child: Column(
           children: [
             // Search Box
@@ -101,8 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       onSubmitted: (value) async {
                         if (value.isNotEmpty) {
-                          final city =
-                              await context.read<CityProvider>().searchCity(value);
+                          final city = await context
+                              .read<CityProvider>()
+                              .searchCity(value);
                           if (city != null) {
                             setState(() {
                               _searchQuery = value;
@@ -158,9 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             )
                           : const Icon(Icons.search),
                       label: const Text('Search'),
@@ -175,17 +181,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           _showFilters = !_showFilters;
                         });
                       },
-                      icon: Icon(_showFilters ? Icons.filter_alt_off : Icons.filter_alt),
-                      label: Text(_showFilters ? 'Hide Filters' : 'Show Filters'),
+                      icon: Icon(
+                        _showFilters ? Icons.filter_alt_off : Icons.filter_alt,
+                      ),
+                      label: Text(
+                        _showFilters ? 'Hide Filters' : 'Show Filters',
+                      ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _activeFilters.isEmpty ? null : Colors.blue,
+                        backgroundColor: _activeFilters.isEmpty
+                            ? null
+                            : Colors.blue,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            
+
             // Filter Panel
             if (_showFilters)
               Padding(
@@ -195,7 +207,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     setState(() {
                       _activeFilters = filters;
                     });
-                    await context.read<CityProvider>().loadCitiesWithFilters(filters);
+                    await context.read<CityProvider>().loadCitiesWithFilters(
+                      filters,
+                    );
                   },
                   onFiltersCleared: () async {
                     setState(() {
@@ -210,62 +224,61 @@ class _HomeScreenState extends State<HomeScreen> {
               child: cityProvider.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : filteredCities.isEmpty
-                      ? const Center(
-                          child: Text('No cities available. Try searching!'),
-                        )
-                      : ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context)
-                              .copyWith(scrollbars: false),
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
+                  ? const Center(
+                      child: Text('No cities available. Try searching!'),
+                    )
+                  : ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(
+                        context,
+                      ).copyWith(scrollbars: false),
+                      child: GridView.builder(
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: columns,
                               crossAxisSpacing: 15.0,
                               mainAxisSpacing: 15.0,
-                              mainAxisExtent: 360,
+                              mainAxisExtent: screenHeight * 0.4
                             ),
-                            itemCount: filteredCities.length,
-                            itemBuilder: (context, index) {
-                              final city = filteredCities[index];
+                        itemCount: filteredCities.length,
+                        itemBuilder: (context, index) {
+                          final city = filteredCities[index];
 
-                              return CityCard(
-                                city: city,
-                                imageHeight: screenHeight * 0.2,
-                                cardHeight: 340,
-                                onFavoriteToggle: () {
-                                  final isFavorite = userProvider.favoriteCities
-                                      .contains(city.id);
-                                  if (isFavorite) {
-                                    userProvider.removeFavorite(city.id);
-                                  } else {
-                                    userProvider.addFavorite(city.id);
-                                  }
-                                },
-                                onBookmarkToggle: () {
-                                  final isWishlisted = userProvider
-                                      .wishlistCities
-                                      .contains(city.id);
-                                  if (isWishlisted) {
-                                    userProvider.removeWishlist(city.id);
-                                  } else {
-                                    userProvider.addWishlist(city.id);
-                                  }
-                                },
-                                onDelete: () {
-                                  userProvider.deleteCity(city.id);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('City hidden')),
-                                  );
-                                },
-                                onViewCityDetails: () {
-                                  context.read<CityProvider>().setSelectedCity(city);
-                                  Navigator.pushNamed(context,'/city-details');
-                                },
+                          return CityCard(
+                            city: city,
+                            onFavoriteToggle: () {
+                              final isFavorite = userProvider.favoriteCities
+                                  .contains(city.id);
+                              if (isFavorite) {
+                                userProvider.removeFavorite(city.id);
+                              } else {
+                                userProvider.addFavorite(city.id);
+                              }
+                            },
+                            onBookmarkToggle: () {
+                              final isWishlisted = userProvider.wishlistCities
+                                  .contains(city.id);
+                              if (isWishlisted) {
+                                userProvider.removeWishlist(city.id);
+                              } else {
+                                userProvider.addWishlist(city.id);
+                              }
+                            },
+                            onDelete: () {
+                              userProvider.deleteCity(city.id);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('City hidden')),
                               );
                             },
-                          ),
-                        ),
+                            onViewCityDetails: () {
+                              context.read<CityProvider>().setSelectedCity(
+                                city,
+                              );
+                              Navigator.pushNamed(context, '/city-details');
+                            },
+                          );
+                        },
+                      ),
+                    ),
             ),
           ],
         ),

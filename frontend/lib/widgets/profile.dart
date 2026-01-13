@@ -70,9 +70,6 @@ class CitySection extends StatelessWidget {
   final void Function(City city)? onFavoriteToggle;
   final void Function(City city)? onBookmarkToggle;
   final void Function(City city)? onDelete;
-  final bool showDeleteButton;
-  final bool showFavoriteButton;
-  final bool showBookmarkButton;
 
   const CitySection({
     super.key,
@@ -85,9 +82,6 @@ class CitySection extends StatelessWidget {
     this.onBookmarkToggle,
     this.onDelete,
     this.isHidden = false,
-    this.showDeleteButton = true,
-    this.showFavoriteButton = true,
-    this.showBookmarkButton = true,
   });
 
   @override
@@ -131,13 +125,6 @@ class CitySection extends StatelessWidget {
                     width: itemWidth,
                     child: CityCard(
                       city: city,
-                      imageHeight: 110,
-                      cardHeight: 250,
-
-                      showFavoriteButton: onFavoriteToggle != null && !isHidden,
-                      showBookmarkButton: onBookmarkToggle != null,
-                      showDeleteButton: onDelete != null || isHidden,
-
                       onFavoriteToggle: onFavoriteToggle != null
                           ? () => onFavoriteToggle!(city)
                           : null,

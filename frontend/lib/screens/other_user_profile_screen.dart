@@ -141,7 +141,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                     cityProvider.setSelectedCity(city);
                     Navigator.pushNamed(context, '/city-details');
                   },
-                  showFavoriteButton: false,
+                  // showFavoriteButton: false,
                 ),
 
                 const SizedBox(height: 24),
@@ -152,7 +152,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                   emptyText: 'No wishlist cities',
                   cityIds: userProfile!.wishlistCities.map((c) => c.id).toList(),
                   cityProvider: cityProvider,
-                  showFavoriteButton: false,
+                  // showFavoriteButton: false,
                   onCityTap: (context, city) {
                     cityProvider.setSelectedCity(city);
                     Navigator.pushNamed(context, '/city-details');
