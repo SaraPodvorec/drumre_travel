@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/discover_users_screen.dart';
+import 'package:frontend/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../screens/profile_screen.dart';
@@ -108,6 +109,17 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                           if (context.mounted) {
                             Navigator.of(context).pushReplacementNamed('/');
                           }
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: const Text('Settings'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const AccessibilitySettingsScreen(),
+                            ),
+                          );
                         },
                       ),
                     ],

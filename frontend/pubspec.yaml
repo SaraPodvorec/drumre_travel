@@ -39,7 +39,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   google_sign_in_web: ^1.1.0
   provider: ^6.1.5+1
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +64,11 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/fonts/opendyslexic/OpenDyslexic-Regular.otf
+  fonts:
+    - family: OpenDyslexic
+      fonts:
+        - asset: assets/fonts/opendyslexic/OpenDyslexic-Regular.otf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

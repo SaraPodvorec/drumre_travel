@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/accessibility_provider.dart';
 import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_activities_screen.dart';
@@ -24,6 +25,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ActivityProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => SocialProvider()),
+        ChangeNotifierProvider(create: (_) => AccessibilityProvider()),
       ],
       child: const App(),
     ),
@@ -35,7 +37,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     const primaryColor = Color.fromARGB(255, 0, 96, 175);
     const backgroundColor = Color.fromARGB(255, 250, 253, 255);
     const textColor = Color(0xFF212121);
@@ -86,7 +87,10 @@ class App extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           borderSide: const BorderSide(color: primaryColor, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         hintStyle: const TextStyle(color: Color(0xFF9E9E9E)),
       ),
       textTheme: const TextTheme(
@@ -100,14 +104,8 @@ class App extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
-        bodyLarge: TextStyle(
-          fontSize: 16,
-          color: textColor,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          color: textColor,
-        ),
+        bodyLarge: TextStyle(fontSize: 16, color: textColor),
+        bodyMedium: TextStyle(fontSize: 14, color: textColor),
       ),
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
@@ -115,40 +113,53 @@ class App extends StatelessWidget {
       ),
     );
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Traveler",
-      theme: theme,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const AuthWrapper(),
-        '/login': (context) => const LoginScreen(),
-        '/onboarding': (context) => const OnboardingScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/city-details': (context) {
-          final selectedCity = context.watch<CityProvider>().selectedCity;
-          if (selectedCity != null) {
-            return CityDetailsScreen(city: selectedCity);
-          }
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        },
-        '/city-activities': (context) {
-          final selectedCity = context.watch<CityProvider>().selectedCity;
-          if (selectedCity != null) {
-            return CityActivitiesScreen(city: selectedCity);
-          }
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        },
-        '/leave-review': (context) {
-          final args = ModalRoute.of(context)?.settings.arguments;
-          final initialCity = args is String ? args : null;
-          return LeaveReviewScreen(initialCityName: initialCity);
-        },
-        '/discover-users': (context) => const UsersScreen(),
+    return Consumer<AccessibilityProvider>(
+      builder: (context, accessibility, _) {
+        return MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(accessibility.textScale)),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: "Traveler",
+            theme: theme.copyWith(
+              textTheme: theme.textTheme.apply(
+                fontFamily: accessibility.fontFamily,
+              ),
+            ),
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const AuthWrapper(),
+              '/login': (context) => const LoginScreen(),
+              '/onboarding': (context) => const OnboardingScreen(),
+              '/home': (context) => const HomeScreen(),
+              '/city-details': (context) {
+                final selectedCity = context.watch<CityProvider>().selectedCity;
+                if (selectedCity != null) {
+                  return CityDetailsScreen(city: selectedCity);
+                }
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              },
+              '/city-activities': (context) {
+                final selectedCity = context.watch<CityProvider>().selectedCity;
+                if (selectedCity != null) {
+                  return CityActivitiesScreen(city: selectedCity);
+                }
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              },
+              '/leave-review': (context) {
+                final args = ModalRoute.of(context)?.settings.arguments;
+                final initialCity = args is String ? args : null;
+                return LeaveReviewScreen(initialCityName: initialCity);
+              },
+              '/discover-users': (context) => const UsersScreen(),
+            },
+          ),
+        );
       },
     );
   }
@@ -173,6 +184,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Future<void> _initialize() async {
     final authProvider = context.read<AuthProvider>();
     final userProvider = context.read<UserProvider>();
+    await context.read<AccessibilityProvider>().loadPreferences();
 
     // Wait for auth initialization
     await authProvider.initialize();
@@ -194,9 +206,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     if (_loading) {
       log('AuthWrapper: Loading...');
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (!authProvider.isAuthenticated) {
@@ -205,11 +215,15 @@ class _AuthWrapperState extends State<AuthWrapper> {
     }
 
     if (!userProvider.onboardingCompleted) {
-      log('AuthWrapper: Onboarding not completed, navigating to OnboardingScreen');
+      log(
+        'AuthWrapper: Onboarding not completed, navigating to OnboardingScreen',
+      );
       return const OnboardingScreen();
     }
 
-    log('AuthWrapper: User authenticated and onboarding completed, navigating to HomeScreen');
+    log(
+      'AuthWrapper: User authenticated and onboarding completed, navigating to HomeScreen',
+    );
     return const HomeScreen();
   }
 }
