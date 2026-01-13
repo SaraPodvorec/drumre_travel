@@ -105,9 +105,10 @@ export async function deleteReview(req, res) {
 export async function getReviewsByCity(req, res) {
     const { cityId } = req.body;
     try {
-    const reviews = await CityReview.find({ cityId: cityId }).populate('userId', 'name picture');
+    const reviews = await CityReview.find({ cityId: cityId }).populate('userId', '_id name picture');
     const response = reviews.map(review => ({
       id: review._id,
+      userId: review.userId?._id ?? null,
       name: review.userId?.name ?? null,
       picture: review.userId?.picture ?? null,
       impression: review.impression,

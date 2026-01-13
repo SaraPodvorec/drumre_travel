@@ -5,6 +5,7 @@ import 'package:frontend/providers/activity_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/leave_review_screen.dart';
+import 'package:frontend/screens/other_user_profile_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
@@ -504,15 +505,33 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.blue.shade100,
-                backgroundImage: review.userPicture != null
-                    ? NetworkImage(Api.getProxyImageUrl(review.userPicture!))
-                    : null,
-                child: review.userPicture == null
-                    ? const Icon(Icons.person, size: 18, color: Colors.blue)
-                    : null,
+              Material(
+                color: Colors.transparent,
+                shape: const CircleBorder(),
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            OtherUserProfileScreen(userId: review.userId!),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.blue.shade100,
+                    backgroundImage: review.userPicture != null
+                        ? NetworkImage(
+                            Api.getProxyImageUrl(review.userPicture!),
+                          )
+                        : null,
+                    child: review.userPicture == null
+                        ? const Icon(Icons.person, size: 18, color: Colors.blue)
+                        : null,
+                  ),
+                ),
               ),
 
               const SizedBox(width: 12),

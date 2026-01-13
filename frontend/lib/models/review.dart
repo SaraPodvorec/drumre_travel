@@ -1,6 +1,7 @@
 class CityReview {
   final String id;
   final String? city;
+  final String? userId;
   final String? userName;
   final String? userPicture;
   final int impression;
@@ -14,6 +15,7 @@ class CityReview {
   CityReview({
     required this.id,
     this.city,
+    this.userId,
     this.userName,
     this.userPicture,
     required this.impression,
@@ -33,6 +35,7 @@ class CityReview {
         : json['cityId'] is Map<String, dynamic>
             ? json['cityId']['city']
             : null,
+      userId: json['userId'],
       userName: json['name'],
       userPicture: json['picture'],
       impression: (json['impression'] as num).toInt(),
