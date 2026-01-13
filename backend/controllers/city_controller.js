@@ -2,11 +2,55 @@ import City from "../models/city.js";
 import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
 import { fetchCityWeather } from "../services/openweather.js";
+import { fetchCityDescription } from "../services/serpapi.js";
+
+export async function updateMissingDescriptions() {
+  console.log("Starting batch update for cities missing descriptions...");
+
+  try {
+    const citiesToUpdate = await City.find({
+      $or: [
+        { description: { $exists: false } },
+        { description: null },
+        { description: "" }
+      ]
+    });
+
+    console.log(`Found ${citiesToUpdate.length} cities to update.`);
+
+    if (citiesToUpdate.length === 0) {
+      console.log("All cities already have descriptions.");
+      return;
+    }
+
+    for (const city of citiesToUpdate) {
+      try {
+        console.log(`Updating description for: ${city.city}...`);
+        
+        const description = await fetchCityDescription(city.city, city.country);
+
+        if (description) {
+          city.description = description;
+          await city.save();
+          console.log(`Successfully updated ${city.city}`);
+        } else {
+          console.warn(`No description returned for ${city.city}`);
+        }
+
+      } catch (error) {
+        console.error(`Failed to update ${city.city}:`, error.message);
+      }
+    }
+
+    console.log("Batch update completed.");
+  } catch (error) {
+    console.error("Critical error during batch update:", error);
+  }
+}
 
 export async function getAllCities(req, res) {
   const cities = await City.find();
   res.json(cities);
- //console.log("Top cities:", cities);
 }
 
 export async function getCityLonLat(cityName) {
@@ -38,6 +82,8 @@ export async function saveCity(cityData) {
 
 export async function getCityData(cityName) {
   
+  console.log(`Getting data for: ${cityName}`);
+  
   const city = await City.findOne({ city: new RegExp(`^${cityName}$`, 'i') });
 
   if (!city) {
@@ -54,7 +100,11 @@ export async function getCityData(cityName) {
 
       //console.log(`Fetching OpenWeather data for ${cityName}...`);
       const openweather = await fetchCityWeather(geoapify.lat, geoapify.lon);
-     // console.log(`OpenWeather success for ${cityName}:`, openweather);
+      // console.log(`OpenWeather success for ${cityName}:`, openweather);
+
+      //console.log(`Fetching SerpAPI data for ${cityName}...`);
+      const serpapiDescription = await fetchCityDescription(cityName)
+      // console.log(`SerpAPI success for ${cityName}:`, openweather);
 
       // check again before saving in case another request saved it simultaneously
       const existingCity = await City.findOne({ 
@@ -83,6 +133,7 @@ export async function getCityData(cityName) {
         imageAuthorLink: unsplash.imageAuthorLink,
         imageDescription: unsplash.imageDescription,
         imageAltDescription: unsplash.imageAltDescription,
+        description: serpapiDescription
       };
 
       const newCity = new City(cityData);
@@ -93,6 +144,20 @@ export async function getCityData(cityName) {
       console.error(`Error fetching city ${cityName}:`, error.message);
       console.error(`Full error:`, error);
       throw new Error(`Failed to fetch city data: ${error.message}`);
+    }
+  } else if (!city.description) {
+    console.log(`City ${cityName} found, but description is missing. Updating...`);
+    try {
+      const description = await fetchCityDescription(city.city, city.country);
+      
+      city.description = description;
+      await city.save();
+      
+      console.log(`Updated description for ${city.city}`);
+      return city;
+    } catch (error) {
+      console.error(`Failed to update description for ${cityName}:`, error);
+      return city; 
     }
   } else {
     console.log(`City ${cityName} found in database.`);

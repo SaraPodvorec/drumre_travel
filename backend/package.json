@@ -25,7 +25,8 @@
     "google-auth-library": "^10.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^7.0.0",
-    "mongoose": "^9.0.0"
+    "mongoose": "^9.0.0",
+    "serpapi": "^2.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
