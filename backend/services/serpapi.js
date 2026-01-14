@@ -1,6 +1,6 @@
 import { getJson } from "serpapi";
 
-export async function fetchCityDescription (cityName, country) {
+export async function fetchCityDescription (cityName) {
   try {
     const params = {
       engine: "google",
@@ -18,7 +18,7 @@ export async function fetchCityDescription (cityName, country) {
   }
 };
 
-export async function fetchCityTopSights (cityName, country) {
+export async function fetchCityTopSights (cityName) {
   try {
     const params = {
       engine: "google",
