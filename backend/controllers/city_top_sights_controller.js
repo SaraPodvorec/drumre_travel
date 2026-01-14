@@ -52,7 +52,7 @@ export async function updateMissingCitySights() {
 export async function getTopSightsByCityId(req, res) {
   const { cityId } = req.query;
   const topSights = await CityTopSight.find({ cityId });
-  console.log(`Top sights for cityId ${cityId}:`, topSights);
+  // console.log(`Top sights for cityId ${cityId}:`, topSights);
   return res.json(topSights);
 };
 
