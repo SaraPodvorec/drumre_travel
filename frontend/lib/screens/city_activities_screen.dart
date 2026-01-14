@@ -3,6 +3,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/providers/activity_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/widgets/image_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CityActivitiesScreen extends StatefulWidget {
   final City city;
@@ -116,11 +117,7 @@ class _CityActivitiesScreenState extends State<CityActivitiesScreen> {
                         const SizedBox(height: 12),
                         // Book button
                         ElevatedButton.icon(
-                          onPressed: () {
-                            if (activity.bookingLink.isNotEmpty) {
-                              // use url_launcher package to open link
-                            }
-                          },
+                          onPressed: () => _launchBookingLink(activity.bookingLink),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
                             padding: const EdgeInsets.all(16.0),
@@ -148,5 +145,22 @@ class _CityActivitiesScreenState extends State<CityActivitiesScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _launchBookingLink(String url) async {
+    if (url.isEmpty) return;
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid booking link')),
+      );
+      return;
+    }
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open booking link')),
+      );
+    }
   }
 }

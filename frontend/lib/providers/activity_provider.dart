@@ -8,13 +8,23 @@ class ActivityProvider extends ChangeNotifier {
   bool isLoading = false;
   String? error;
 
-  Future<void> loadActivities(String cityId, double lat, double lon) async {
+  Future<void> loadActivities(
+    String cityId,
+    double lat,
+    double lon, {
+    bool forceRefresh = false,
+  }) async {
     isLoading = true;
     error = null;
     notifyListeners();
 
     try {
-      activities = await _activitiesService.fetchActivities(cityId, lat, lon);
+      activities = await _activitiesService.fetchActivities(
+        cityId,
+        lat,
+        lon,
+        forceRefresh: forceRefresh,
+      );
     } catch (e) {
       error = 'Failed to load activities: $e';
       print('Error loading activities: $e');

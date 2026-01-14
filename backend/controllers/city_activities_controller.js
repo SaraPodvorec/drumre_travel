@@ -36,13 +36,9 @@ export async function getCityActivities(req, res) {
 
   const existing = await CityActivity.find({ cityId });
 
-  // const oneDay = 1000 * 60 * 60 * 24;
+  const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
-  // if (existing.length > 0 && Date.now() - existing[0].lastFetched < oneDay) {
-  //   return res.json(existing);
-  // }
-
-  if(existing.length > 0) {
+  if(existing.length > 0 && Date.now() - existing[0].lastFetched < oneWeek) {
     console.log("Returning cached activities");
     return res.json(existing);
   }

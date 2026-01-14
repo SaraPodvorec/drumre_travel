@@ -447,14 +447,15 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       activity.name,
                       maxLines: 3,
-                      overflow: TextOverflow.visible,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

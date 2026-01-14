@@ -1,4 +1,11 @@
 import axios from "axios";
+import he from "he";
+
+function cleanDescription(html = "") {
+  const withoutTags = html.replace(/<[^>]*>/g, " ");
+  const decoded = he.decode(withoutTags);
+  return decoded.replace(/\s+/g, " ").trim();
+}
 
 export async function getAmadeusToken() {
   const res = await axios.post(
@@ -34,7 +41,7 @@ export async function fetchActivities(lat, lon) {
     return {
       amadeusId: a.id,
       name: a.name,
-      description: a.description || "",
+      description: cleanDescription(a.description || ""),
       lat: a.geoCode?.latitude || lat,
       lon: a.geoCode?.longitude || lon,
       price: {
