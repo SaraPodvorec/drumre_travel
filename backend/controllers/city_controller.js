@@ -54,7 +54,7 @@ export async function updateMissingDescriptions() {
 
 export async function getAllCities(req, res) {
   // updateMissingDescriptions();
-  updateMissingCitySights();
+  // updateMissingCitySights();
   let cities = await City.find();
   
   cities = await Promise.all(
