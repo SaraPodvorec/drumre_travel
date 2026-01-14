@@ -4,7 +4,7 @@ export async function fetchCityDescription (cityName) {
   try {
     const params = {
       engine: "google",
-      q: `${cityName}, ${country}`,
+      q: `${cityName}`,
       api_key: process.env.SERPAPI_KEY,
       hl: "en",
     };
@@ -22,7 +22,7 @@ export async function fetchCityTopSights (cityName) {
   try {
     const params = {
       engine: "google",
-      q: `top sights in ${cityName}, ${country}`,
+      q: `top sights in ${cityName}`,
       api_key: process.env.SERPAPI_KEY,
       hl: "en",
     };
