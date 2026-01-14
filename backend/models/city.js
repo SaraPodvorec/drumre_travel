@@ -25,6 +25,11 @@ const CitySchema = new mongoose.Schema({
 
     onWishlists: { type: Number, default: 0 },
 
+    //rest_countries
+    currency: { type: String, required: false },
+    language: { type: String, required: false },
+    population: { type: Number, required: false },
+
     //serpapi
     description: {type: String, required: false},
 });

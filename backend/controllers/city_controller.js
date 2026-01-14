@@ -3,6 +3,8 @@ import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
 import { fetchCityWeather } from "../services/openweather.js";
 import { fetchCityDescription } from "../services/serpapi.js";
+import { getCountryData } from "../services/rest_countries.js";
+
 
 export async function updateMissingDescriptions() {
   console.log("Starting batch update for cities missing descriptions...");
@@ -49,7 +51,24 @@ export async function updateMissingDescriptions() {
 }
 
 export async function getAllCities(req, res) {
-  const cities = await City.find();
+  let cities = await City.find();
+  
+  cities = await Promise.all(
+    cities.map(async (city) => {
+      if (!city.currency || !city.language) {
+        const countryData = await getCountryData(city.country);
+        if (countryData) {
+          city.currency = countryData.currency;
+          city.language = countryData.language;
+          console.log(`Updated country data for ${city.city}: ${city.currency}, ${city.language}`);
+          //city.population = countryData.population;
+          await city.save();
+        }
+      }
+      return city;
+    })
+  );
+  
   res.json(cities);
 }
 
