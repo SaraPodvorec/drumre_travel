@@ -206,9 +206,9 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Population: ${widget.city.population ?? 'N/A'}', style: TextStyle(fontSize: 16),),
-                    Text('Currency: ${widget.city.currency ?? 'N/A'}',  style: TextStyle(fontSize: 16)),
-                    Text('Temperature: ${widget.city.temperature}°C',  style: TextStyle(fontSize: 16))
+                    richTextBuilder('Population: ', widget.city.population?.toString() ?? 'N/A', 16),
+                    richTextBuilder('Currency: ', widget.city.currency ?? 'N/A', 16),
+                    richTextBuilder('Temperature: ', '${widget.city.temperature}°C', 16)
                   ],
                 ),
               ),
@@ -216,8 +216,8 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Timezone: ${widget.city.timezone}',  style: TextStyle(fontSize: 16)),
-                    Text('Language: ${widget.city.language ?? 'N/A'}',  style: TextStyle(fontSize: 16)),
+                    richTextBuilder('Timezone: ', widget.city.timezone, 16),
+                    richTextBuilder('Language: ', widget.city.language ?? 'N/A', 16),
                   ],
                 ),
               ),
