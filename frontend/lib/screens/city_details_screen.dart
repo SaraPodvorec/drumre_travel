@@ -23,11 +23,19 @@ class CityDetailsScreen extends StatefulWidget {
 class _CityDetailsScreenState extends State<CityDetailsScreen> {
   List<CityReview> _reviews = [];
   bool _isReviewsLoading = true;
+  double _avgImpression = 0.0;
+  double _avgPeople = 0.0;
+  double _avgSights = 0.0;
+  double _avgSafety = 0.0;
+  double _avgAffordability = 0.0;
+  int _numOfReviews = 0;
+  bool _isRatingsLoading = true;
 
   @override
   void initState() {
     super.initState();
     _fetchReviews();
+    _fetchRatingsData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ActivityProvider>().loadActivities(
         widget.city.id,
@@ -49,6 +57,24 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
     } catch (e) {
       setState(() => _isReviewsLoading = false);
       print("Error fetching reviews: $e");
+    }
+  }
+
+  Future<void> _fetchRatingsData() async {
+    try {
+      final data = await ReviewService.getCityReviewsData(widget.city.id);
+      setState(() {
+        _avgImpression = (data['avgImpression'] ?? 0.0).toDouble();
+        _avgPeople = (data['avgPeople'] ?? 0.0).toDouble();
+        _avgSights = (data['avgSights'] ?? 0.0).toDouble();
+        _avgSafety = (data['avgSafety'] ?? 0.0).toDouble();
+        _avgAffordability = (data['avgAffordability'] ?? 0.0).toDouble();
+        _numOfReviews = data['numOfReviews'] ?? 0;
+        _isRatingsLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isRatingsLoading = false);
+      print("Error fetching ratings data: $e");
     }
   }
 
@@ -107,18 +133,22 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ratingItem(Icons.star, Colors.amber.shade600, '4.5'),
-                ratingItem(Icons.people, Colors.cyan.shade600, '4.5'),
-                ratingItem(Icons.attractions, Colors.deepPurpleAccent, '4.5'),
-              ],
-            ),
+            _isRatingsLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ratingItem(Icons.star, Colors.amber.shade600, _avgImpression.toStringAsFixed(1)),
+                      ratingItem(Icons.people, Colors.cyan.shade600, _avgPeople.toStringAsFixed(1)),
+                      ratingItem(Icons.attractions, Colors.deepPurpleAccent, _avgSights.toStringAsFixed(1)),
+                      ratingItem(Icons.security, Colors.green.shade600, _avgSafety.toStringAsFixed(1)),
+                      ratingItem(Icons.attach_money, Colors.orange.shade600, _avgAffordability.toStringAsFixed(1)),
+                    ],
+                  ),
             const SizedBox(height: 16),
             Column(
               children: [
-                Text('Visited by ${widget.city.numOfReviews} users', style: TextStyle( fontSize: 18)),
+                Text('Visited by $_numOfReviews users', style: TextStyle( fontSize: 18)),
                 const SizedBox(height: 12),
                 Text('Wishlisted by ${widget.city.onWishlists} users', style: TextStyle( fontSize: 18)),
               ],

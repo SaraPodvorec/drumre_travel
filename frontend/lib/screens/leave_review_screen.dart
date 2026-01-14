@@ -19,10 +19,10 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
   final TextEditingController _commentController = TextEditingController();
 
   int _impression = 1;
-  int _people = 0;
-  int _sights = 0;
-  int _safety = 0;
-  int _affordability = 0;
+  int _people = 1;
+  int _sights = 1;
+  int _safety = 1;
+  int _affordability = 1;
 
   bool _isSubmitting = false;
 

@@ -59,4 +59,9 @@ class ReviewService {
     print(data);
     await Api.putRequest('/review/$reviewId', data);
   }
+
+  static Future<Map<String, dynamic>> getCityReviewsData(String cityId) async {
+    final response = await Api.postRequest('/review/$cityId', {});
+    return response as Map<String, dynamic>;
+  }
 }

@@ -23,8 +23,6 @@ const CitySchema = new mongoose.Schema({
     imageDescription: { type: String },
     imageAltDescription: { type: String },
 
-    numOfReviews: { type: Number, default: 0 },
-    avgImpression: { type: Number, default: 0 },
     onWishlists: { type: Number, default: 0 },
 
     //serpapi

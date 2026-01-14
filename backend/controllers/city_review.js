@@ -16,21 +16,14 @@ export async function submitReview(req, res) {
             return res.status(400).json({ error: 'City name is required' });
         }
 
-        if (impression === undefined || impression === null) {
-            return res.status(400).json({ error: 'Impression is required' });
+        if (!impression || !people || !sights || !safety || !affordability) {
+            return res.status(400).json({ error: 'All ratings (impression, people, sights, safety, affordability) are required' });
         }
-        if (typeof impression !== 'number' || impression < 1 || impression > 5) {
-            return res.status(400).json({ error: 'Impression must be a number between 1 and 5' });
-        }
-        const peopleVal = people ?? 0;
-        const sightsVal = sights ?? 0;
-        const safetyVal = safety ?? 0;
-        const affordabilityVal = affordability ?? 0;
 
-        const ratings = [peopleVal, sightsVal, safetyVal, affordabilityVal];
+        const ratings = [impression, people, sights, safety, affordability];
         for (let rating of ratings) {
-            if (rating < 0 || rating > 5) {
-                return res.status(400).json({ error: 'Ratings must be numbers between 0 and 5' });
+            if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+                return res.status(400).json({ error: 'All ratings must be numbers between 1 and 5' });
             }
         }
 
@@ -48,10 +41,6 @@ export async function submitReview(req, res) {
         if (!city) {
             return res.status(404).json({ error: 'City not found' });
         }
-        // Update city's number of reviews and average impression
-        city.numOfReviews += 1;
-        city.avgImpression = ((city.avgImpression * (city.numOfReviews - 1)) + impression) / city.numOfReviews;
-        await city.save();
 
         const existingReview = await CityReview.findOne({
             userId: req.user.id, 
@@ -65,10 +54,10 @@ export async function submitReview(req, res) {
             userId: req.user.id,
             cityId: city._id,
             impression,
-            people: peopleVal,
-            sights: sightsVal,
-            safety: safetyVal,
-            affordability: affordabilityVal,
+            people: people,
+            sights: sights,
+            safety: safety,
+            affordability: affordability,
             comments: comments || ''
         });
 
@@ -89,16 +78,7 @@ export async function deleteReview(req, res) {
     if (!review) {
         return res.status(404).json({ error: 'Review not found' });
     }
-    const city = await City.findById(review.cityId);
-    if (city) {
-        city.numOfReviews = Math.max(0, city.numOfReviews - 1);
-        city.avgImpression =
-            city.numOfReviews === 0
-                ? 0
-                : (city.avgImpression * (city.numOfReviews + 1) - review.impression) / city.numOfReviews;
-
-        await city.save();
-    }
+    
     res.status(200).json({ message: 'Review deleted successfully' });
 }
 
@@ -125,7 +105,7 @@ export async function getReviewsByCity(req, res) {
 }
 
 export async function getReviewsByUser(req, res) {
-    const { userId } = req.body; // MongoDB _id of the user
+    const { userId } = req.body; 
     try{
         const reviews = await CityReview.find({ userId: userId }).populate('cityId', 'city country imageUrl');
         const response = reviews.map(review => ({
@@ -159,6 +139,26 @@ export async function updateReview(req, res) {
         comments
     } = req.body;
     try {
+        // Validacija: svi ratings su required
+        if (!impression || !people || !sights || !safety || !affordability) {
+            return res.status(400).json({ error: 'All ratings (impression, people, sights, safety, affordability) are required' });
+        }
+
+        // Validacija: svi ratings moraju biti brojevi između 1 i 5
+        const ratings = [impression, people, sights, safety, affordability];
+        for (let rating of ratings) {
+            if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+                return res.status(400).json({ error: 'All ratings must be numbers between 1 and 5' });
+            }
+        }
+
+        if (comments && typeof comments !== 'string') {
+            return res.status(400).json({ error: 'Comments must be a string' });
+        }
+        if (comments && comments.length > 1000) {
+            return res.status(400).json({ error: 'Comments cannot exceed 1000 characters' });
+        }
+
         console.log("Updating review:", reviewId);
         const review = await CityReview.findByIdAndUpdate(
         reviewId,
@@ -176,5 +176,45 @@ export async function updateReview(req, res) {
     } catch (error) {
         console.error('Review update error:', error);
         res.status(500).json({ error: 'Failed to update review', details: error.message });
+    }
+}
+
+export async function getCityReviewsData(req, res) {
+    const { cityId } = req.params;
+
+    try {
+        const reviews = await CityReview.find({ cityId: cityId });
+        if (reviews.length === 0) {
+            return res.status(200).json({
+                avgImpression: 0,
+                avgPeople: 0,
+                avgSights: 0,
+                avgSafety: 0,
+                avgAffordability: 0,
+                numOfReviews: 0
+            });
+        }
+        const totalImpression = reviews.reduce((sum, review) => sum + review.impression, 0);
+        const totalPeople = reviews.reduce((sum, review) => sum + review.people, 0);
+        const totalSights = reviews.reduce((sum, review) => sum + review.sights, 0);
+        const totalSafety = reviews.reduce((sum, review) => sum + review.safety, 0);
+        const totalAffordability = reviews.reduce((sum, review) => sum + review.affordability, 0);
+
+        const avgImpression = totalImpression / reviews.length;
+        const avgPeople = totalPeople / reviews.length;
+        const avgSights = totalSights / reviews.length;
+        const avgSafety = totalSafety / reviews.length;
+        const avgAffordability = totalAffordability / reviews.length;
+
+        res.status(200).json({
+            avgImpression,
+            avgPeople,
+            avgSights,
+            avgSafety,
+            avgAffordability,
+            numOfReviews: reviews.length
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch average review data', details: error.message });
     }
 }
