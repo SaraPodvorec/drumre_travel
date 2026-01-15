@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
-  String? _searchQuery; // Add this line
+  String? _searchQuery; 
   bool _showFilters = false;
   Map<String, dynamic> _activeFilters = {};
 

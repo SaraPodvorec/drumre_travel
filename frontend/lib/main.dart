@@ -183,16 +183,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   Future<void> _initialize() async {
     final authProvider = context.read<AuthProvider>();
-    final userProvider = context.read<UserProvider>();
     await context.read<AccessibilityProvider>().loadPreferences();
 
-    // Wait for auth initialization
     await authProvider.initialize();
-
-    // If authenticated, load user data
-    if (authProvider.isAuthenticated) {
-      await userProvider.loadUserData();
-    }
 
     if (mounted) {
       setState(() => _loading = false);
@@ -212,6 +205,21 @@ class _AuthWrapperState extends State<AuthWrapper> {
     if (!authProvider.isAuthenticated) {
       log('AuthWrapper: User not authenticated, navigating to LoginScreen');
       return const LoginScreen();
+    }
+
+    // ensure user data is loaded
+    if (!userProvider.isInitialized) {
+      if (!userProvider.isLoading) {
+        log('AuthWrapper: User authenticated, scheduling user data load');
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final userProv = context.read<UserProvider>();
+          if (!userProv.isInitialized && !userProv.isLoading) {
+            userProv.loadUserData();
+          }
+        });
+      }
+
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (!userProvider.onboardingCompleted) {

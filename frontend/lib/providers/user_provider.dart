@@ -155,7 +155,6 @@ class UserProvider extends ChangeNotifier {
     selecetedClimate = '';
     selectedCitySize = '';
     selectedContinents.clear();
-    _onboardingCompleted = false;
     _initialized = false;
     error = null;
     notifyListeners();

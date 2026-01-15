@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/discover_users_screen.dart';
 import 'package:frontend/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
+    final userProvider = context.watch<UserProvider>();
 
     return AppBar(
       title: Text(title ?? ''),
@@ -105,6 +107,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                       PopupMenuItem(
                         child: const Text('Logout'),
                         onTap: () async {
+                          userProvider.clearUserData();
                           await authProvider.signOut();
                           if (context.mounted) {
                             Navigator.of(context).pushReplacementNamed('/');
