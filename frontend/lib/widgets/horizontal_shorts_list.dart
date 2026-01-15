@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/city_short_videos.dart';
+import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/city_shorts_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -54,7 +55,6 @@ class _HorizontalShortsListState extends State<HorizontalShortsList> {
                 itemCount: videos.length,
                 itemBuilder: (context, index) {
                   final video = videos[index];
-                  if (video.thumbnail.startsWith("https://serpapi.com")) {return const SizedBox.shrink();}
 
                   return GestureDetector(
                     onTap: () async {
@@ -82,7 +82,7 @@ class _HorizontalShortsListState extends State<HorizontalShortsList> {
                           fit: StackFit.expand,
                           children: [
                             Image.network(
-                              video.thumbnail,
+                              Api.getProxyImageUrl(video.thumbnail),
                               fit: BoxFit.cover,
                             ),
                             Container(
