@@ -1,9 +1,10 @@
 import City from "../models/city.js";
 import CityTopSight from "../models/city_top_sight.js";
+import CityShort from "../models/city_short_video.js";
 import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
 import { fetchCityWeather } from "../services/openweather.js";
-import { fetchCityDescription } from "../services/serpapi.js";
+import { fetchCityDescription, fetchCityShorts } from "../services/serpapi.js";
 import { updateMissingCitySights, saveCityTopSights } from "./city_top_sights_controller.js";
 import { getCountryData } from "../services/rest_countries.js";
 

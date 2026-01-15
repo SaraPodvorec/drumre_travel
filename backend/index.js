@@ -9,6 +9,7 @@ import topSights from './routes/top_sights.js';
 import review from './routes/review.js';
 import connectDB from './config/db.js';
 import user from './routes/user.js';
+import cityShorts from './routes/city_shorts.js';
 
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.use("/api/activities", activities);
 app.use("/api/topSights", topSights);
 app.use("/api/user", user);
 app.use("/api/review", review);
+app.use("/api/cityShorts", cityShorts);
 
 app.get("/api/proxy-image", async (req, res) => {
   const imageUrl = req.query.url;
