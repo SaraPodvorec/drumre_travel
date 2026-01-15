@@ -8,6 +8,7 @@ import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/other_user_profile_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
+import 'package:frontend/widgets/horizontal_shorts_list.dart';
 import 'package:frontend/widgets/horizontal_sights.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
 import 'package:provider/provider.dart';
@@ -224,6 +225,8 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             ],
           ),
           HorizontalSightsList(cityId: widget.city.id),
+          const SizedBox(height: 24),
+          HorizontalShortsList(cityId:  widget.city.id),
           const SizedBox(height: 24),
           Text('Activities',  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color.fromARGB(255, 0, 96, 175))),
           const SizedBox(height: 12),
