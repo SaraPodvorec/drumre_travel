@@ -136,22 +136,51 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             const SizedBox(height: 16),
             _isRatingsLoading
                 ? const Center(child: CircularProgressIndicator())
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ratingItem(Icons.star, Colors.amber.shade600, _avgImpression.toStringAsFixed(1)),
-                      ratingItem(Icons.people, Colors.cyan.shade600, _avgPeople.toStringAsFixed(1)),
-                      ratingItem(Icons.attractions, Colors.deepPurpleAccent, _avgSights.toStringAsFixed(1)),
-                      ratingItem(Icons.security, Colors.green.shade600, _avgSafety.toStringAsFixed(1)),
-                      ratingItem(Icons.attach_money, Colors.orange.shade600, _avgAffordability.toStringAsFixed(1)),
-                    ],
-                  ),
+                : Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 24,
+                  runSpacing: 16, 
+                  children: [
+                    ratingItem(
+                      Icons.star,
+                      Colors.amber.shade600,
+                      _avgImpression.toStringAsFixed(1),
+                    ),
+                    ratingItem(
+                      Icons.people,
+                      Colors.cyan.shade600,
+                      _avgPeople.toStringAsFixed(1),
+                    ),
+                    ratingItem(
+                      Icons.attractions,
+                      Colors.deepPurpleAccent,
+                      _avgSights.toStringAsFixed(1),
+                    ),
+                    ratingItem(
+                      Icons.security,
+                      Colors.green.shade600,
+                      _avgSafety.toStringAsFixed(1),
+                    ),
+                    ratingItem(
+                      Icons.attach_money,
+                      Colors.orange.shade600,
+                      _avgAffordability.toStringAsFixed(1),
+                    ),
+                  ],
+                ),
+
             const SizedBox(height: 16),
             Column(
               children: [
-                Text('Visited by $_numOfReviews users', style: TextStyle( fontSize: 18)),
+                Text(
+                  'Visited by $_numOfReviews users',
+                  style: TextStyle(fontSize: 18),
+                ),
                 const SizedBox(height: 12),
-                Text('Wishlisted by ${widget.city.onWishlists} users', style: TextStyle( fontSize: 18)),
+                Text(
+                  'Wishlisted by ${widget.city.onWishlists} users',
+                  style: TextStyle(fontSize: 18),
+                ),
               ],
             ),
           ],
@@ -165,7 +194,14 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
         children: [
           Row(
             children: [
-              Text('${widget.city.name}, ${widget.city.country}', style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 0, 96, 175), fontSize: 26),),
+              Text(
+                '${widget.city.name}, ${widget.city.country}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 96, 175),
+                  fontSize: 26,
+                ),
+              ),
               Spacer(),
               IconButton(
                 onPressed: () {
@@ -198,7 +234,10 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(widget.city.description ?? '<No description available>',  style: TextStyle(fontSize: 16)),
+          Text(
+            widget.city.description ?? '<No description available>',
+            style: TextStyle(fontSize: 16),
+          ),
           const SizedBox(height: 24),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,9 +246,21 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    richTextBuilder('Population: ', widget.city.population?.toString() ?? 'N/A', 16),
-                    richTextBuilder('Currency: ', widget.city.currency ?? 'N/A', 16),
-                    richTextBuilder('Temperature: ', '${widget.city.temperature}°C', 16)
+                    richTextBuilder(
+                      'Population: ',
+                      widget.city.population?.toString() ?? 'N/A',
+                      16,
+                    ),
+                    richTextBuilder(
+                      'Currency: ',
+                      widget.city.currency ?? 'N/A',
+                      16,
+                    ),
+                    richTextBuilder(
+                      'Temperature: ',
+                      '${widget.city.temperature}°C',
+                      16,
+                    ),
                   ],
                 ),
               ),
@@ -218,7 +269,11 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     richTextBuilder('Timezone: ', widget.city.timezone, 16),
-                    richTextBuilder('Language: ', widget.city.language ?? 'N/A', 16),
+                    richTextBuilder(
+                      'Language: ',
+                      widget.city.language ?? 'N/A',
+                      16,
+                    ),
                   ],
                 ),
               ),
@@ -226,9 +281,16 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
           ),
           HorizontalSightsList(cityId: widget.city.id),
           const SizedBox(height: 24),
-          HorizontalShortsList(cityId:  widget.city.id),
+          HorizontalShortsList(cityId: widget.city.id),
           const SizedBox(height: 24),
-          Text('Activities',  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color.fromARGB(255, 0, 96, 175))),
+          Text(
+            'Activities',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: Color.fromARGB(255, 0, 96, 175),
+            ),
+          ),
           const SizedBox(height: 12),
           SizedBox(
             height: cardHeight,
@@ -248,9 +310,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                           for (var i = 0; i < 5; i++)
                             Expanded(
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                  right: 16,
-                                ),
+                                padding: EdgeInsets.only(right: 16),
                                 child: i < maxCount
                                     ? activityCard(activities[i])
                                     : const SizedBox.shrink(),
@@ -289,7 +349,14 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Reviews', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color.fromARGB(255, 0, 96, 175)),),
+              Text(
+                'Reviews',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Color.fromARGB(255, 0, 96, 175),
+                ),
+              ),
               FilledButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -374,6 +441,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
 
   Widget ratingItem(IconData icon, Color iconColor, String value) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 28, color: iconColor),
         const SizedBox(width: 6),
@@ -460,9 +528,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                       activity.name,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
