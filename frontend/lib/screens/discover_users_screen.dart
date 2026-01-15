@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/screens/other_user_profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/services/api_service.dart';
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({super.key});
@@ -18,7 +19,7 @@ class UsersScreen extends StatelessWidget {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: (user.picture.isNotEmpty)
-                  ? NetworkImage(user.picture)
+                  ? NetworkImage(Api.getProxyImageUrl(user.picture))
                   : null,
               child: (user.picture.isEmpty) ? const Icon(Icons.person) : null,
             ),

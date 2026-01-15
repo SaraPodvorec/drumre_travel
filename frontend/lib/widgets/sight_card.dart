@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/topsight.dart';
+import 'package:frontend/services/api_service.dart';
 
 class SightCard extends StatelessWidget {
   final CityTopSight sight;
@@ -18,7 +19,7 @@ class SightCard extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Image.network(
-              sight.image,
+              Api.getProxyImageUrl(sight.image),
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
