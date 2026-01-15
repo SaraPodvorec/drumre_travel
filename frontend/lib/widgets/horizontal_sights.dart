@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/topsight.dart';
 import 'package:frontend/services/sights_service.dart';
-import 'package:frontend/widgets/sight_card.dart'; // Assuming you saved the service here
+import 'package:frontend/widgets/sight_card.dart';
 
 class HorizontalSightsList extends StatefulWidget {
   final String cityId;
@@ -19,7 +19,6 @@ class _HorizontalSightsListState extends State<HorizontalSightsList> {
   @override
   void initState() {
     super.initState();
-    // Fetch data once when the widget initializes
     _sightsFuture = _sightsService.fetchTopSights(widget.cityId);
   }
 
@@ -28,15 +27,9 @@ class _HorizontalSightsListState extends State<HorizontalSightsList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(
-            "Top Sights",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
+        Text('Top Sights',  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color.fromARGB(255, 0, 96, 175))),
         SizedBox(
-          height: 280, // Set a fixed height for the horizontal list
+          height: 280,
           child: FutureBuilder<List<CityTopSight>>(
             future: _sightsFuture,
             builder: (context, snapshot) {
