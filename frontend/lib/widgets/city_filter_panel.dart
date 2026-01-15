@@ -30,8 +30,12 @@ class _CityFilterPanelState extends State<CityFilterPanel> {
 
   final Map<String, String> sortOptions = {
     'temperature': 'Temperature',
-    'avgImpression': 'Rating',
     //'popularity': 'Popularity',
+    'impression': 'Impression',
+    'people': 'People',
+    'sights': 'Sights',
+    'safety': 'Safety',
+    'affordability': 'Affordability',
   };
 
   void _applyFilters() {
@@ -45,9 +49,8 @@ class _CityFilterPanelState extends State<CityFilterPanel> {
       filters['country'] = selectedCountry;
     }
     
-    if (selectedSortBy != null) {
-      filters['sort'] = selectedSortBy;
-    }
+    filters['sort'] = selectedSortBy ?? 'city';
+    
 
     filters['order'] = selectedOrder;
     
@@ -158,7 +161,7 @@ class _CityFilterPanelState extends State<CityFilterPanel> {
               items: [
                 const DropdownMenuItem(
                   value: null,
-                  child: Text('Default'),
+                  child: Text('City name'),
                 ),
                 ...sortOptions.entries.map((entry) {
                   return DropdownMenuItem(

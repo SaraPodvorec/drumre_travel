@@ -139,12 +139,10 @@ export async function updateReview(req, res) {
         comments
     } = req.body;
     try {
-        // Validacija: svi ratings su required
         if (!impression || !people || !sights || !safety || !affordability) {
             return res.status(400).json({ error: 'All ratings (impression, people, sights, safety, affordability) are required' });
         }
 
-        // Validacija: svi ratings moraju biti brojevi između 1 i 5
         const ratings = [impression, people, sights, safety, affordability];
         for (let rating of ratings) {
             if (typeof rating !== 'number' || rating < 1 || rating > 5) {

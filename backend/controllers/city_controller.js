@@ -191,12 +191,13 @@ export async function getCityData(cityName) {
 }
 
 export const cityFilters = async (req, res) => {
+  const cityFields = [ 'city', 'temperature', 'popularity' ];
   try {
     const {
       country,
       continent,
       sort,   
-      order = "asc",
+      order,
       //limit = 20
     } = req.query; 
 
@@ -210,19 +211,34 @@ export const cityFilters = async (req, res) => {
       filter.continent = continent;
 
     }
-
-    const sortOptions = {};
-
-    if(sort){
-      sortOptions[sort] = order === "desc" ? -1 : 1;
+    let pipeline = [ { $match: filter } ];
+    console.log("Sort field:", sort);
+    if(cityFields.includes(sort)) {
+      pipeline.push({
+        $sort: {
+          [sort]: order === "asc" ? 1 : -1
+        }
+      });
+    }
+    else {
+      pipeline.push({
+        $lookup: {
+          from: "cityreviews",
+          localField: "_id",
+          foreignField: "cityId",
+          as: "reviews"
+        }
+      },
+      {
+        $addFields: {
+          avgSortField: { $avg: `$reviews.${sort}`}
+        }
+      },
+      { $sort: { avgSortField: order === "asc" ? 1 : -1 } }
+      );
     }
 
-    if (!sort && (country || continent)) {
-      sortOptions.city = order === "desc" ? -1 : 1;
-    }
-    const cities = await City.find(filter)
-      .sort(sortOptions);
-      //.limit(Number(limit));
+    const cities =  await City.aggregate(pipeline);
 
     res.json({ cities });
   } catch (err) {
