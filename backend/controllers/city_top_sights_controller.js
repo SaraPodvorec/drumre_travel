@@ -50,27 +50,46 @@ export async function updateMissingCitySights() {
 }
 
 export async function getTopSightsByCityId(req, res) {
-  const { cityId } = req.query;
-  const topSights = await CityTopSight.find({ cityId });
-  // console.log(`Top sights for cityId ${cityId}:`, topSights);
-  return res.json(topSights);
-};
+  try {
+    const { cityId } = req.query;
+
+    let topSights = await CityTopSight.find({ cityId });
+
+    if (!topSights || topSights.length === 0) {
+      const city = await City.findById(cityId);
+
+      if (!city) {
+        return res.status(404).json({ error: "City not found in database." });
+      }
+
+      await saveCityTopSights(cityId, city.name);
+
+      topSights = await CityTopSight.find({ cityId });
+    }
+
+    return res.json(topSights);
+  } catch (error) {
+    console.error("Error in getTopSightsByCityId:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
 export async function saveCityTopSights(cityId, cityName) {
-
   const topSights = await fetchCityTopSights(cityName);
   
   for (const topSight of topSights) {
     await CityTopSight.findOneAndUpdate(
+      { 
+        cityId: cityId, 
+        name: topSight.name 
+      }, 
       {
-        cityId: cityId,
-        name: topSight.name,
         description: topSight.description,
         link: topSight.link,
         image: topSight.image,
         lastFetched: new Date()
       },
-      { upsert: true }
+      { upsert: true, new: true }
     );
   }
 }

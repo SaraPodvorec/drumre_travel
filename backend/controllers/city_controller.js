@@ -162,10 +162,6 @@ export async function getCityData(cityName) {
       const newCity = new City(cityData);
       const savedCity = await newCity.save();
 
-      console.log(`New sight for city: ${savedCity._id}`)
-
-      await saveCityTopSights(savedCity._id, savedCity.city);
-
       console.log(`City ${geoapify.city} saved successfully`);
       return newCity;
     } catch (error) {

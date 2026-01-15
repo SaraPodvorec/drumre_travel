@@ -4,7 +4,7 @@ import { fetchActivities } from "../services/amadeus.js";
 
 export async function getActivitiesByCityId(cityId) {
   const activities = await CityActivity.find({ cityId });
-  console.log(`Activities for cityId ${cityId}:`, activities);
+  // console.log(`Activities for cityId ${cityId}:`, activities);
   return activities;
 };
 
