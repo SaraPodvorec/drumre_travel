@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/city.dart';
+import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -9,9 +10,6 @@ class CityCard extends StatelessWidget {
   final VoidCallback? onBookmarkToggle;
   final VoidCallback? onDelete;
   final VoidCallback? onViewCityDetails;
-  final bool showDeleteButton;
-  final bool showBookmarkButton;
-  final bool showFavoriteButton;
 
   const CityCard({
     super.key,
@@ -20,42 +18,42 @@ class CityCard extends StatelessWidget {
     this.onBookmarkToggle,
     this.onDelete,
     this.onViewCityDetails,
-    this.showBookmarkButton = true,
-    this.showFavoriteButton = true,
-    this.showDeleteButton = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
+    final cityProvider = context.watch<CityProvider>();
     final isFavorite = userProvider.favoriteCities.contains(city.id);
     final isWishlisted = userProvider.wishlistCities.contains(city.id);
 
+    cityProvider.fetchAvgImpression(city.id);
+    final avgImpression = cityProvider.getAvgImpression(city.id);
+
+    const cardHeight = 250.0;
+    const imageHeight = 150.0;
+    const padding = 12.0;
+    const spacing = 6.0;
+
     return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       clipBehavior: Clip.antiAlias,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final cardHeight = constraints.maxHeight.isFinite 
-              ? constraints.maxHeight 
+          final cardHeight = constraints.maxHeight.isFinite
+              ? constraints.maxHeight
               : 350.0;
-          
           final imageRatio = cardHeight < 300 ? 0.55 : 0.6;
           final contentRatio = cardHeight < 300 ? 0.45 : 0.4;
-          
           final padding = cardHeight < 250 ? 8.0 : 12.0;
           final verticalSpacing = cardHeight < 250 ? 2.0 : 4.0;
-          
           return SizedBox(
             height: cardHeight,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image
                 SizedBox(
                   height: cardHeight * imageRatio,
                   width: double.infinity,
@@ -70,8 +68,6 @@ class CityCard extends StatelessWidget {
                     },
                   ),
                 ),
-
-                // Content area
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(padding),
@@ -79,15 +75,12 @@ class CityCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Title + actions
                         Row(
                           children: [
                             Expanded(
                               child: Text(
                                 city.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: cardHeight < 250 ? 14 : null,
@@ -105,7 +98,9 @@ class CityCard extends StatelessWidget {
                                     isFavorite
                                         ? Icons.favorite
                                         : Icons.favorite_border,
-                                    color: isFavorite ? Colors.red : Colors.grey,
+                                    color: isFavorite
+                                        ? Colors.red
+                                        : Colors.grey,
                                     size: cardHeight < 250 ? 18 : 20,
                                   ),
                                   onPressed: onFavoriteToggle,
@@ -121,14 +116,16 @@ class CityCard extends StatelessWidget {
                                     isWishlisted
                                         ? Icons.bookmark
                                         : Icons.bookmark_border,
-                                    color: isWishlisted ? Colors.amber : Colors.grey,
+                                    color: isWishlisted
+                                        ? Colors.amber
+                                        : Colors.grey,
                                     size: cardHeight < 250 ? 18 : 20,
                                   ),
                                   onPressed: onBookmarkToggle,
                                   padding: EdgeInsets.zero,
                                 ),
                               ),
-                            if(onDelete != null) 
+                            if (onDelete != null)
                               SizedBox(
                                 width: cardHeight < 250 ? 28 : 32,
                                 height: cardHeight < 250 ? 28 : 32,
@@ -144,45 +141,39 @@ class CityCard extends StatelessWidget {
                               ),
                           ],
                         ),
-
                         SizedBox(height: verticalSpacing),
-
-                        // Location and temperature
                         Row(
                           children: [
                             Icon(
-                              Icons.location_on, 
+                              Icons.location_on,
                               size: cardHeight < 250 ? 12 : 14,
                             ),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
                                 city.country,
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  fontSize: cardHeight < 250 ? 11 : null,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      fontSize: cardHeight < 250 ? 11 : null,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Icon(
-                              Icons.thermostat, 
-                              size: cardHeight < 250 ? 12 : 14,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${city.temperature.toStringAsFixed(1)}°C',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontSize: cardHeight < 250 ? 11 : null,
-                              ),
+                            const SizedBox(width: 10),
+
+                            _buildSoftChip(
+                              icon: Icons.star,
+                              label: avgImpression != null
+                                  ? avgImpression.toStringAsFixed(1)
+                                  : 'N/A',
+                              color: _getRatingBackgroundColor(avgImpression),
+                              textColor: _getRatingTextColor(avgImpression),
                             ),
                           ],
                         ),
-
                         const Spacer(),
-
-                        // Button
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -213,5 +204,49 @@ class CityCard extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget _buildSoftChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required Color textColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: textColor),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getRatingBackgroundColor(double? rating) {
+    if (rating == null) return Colors.grey[200]!;
+    if (rating < 2.0) return Colors.red[100]!;
+    if (rating < 4.0) return Colors.orange[100]!;
+    return Colors.green[100]!;
+  }
+
+  Color _getRatingTextColor(double? rating) {
+    if (rating == null) return Colors.grey[500]!;
+    if (rating < 2.0) return Colors.red[800]!;
+    if (rating < 4.0) return Colors.orange[800]!;
+    return Colors.green[800]!;
   }
 }
