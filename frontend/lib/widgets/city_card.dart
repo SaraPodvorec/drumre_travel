@@ -20,6 +20,9 @@ class CityCard extends StatelessWidget {
     this.onViewCityDetails,
   });
 
+  static const double cardHeight = 300; // fixed card height
+  static const double imageHeight = cardHeight * 0.75; // 40% for image
+
   @override
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
@@ -30,178 +33,136 @@ class CityCard extends StatelessWidget {
     cityProvider.fetchAvgImpression(city.id);
     final avgImpression = cityProvider.getAvgImpression(city.id);
 
-    const cardHeight = 250.0;
-    const imageHeight = 150.0;
-    const padding = 12.0;
-    const spacing = 6.0;
-
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       clipBehavior: Clip.antiAlias,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final cardHeight = constraints.maxHeight.isFinite
-              ? constraints.maxHeight
-              : 350.0;
-          final imageRatio = cardHeight < 300 ? 0.55 : 0.6;
-          final contentRatio = cardHeight < 300 ? 0.45 : 0.4;
-          final padding = cardHeight < 250 ? 8.0 : 12.0;
-          final verticalSpacing = cardHeight < 250 ? 2.0 : 4.0;
-          return SizedBox(
-            height: cardHeight,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: cardHeight * imageRatio,
-                  width: double.infinity,
-                  child: Image.network(
-                    city.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.error),
-                      );
-                    },
-                  ),
+      child: SizedBox(
+        height: cardHeight, // fixed height
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image
+            SizedBox(
+              height: imageHeight,
+              width: double.infinity,
+              child: Image.network(
+                city.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.error),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(padding),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                city.name,
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: cardHeight < 250 ? 14 : null,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            if (onFavoriteToggle != null)
-                              SizedBox(
-                                width: cardHeight < 250 ? 28 : 32,
-                                height: cardHeight < 250 ? 28 : 32,
-                                child: IconButton(
-                                  icon: Icon(
-                                    isFavorite
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: isFavorite
-                                        ? Colors.red
-                                        : Colors.grey,
-                                    size: cardHeight < 250 ? 18 : 20,
-                                  ),
-                                  onPressed: onFavoriteToggle,
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ),
-                            if (onBookmarkToggle != null)
-                              SizedBox(
-                                width: cardHeight < 250 ? 28 : 32,
-                                height: cardHeight < 250 ? 28 : 32,
-                                child: IconButton(
-                                  icon: Icon(
-                                    isWishlisted
-                                        ? Icons.bookmark
-                                        : Icons.bookmark_border,
-                                    color: isWishlisted
-                                        ? Colors.amber
-                                        : Colors.grey,
-                                    size: cardHeight < 250 ? 18 : 20,
-                                  ),
-                                  onPressed: onBookmarkToggle,
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ),
-                            if (onDelete != null)
-                              SizedBox(
-                                width: cardHeight < 250 ? 28 : 32,
-                                height: cardHeight < 250 ? 28 : 32,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.block,
-                                    color: Colors.grey,
-                                    size: cardHeight < 250 ? 18 : 20,
-                                  ),
-                                  onPressed: onDelete,
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ),
-                          ],
-                        ),
-                        SizedBox(height: verticalSpacing),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: cardHeight < 250 ? 12 : 14,
-                            ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                city.country,
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      fontSize: cardHeight < 250 ? 11 : null,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
+              ),
+            ),
 
-                            _buildSoftChip(
-                              icon: Icons.star,
-                              label: avgImpression != null
-                                  ? avgImpression.toStringAsFixed(1)
-                                  : 'N/A',
-                              color: _getRatingBackgroundColor(avgImpression),
-                              textColor: _getRatingTextColor(avgImpression),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: onViewCityDetails,
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                vertical: cardHeight < 250 ? 8 : 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
+            // Content (scrollable if needed)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Name + icons
+                      Row(
+                        children: [
+                          Expanded(
                             child: Text(
-                              'View details',
-                              style: TextStyle(
-                                fontSize: cardHeight < 250 ? 12 : null,
-                              ),
+                              city.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ),
+                          if (onFavoriteToggle != null)
+                            IconButton(
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isFavorite ? Colors.red : Colors.grey,
+                              ),
+                              onPressed: onFavoriteToggle,
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                          if (onBookmarkToggle != null)
+                            IconButton(
+                              icon: Icon(
+                                isWishlisted
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                color: isWishlisted ? Colors.amber : Colors.grey,
+                              ),
+                              onPressed: onBookmarkToggle,
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                          if (onDelete != null)
+                            IconButton(
+                              icon: const Icon(Icons.block, color: Colors.grey),
+                              onPressed: onDelete,
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Location + rating
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on, size: 14),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              city.country,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          _buildSoftChip(
+                            icon: Icons.star,
+                            label: avgImpression != null
+                                ? avgImpression.toStringAsFixed(1)
+                                : 'N/A',
+                            color: _getRatingBackgroundColor(avgImpression),
+                            textColor: _getRatingTextColor(avgImpression),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // View details button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: onViewCityDetails,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text('View details'),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
