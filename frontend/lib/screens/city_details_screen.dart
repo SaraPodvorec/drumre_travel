@@ -49,7 +49,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
     super.initState();
     _fetchReviews();
     _fetchRatingsData();
-    _fetchCurrentWeather();
+    // _fetchCurrentWeather(); otkomentirati za fetch
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ActivityProvider>().loadActivities(
         widget.city.id,
@@ -335,7 +335,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 value: _isWeatherLoading
                     ? 'Loading...'
                     : weather == null
-                    ? 'Unavailable'
+                    ? widget.city.temperature.toString()
                     : '${weather.temp.toStringAsFixed(1)}°C · ${_labelForWeather(weather.main)}',
                 color: Colors.blue.shade300,
                 isWeather: true,
