@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/city.dart';
+import 'package:frontend/providers/accessibility_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -20,48 +21,52 @@ class CityCard extends StatelessWidget {
     this.onViewCityDetails,
   });
 
-  static const double cardHeight = 300; // fixed card height
-  static const double imageHeight = cardHeight * 0.75; // 40% for image
 
   @override
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
     final cityProvider = context.watch<CityProvider>();
+    final accessibility = context.watch<AccessibilityProvider>();
     final isFavorite = userProvider.favoriteCities.contains(city.id);
     final isWishlisted = userProvider.wishlistCities.contains(city.id);
 
     cityProvider.fetchAvgImpression(city.id);
     final avgImpression = cityProvider.getAvgImpression(city.id);
 
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      clipBehavior: Clip.antiAlias,
-      child: SizedBox(
-        height: cardHeight, // fixed height
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image
-            SizedBox(
-              height: imageHeight,
-              width: double.infinity,
-              child: Image.network(
-                city.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.error),
+    final scale = accessibility.textScale;
+
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+        textScaler: TextScaler.linear(scale),
+      ),
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        clipBehavior: Clip.antiAlias,
+        child: SizedBox(
+          // height: cardHeight, // fixed height
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image
+              AspectRatio(
+                aspectRatio: 4/3,
+                child: Image.network(
+                  city.imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.error),
+                  ),
                 ),
               ),
-            ),
-
-            // Content (scrollable if needed)
-            Expanded(
-              child: Padding(
+      
+              // Content (scrollable if needed)
+              Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // Name + icons
                     Row(
@@ -157,8 +162,8 @@ class CityCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

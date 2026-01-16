@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (width >= 1900) return 5; // ultrawide
       if (width >= 1500) return 4; // 27"
       if (width >= 1200) return 3; // 24"
-      if (width >= 900) return 2; // tablet
+      if (width >= 600) return 2; // tablet
       return 1; // mobile
     }
 
@@ -64,11 +64,25 @@ class _HomeScreenState extends State<HomeScreen> {
           )
           .toList();
     }
-
+      final horizontalPadding = screenWidth >= 1600
+          ? 120.0
+          : screenWidth >= 1200
+              ? 80.0
+              : screenWidth >= 800
+                  ? 40.0
+                  : 16.0;
     return Scaffold(
       appBar: const MainAppBar(title: 'Traveler Cities'),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 100.0, right: 100.0, bottom: 25.0),
+      body:
+
+      Padding(
+        padding: EdgeInsets.fromLTRB(
+          horizontalPadding,
+          0,
+          horizontalPadding,
+          25,
+        ),
+
         child: Column(
           children: [
             // Search Box
@@ -237,7 +251,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisCount: columns,
                               crossAxisSpacing: 15.0,
                               mainAxisSpacing: 15.0,
-                              mainAxisExtent: 380
+                              // mainAxisExtent: 430,
+                              childAspectRatio: 0.8
+
                             ),
                         itemCount: filteredCities.length,
                         itemBuilder: (context, index) {

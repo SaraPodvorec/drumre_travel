@@ -86,13 +86,11 @@ class CitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 12),
-
         if (cityIds.isEmpty)
           Text(emptyText, style: TextStyle(color: Colors.grey[600]))
         else
