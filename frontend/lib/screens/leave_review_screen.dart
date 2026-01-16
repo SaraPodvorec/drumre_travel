@@ -74,15 +74,33 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
       }
 
       if (mounted) Navigator.pop(context, true);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+  } catch (e) {
+    String errorMessage = 'An unexpected error occurred';
+
+    // Check if it's an HTTP exception or a known error from your API
+    if (e.toString().contains('404')) {
+      if (e.toString().contains('exists')) {
+        errorMessage = 'You have already submitted a review for this city.';
+      } else if (e.toString().contains('data')) {
+        errorMessage = 'The city does not exist. Please check the name.';
+      } else {
+        errorMessage = 'Invalid request. Please check your input.';
       }
-    } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+    } else if (e.toString().contains('400')) {
+      errorMessage = 'You have already submitted a review for this city.';
     }
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+  } finally {
+    if (mounted) setState(() => _isSubmitting = false);
+  }
   }
 
 
