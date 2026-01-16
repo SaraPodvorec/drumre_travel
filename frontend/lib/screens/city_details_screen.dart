@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/city.dart';
 import 'package:frontend/models/review.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/activity_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/other_user_profile_screen.dart';
+import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/services/review_service.dart';
 import 'package:frontend/widgets/horizontal_shorts_list.dart';
@@ -31,6 +33,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
   double _avgAffordability = 0.0;
   int _numOfReviews = 0;
   bool _isRatingsLoading = true;
+  User? _currentUser;
 
   @override
   void initState() {
@@ -88,6 +91,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
     final cardHeight = MediaQuery.of(context).size.height * 0.4;
     final isFavorite = userProvider.favoriteCities.contains(widget.city.id);
     final isWishlisted = userProvider.wishlistCities.contains(widget.city.id);
+    final currentUser = userProvider.currentUser;
 
     Widget sidePanel() {
       return Container(
@@ -137,37 +141,37 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             _isRatingsLoading
                 ? const Center(child: CircularProgressIndicator())
                 : Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 24,
-                  runSpacing: 16, 
-                  children: [
-                    ratingItem(
-                      Icons.star,
-                      Colors.amber.shade600,
-                      _avgImpression.toStringAsFixed(1),
-                    ),
-                    ratingItem(
-                      Icons.people,
-                      Colors.cyan.shade600,
-                      _avgPeople.toStringAsFixed(1),
-                    ),
-                    ratingItem(
-                      Icons.attractions,
-                      Colors.deepPurpleAccent,
-                      _avgSights.toStringAsFixed(1),
-                    ),
-                    ratingItem(
-                      Icons.security,
-                      Colors.green.shade600,
-                      _avgSafety.toStringAsFixed(1),
-                    ),
-                    ratingItem(
-                      Icons.attach_money,
-                      Colors.orange.shade600,
-                      _avgAffordability.toStringAsFixed(1),
-                    ),
-                  ],
-                ),
+                    alignment: WrapAlignment.center,
+                    spacing: 24,
+                    runSpacing: 16,
+                    children: [
+                      ratingItem(
+                        Icons.star,
+                        Colors.amber.shade600,
+                        _avgImpression.toStringAsFixed(1),
+                      ),
+                      ratingItem(
+                        Icons.people,
+                        Colors.cyan.shade600,
+                        _avgPeople.toStringAsFixed(1),
+                      ),
+                      ratingItem(
+                        Icons.attractions,
+                        Colors.deepPurpleAccent,
+                        _avgSights.toStringAsFixed(1),
+                      ),
+                      ratingItem(
+                        Icons.security,
+                        Colors.green.shade600,
+                        _avgSafety.toStringAsFixed(1),
+                      ),
+                      ratingItem(
+                        Icons.attach_money,
+                        Colors.orange.shade600,
+                        _avgAffordability.toStringAsFixed(1),
+                      ),
+                    ],
+                  ),
 
             const SizedBox(height: 16),
             Column(
@@ -545,6 +549,8 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
   }
 
   Widget reviewCard(CityReview review) {
+    final userProvider = context.read<UserProvider>();
+    final currentUser = userProvider.currentUser;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -559,13 +565,24 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: InkWell(
                   customBorder: const CircleBorder(),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            OtherUserProfileScreen(userId: review.userId!),
-                      ),
-                    );
+                    if (currentUser != null &&
+                        review.userId != currentUser.id) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              OtherUserProfileScreen(userId: review.userId!),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              ProfileScreen(),
+                        ),
+                      );
+                    }
                   },
                   child: CircleAvatar(
                     radius: 18,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user.dart';
 import '../services/user_service.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -10,6 +11,8 @@ class UserProvider extends ChangeNotifier {
   Set<String> selectedContinents = {};
   bool isLoading = false;
   String? error;
+
+ User? currentUser;
 
   bool _onboardingCompleted = false;
   bool _initialized = false;
@@ -46,6 +49,7 @@ class UserProvider extends ChangeNotifier {
         (data['deletedCities'] as List?)?.map((c) => c.toString()) ?? []
       );
       _onboardingCompleted = data['onboardingCompleted'] == true;
+      currentUser = User.fromJson(data);
       error = null;
     } catch (e) {
       error = e.toString();
