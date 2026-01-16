@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
       int _calculateColumns(double width) {
-      // if (width >= 1900) return 5; // ultrawide
+      if (width >= 1900) return 5; // ultrawide
       if (width >= 1500) return 4; // 27"
       if (width >= 1200) return 3; // 24"
       if (width >= 900) return 2; // tablet
@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisCount: columns,
                               crossAxisSpacing: 15.0,
                               mainAxisSpacing: 15.0,
-                              mainAxisExtent: screenHeight * 0.4
+                              mainAxisExtent: 380
                             ),
                         itemCount: filteredCities.length,
                         itemBuilder: (context, index) {
