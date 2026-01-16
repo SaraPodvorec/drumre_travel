@@ -283,6 +283,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
               ),
             ],
           ),
+          const SizedBox(height: 24),
           HorizontalSightsList(cityId: widget.city.id),
           const SizedBox(height: 24),
           HorizontalShortsList(cityId: widget.city.id),
