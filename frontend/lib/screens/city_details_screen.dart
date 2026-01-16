@@ -15,6 +15,13 @@ import 'package:frontend/widgets/horizontal_sights.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
 import 'package:provider/provider.dart';
 
+class WeatherInfo {
+  final double temp;
+  final String main;
+
+  WeatherInfo({required this.temp, required this.main});
+}
+
 class CityDetailsScreen extends StatefulWidget {
   final City city;
   const CityDetailsScreen({super.key, required this.city});
@@ -34,18 +41,42 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
   int _numOfReviews = 0;
   bool _isRatingsLoading = true;
   User? _currentUser;
+  WeatherInfo? _currentWeather;
+  bool _isWeatherLoading = false;
 
   @override
   void initState() {
     super.initState();
     _fetchReviews();
     _fetchRatingsData();
+    _fetchCurrentWeather();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ActivityProvider>().loadActivities(
         widget.city.id,
         widget.city.lat,
         widget.city.lon,
       );
+    });
+  }
+
+  Future<void> _fetchCurrentWeather() async {
+    try {
+      setState(() {
+        _isWeatherLoading = true;
+      });
+      final data = await Api.getRequest('/weather/${widget.city.name}');
+      print("Weather data for ${widget.city.name}: $data");
+      setState(() {
+        _currentWeather = WeatherInfo(
+          temp: (data['temperature'] ?? 0.0).toDouble(),
+          main: data['main'] ?? 'N/A',
+        );
+      });
+    } catch (e) {
+      print("Error fetching weather data: $e");
+    }
+    setState(() {
+      _isWeatherLoading = false;
     });
   }
 
@@ -80,6 +111,44 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
       setState(() => _isRatingsLoading = false);
       print("Error fetching ratings data: $e");
     }
+  }
+
+  String _emojiForWeather(String main) {
+    final m = main.toLowerCase();
+    if (m.contains('clear')) return '☀️';
+    if (m.contains('cloud')) return '☁️';
+    if (m.contains('rain')) return '🌧️';
+    if (m.contains('snow')) return '❄️';
+    if (m.contains('storm') || m.contains('thunder')) return '⛈️';
+    if (m.contains('drizzle')) return '🌦️';
+    if (m.contains('mist') || m.contains('fog')) return '🌫️';
+    return '🌍';
+  }
+
+  IconData weatherIconFromMain(String main) {
+    final m = main.toLowerCase();
+
+    if (m.contains('clear')) return Icons.sunny;
+    if (m.contains('cloud')) return Icons.cloud;
+    if (m.contains('rain')) return Icons.grain;
+    if (m.contains('snow')) return Icons.ac_unit;
+    if (m.contains('storm') || m.contains('thunder')) return Icons.flash_on;
+    if (m.contains('drizzle')) return Icons.grain;
+    if (m.contains('mist') || m.contains('fog')) return Icons.blur_on;
+
+    return Icons.public;
+  }
+
+  String _labelForWeather(String main) {
+    final m = main.toLowerCase();
+    if (m.contains('clear')) return 'Sunny';
+    if (m.contains('cloud')) return 'Cloudy';
+    if (m.contains('rain')) return 'Rainy';
+    if (m.contains('snow')) return 'Snowy';
+    if (m.contains('storm') || m.contains('thunder')) return 'Stormy';
+    if (m.contains('drizzle')) return 'Drizzle';
+    if (m.contains('mist') || m.contains('fog')) return 'Foggy';
+    return main;
   }
 
   @override
@@ -193,6 +262,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
     }
 
     Widget mainContent() {
+      final weather = _currentWeather;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -243,46 +313,50 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
             style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 24),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // Under the description
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    richTextBuilder(
-                      'Population: ',
-                      widget.city.population?.toString() ?? 'N/A',
-                      16,
-                    ),
-                    richTextBuilder(
-                      'Currency: ',
-                      widget.city.currency ?? 'N/A',
-                      16,
-                    ),
-                    richTextBuilder(
-                      'Temperature: ',
-                      '${widget.city.temperature}°C',
-                      16,
-                    ),
-                  ],
-                ),
+              infoChip(
+                icon: Icons.location_city,
+                title: 'Population',
+                value: widget.city.population?.toString() ?? 'N/A',
+                color: Colors.purple.shade300,
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    richTextBuilder('Timezone: ', widget.city.timezone, 16),
-                    richTextBuilder(
-                      'Language: ',
-                      widget.city.language ?? 'N/A',
-                      16,
-                    ),
-                  ],
-                ),
+              infoChip(
+                icon: Icons.attach_money,
+                title: 'Currency',
+                value: widget.city.currency ?? 'N/A',
+                color: Colors.orange.shade300,
+              ),
+              infoChip(
+                title: 'Weather',
+                value: _isWeatherLoading
+                    ? 'Loading...'
+                    : weather == null
+                    ? 'Unavailable'
+                    : '${weather.temp.toStringAsFixed(1)}°C · ${_labelForWeather(weather.main)}',
+                color: Colors.blue.shade300,
+                isWeather: true,
+                icon: Icons.public,
+                weatherMain: weather?.main
+              ),
+              infoChip(
+                icon: Icons.access_time,
+                title: 'Timezone',
+                value: widget.city.timezone,
+                color: Colors.teal.shade300,
+              ),
+              infoChip(
+                icon: Icons.language,
+                title: 'Language',
+                value: widget.city.language ?? 'N/A',
+                color: Colors.redAccent.shade200,
               ),
             ],
           ),
+
           const SizedBox(height: 24),
           HorizontalSightsList(cityId: widget.city.id),
           const SizedBox(height: 24),
@@ -444,6 +518,62 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
     );
   }
 
+  Widget infoChip({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+    bool isWeather = false,
+    String? weatherMain,
+  }) {
+    final background = Color.alphaBlend(color.withOpacity(0.28), Colors.white);
+
+    return Material(
+      color: Colors.transparent,
+      elevation: 5,
+      shadowColor: color.withOpacity(0.45),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [background, color.withOpacity(0.35)],
+          ),
+          border: Border.all(color: color.withOpacity(0.35), width: 1),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            isWeather && weatherMain != null
+                ? Icon(weatherIconFromMain(weatherMain), size: 18, color: color)
+                : Icon(icon, size: 18, color: color),
+
+            const SizedBox(width: 8),
+
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                children: [
+                  TextSpan(
+                    text: '$title: ',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  TextSpan(
+                    text: value,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget ratingItem(IconData icon, Color iconColor, String value) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -452,48 +582,6 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
         const SizedBox(width: 6),
         Text(value, style: const TextStyle(color: Colors.black)),
       ],
-    );
-  }
-
-  Widget textBuilder(
-    String title,
-    double fontSize,
-    FontWeight fontWeight, {
-    Color? color,
-  }) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          color: color ?? Colors.black,
-        ),
-      ),
-    );
-  }
-
-  Widget richTextBuilder(
-    String title,
-    String value,
-    double fontSize, {
-    Color? color,
-  }) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: RichText(
-        text: TextSpan(
-          style: TextStyle(fontSize: fontSize, color: color ?? Colors.black),
-          children: [
-            TextSpan(
-              text: title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: value),
-          ],
-        ),
-      ),
     );
   }
 
@@ -578,10 +666,7 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              ProfileScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => ProfileScreen()),
                       );
                     }
                   },

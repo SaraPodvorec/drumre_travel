@@ -10,6 +10,7 @@ import review from './routes/review.js';
 import connectDB from './config/db.js';
 import user from './routes/user.js';
 import cityShorts from './routes/city_shorts.js';
+import { fetchCityWeatherByName } from './services/openweather.js';
 
 
 dotenv.config();
@@ -50,6 +51,12 @@ app.get("/api/proxy-image", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch image" });
   }
+});
+app.get("/api/weather/:cityName", async (req, res) => {
+  const { cityName } = req.params;
+  const weather = await fetchCityWeatherByName(cityName);
+  if (!weather) return res.status(404).json({ error: "City not found" });
+  res.json(weather);
 });
 
 // app.get("/", async (req, res) => {
