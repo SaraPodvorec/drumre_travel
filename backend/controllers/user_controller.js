@@ -181,9 +181,9 @@ export const getUserFollowStats = async (req, res) => {
 };
 
 export const completeOnboarding = async (req, res) => {
-  const { climate, citySize, continents } = req.body;
+  const { impressionPreference, citySize, continents } = req.body;
 
-  if (!climate || !citySize || !continents) {
+  if (!impressionPreference || !citySize || !continents) {
     return res.status(400).json({ error: 'Missing onboarding data' });
   }
 
@@ -192,7 +192,7 @@ export const completeOnboarding = async (req, res) => {
       { _id: req.user.id },
       {
         onboardingCompleted: true,
-        onboardingPreferences: { climate, citySize, continents },
+        onboardingPreferences: { impressionPreference, citySize, continents },
       },
       { new: true }
     );

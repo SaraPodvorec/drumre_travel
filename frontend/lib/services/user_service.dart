@@ -135,17 +135,17 @@ class UserService {
   }
 
   static Future<void> completeOnboarding({
-    required String climate,
+    required String impressionPreference,
     required String citySize,
     required List<String> continents,
   }) async {
     try {
-      log('UserService: Completing onboarding with climate=$climate, citySize=$citySize, continents=$continents');
+      log('UserService: Completing onboarding with climate=$impressionPreference, citySize=$citySize, continents=$continents');
       final response = await _client.post(
         Uri.parse('$baseUrl/user/onboarding/complete'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'climate': climate,
+          'impressionPreference': impressionPreference,
           'citySize': citySize,
           'continents': continents
         }),

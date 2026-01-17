@@ -11,10 +11,10 @@ const userSchema = new mongoose.Schema(
     deletedCities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'City' }],
     deletedActivities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }],
-    
+
     onboardingCompleted: { type: Boolean, default: false },
     onboardingPreferences: {
-      climate: { type: String, enum: ['cold', 'mild', 'hot'], default: '' },
+      impressionPreference: { type: String, enum: ['people', 'sights', 'safety', 'affordability'] },
       citySize: { type: String, enum: ['small', 'medium', 'large'], default: '' },
       continents: [{ type: String }],
     },

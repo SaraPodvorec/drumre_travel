@@ -135,7 +135,7 @@ class UserProvider extends ChangeNotifier {
   }) async {
     try {
       await UserService.completeOnboarding(
-        climate: climate,
+        impressionPreference: climate,
         citySize: citySize,
         continents: continents.toList(),
       );

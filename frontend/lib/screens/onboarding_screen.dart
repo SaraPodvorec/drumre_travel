@@ -13,6 +13,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   String? selectedClimate;
   String? selectedCitySize;
+  String? selectedImpressionPreference;
   final Set<String> selectedContinents = {};
 
   Widget optionCard({
@@ -106,34 +107,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   const SizedBox(height: 28),
 
-                  /// Climate
+                  // Impression preference
                   const Text(
-                    'What climate do you prefer?',
-                    style:
-                        TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                    'What is most important in the city for you?',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),
                   responsiveGrid([
                     optionCard(
-                      emoji: '❄️',
-                      title: 'Cold',
-                      subtitle: 'Below 15°C',
-                      selected: selectedClimate == 'cold',
-                      onTap: () => setState(() => selectedClimate = 'cold'),
+                      emoji: '👥', // Icons.people
+                      title: 'People',
+                      subtitle: 'Friendly Locals',
+                      selected: selectedImpressionPreference == 'people',
+                      onTap: () => setState(() => selectedImpressionPreference = 'people'),
                     ),
                     optionCard(
-                      emoji: '🌤️',
-                      title: 'Mild',
-                      subtitle: '15–25°C',
-                      selected: selectedClimate == 'mild',
-                      onTap: () => setState(() => selectedClimate = 'mild'),
+                      emoji: '🎡', // Icons.attractions
+                      title: 'Sights',
+                      subtitle: 'Attractions',
+                      selected: selectedImpressionPreference == 'sights',
+                      onTap: () => setState(() => selectedImpressionPreference = 'sights'),
                     ),
                     optionCard(
-                      emoji: '🔥',
-                      title: 'Hot',
-                      subtitle: 'Above 25°C',
-                      selected: selectedClimate == 'hot',
-                      onTap: () => setState(() => selectedClimate = 'hot'),
+                      emoji: '🛡️', // Icons.security
+                      title: 'Safety',
+                      subtitle: 'Secure Environment',
+                      selected: selectedImpressionPreference == 'safety',
+                      onTap: () => setState(() => selectedImpressionPreference = 'safety'),
+                    ),
+                    optionCard(
+                      emoji: '💰', // Icons.attach_money
+                      title: 'Budget',
+                      subtitle: 'Affordability',
+                      selected: selectedImpressionPreference == 'budget',
+                      onTap: () => setState(() => selectedImpressionPreference = 'budget'),
                     ),
                   ]),
 
@@ -193,12 +200,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: selectedClimate != null &&
+                      onPressed: selectedImpressionPreference != null &&
                               selectedCitySize != null &&
                               selectedContinents.isNotEmpty
                           ? ()  async{
                             await context.read<UserProvider>().completeOnboarding(
-                              climate: selectedClimate!,
+                              climate: selectedImpressionPreference!,
                               citySize: selectedCitySize!,
                               continents: selectedContinents,
                             );
