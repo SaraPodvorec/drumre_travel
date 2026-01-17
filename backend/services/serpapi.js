@@ -50,8 +50,8 @@ export async function fetchCityTopSights(cityName) {
 export async function fetchCityShorts(cityName) {
   try {
     const params = {
-      engine: "google",
-      q: `${cityName} travel short reels`,
+      engine: "google_short_videos",
+      q: `${cityName} travel shorts`,
       hl: "en",
       gl: "us",
       api_key: process.env.SERPAPI_KEY,
@@ -59,9 +59,11 @@ export async function fetchCityShorts(cityName) {
 
     const data = await getJson(params);
 
-    if (!data.short_videos) return [];
+    console.log(data.short_video_results);
 
-    return data.short_videos.map((video) => ({
+    if (!data.short_video_results) return [];
+
+    return data.short_video_results.map((video) => ({
       title: video.title,
       source: video.source,
       link: video.link,

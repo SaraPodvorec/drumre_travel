@@ -62,7 +62,9 @@ export async function getTopSightsByCityId(req, res) {
         return res.status(404).json({ error: "City not found in database." });
       }
 
-      await saveCityTopSights(cityId, city.name);
+      console.log(`Top sights for: ${city}`)
+
+      await saveCityTopSights(cityId, city.city);
 
       topSights = await CityTopSight.find({ cityId });
     }
@@ -76,7 +78,7 @@ export async function getTopSightsByCityId(req, res) {
 
 export async function saveCityTopSights(cityId, cityName) {
   const topSights = await fetchCityTopSights(cityName);
-  
+  console.log(`Fetching sights for ${cityName}`);
   for (const topSight of topSights) {
     await CityTopSight.findOneAndUpdate(
       { 
