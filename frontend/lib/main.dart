@@ -187,9 +187,11 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   Future<void> _initialize() async {
     final authProvider = context.read<AuthProvider>();
+    final socialProvider = context.read<SocialProvider>();
     await context.read<AccessibilityProvider>().loadPreferences();
 
     await authProvider.initialize();
+    await socialProvider.loadUsers();
 
     if (mounted) {
       setState(() => _loading = false);

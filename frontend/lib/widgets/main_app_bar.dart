@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/discover_users_screen.dart';
 import 'package:frontend/screens/settings_screen.dart';
@@ -132,6 +133,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                         child: const Text('Logout'),
                         onTap: () async {
                           userProvider.clearUserData();
+                          context.read<SocialProvider>().reset();
                           await authProvider.signOut();
                           if (context.mounted) {
                             Navigator.of(context).pushReplacementNamed('/');

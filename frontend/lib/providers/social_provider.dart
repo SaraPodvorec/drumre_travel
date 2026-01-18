@@ -69,4 +69,11 @@ class SocialProvider extends ChangeNotifier {
   Future<SocialUser> fetchUserProfile(String userId) async {
     return SocialService.getUserProfile(userId, followingIds);
   }
+  
+  void reset() {
+    users = [];
+    isLoading = false;
+    error = null;
+    notifyListeners();
+  }
 }

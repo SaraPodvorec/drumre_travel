@@ -162,6 +162,9 @@ class UserProvider extends ChangeNotifier {
     selectedContinents.clear();
     _initialized = false;
     error = null;
+    currentUser = null;
+    currentUserId = null;
     notifyListeners();
   }
+
 }
