@@ -1,13 +1,37 @@
 import City from "../models/city.js";
-import CityTopSight from "../models/city_top_sight.js";
-import CityShort from "../models/city_short_video.js";
 import { fetchCityGeoapify } from "../services/geoapify.js";
 import { fetchCityImage } from "../services/unsplash.js";
 import { fetchCityWeather } from "../services/openweather.js";
-import { fetchCityDescription, fetchCityShorts } from "../services/serpapi.js";
-import { updateMissingCitySights, saveCityTopSights } from "./city_top_sights_controller.js";
+import { fetchCityDescription } from "../services/serpapi.js";
 import { getCountryData } from "../services/rest_countries.js";
+import { fetchCityPopulation, fetchAllCityPopulations, getLatestPopulationFromArray } from "../services/countriesnow.js";
 
+async function updatePopulations() {
+  console.log("Updating city populations...");
+  const populations = await fetchAllCityPopulations();
+  const cities = await City.find();
+  for (const city of cities) {
+    try {
+      console.log(`Updating population for: ${city.city}`);
+      const cityData = populations.find(item =>
+        item.city.toLowerCase().includes(city.city.toLowerCase())
+      );
+
+      if (cityData) {
+        const population = getLatestPopulationFromArray(cityData.populationCounts);
+        city.population = population;
+        console.log(`Successfully updated ${city.city}`);
+      } else {
+        city.population = null;
+        console.warn(`No population data returned for ${city.city}`);
+      }
+      await city.save();
+
+    } catch (error) {
+      console.error(`Failed to update ${city.city}:`, error.message);
+    }
+  }
+}
 
 export async function updateMissingDescriptions() {
   console.log("Starting batch update for cities missing descriptions...");
@@ -31,7 +55,7 @@ export async function updateMissingDescriptions() {
     for (const city of citiesToUpdate) {
       try {
         console.log(`Updating description for: ${city.city}...`);
-        
+
         const description = await fetchCityDescription(city.city, city.country);
 
         if (description) {
@@ -55,8 +79,9 @@ export async function updateMissingDescriptions() {
 
 export async function getAllCities(req, res) {
   // updateMissingDescriptions();
+  await updatePopulations();
   let cities = await City.find();
-  
+
   cities = await Promise.all(
     cities.map(async (city) => {
       if (!city.currency || !city.language || !city.population) {
@@ -65,14 +90,14 @@ export async function getAllCities(req, res) {
           city.currency = countryData.currency;
           city.language = countryData.language;
           console.log(`Updated country data for ${city.city}: ${city.currency}, ${city.language}`);
-          city.population = countryData.population;
+          // city.population = countryData.population;
           await city.save();
         }
       }
       return city;
     })
   );
-  
+
   res.json(cities);
 }
 
@@ -104,9 +129,9 @@ export async function saveCity(cityData) {
 }
 
 export async function getCityData(cityName) {
-  
+
   console.log(`Getting data for: ${cityName}`);
-  
+
   const city = await City.findOne({ city: new RegExp(`^${cityName}$`, 'i') });
 
   if (!city) {
@@ -116,7 +141,7 @@ export async function getCityData(cityName) {
       //console.log(`Fetching Geoapify data for ${cityName}...`);
       const geoapify = await fetchCityGeoapify(cityName);
       //console.log(`Geoapify success for ${cityName}:`, geoapify);
-      
+
       //console.log(`Fetching Unsplash data for ${cityName}...`);
       const unsplash = await fetchCityImage(cityName);
       //console.log(`Unsplash success for ${cityName}:`, unsplash);
@@ -129,11 +154,13 @@ export async function getCityData(cityName) {
       const serpapiDescription = await fetchCityDescription(cityName)
       // console.log(`SerpAPI success for ${cityName}:`, openweather);
 
+      const cityPopulation = await fetchCityPopulation(cityName);
+
       // check again before saving in case another request saved it simultaneously
-      const existingCity = await City.findOne({ 
-        city: new RegExp(`^${geoapify.city}$`, 'i') 
+      const existingCity = await City.findOne({
+        city: new RegExp(`^${geoapify.city}$`, 'i')
       });
-      
+
       if (existingCity) {
         console.log(`City ${geoapify.city} was already saved by another request.`);
         return existingCity;
@@ -156,7 +183,8 @@ export async function getCityData(cityName) {
         imageAuthorLink: unsplash.imageAuthorLink,
         imageDescription: unsplash.imageDescription,
         imageAltDescription: unsplash.imageAltDescription,
-        description: serpapiDescription
+        description: serpapiDescription,
+        population: cityPopulation
       };
 
       const newCity = new City(cityData);
@@ -173,15 +201,15 @@ export async function getCityData(cityName) {
     console.log(`City ${cityName} found, but description is missing. Updating...`);
     try {
       const description = await fetchCityDescription(city.city, city.country);
-      
+
       city.description = description;
       await city.save();
-      
+
       console.log(`Updated description for ${city.city}`);
       return city;
     } catch (error) {
       console.error(`Failed to update description for ${cityName}:`, error);
-      return city; 
+      return city;
     }
   } else {
     console.log(`City ${cityName} found in database.`);
@@ -190,29 +218,29 @@ export async function getCityData(cityName) {
 }
 
 export const cityFilters = async (req, res) => {
-  const cityFields = [ 'city', 'temperature', 'popularity' ];
+  const cityFields = ['city', 'temperature', 'popularity'];
   try {
     const {
       country,
       continent,
-      sort,   
+      sort,
       order,
       //limit = 20
-    } = req.query; 
+    } = req.query;
 
     const filter = {};
 
     if (country) {
-      filter.country= country;
+      filter.country = country;
     }
 
     if (continent) {
       filter.continent = continent;
 
     }
-    let pipeline = [ { $match: filter } ];
+    let pipeline = [{ $match: filter }];
     console.log("Sort field:", sort);
-    if(cityFields.includes(sort)) {
+    if (cityFields.includes(sort)) {
       pipeline.push({
         $sort: {
           [sort]: order === "asc" ? 1 : -1
@@ -228,16 +256,16 @@ export const cityFilters = async (req, res) => {
           as: "reviews"
         }
       },
-      {
-        $addFields: {
-          avgSortField: { $avg: `$reviews.${sort}`}
-        }
-      },
-      { $sort: { avgSortField: order === "asc" ? 1 : -1 } }
+        {
+          $addFields: {
+            avgSortField: { $avg: `$reviews.${sort}` }
+          }
+        },
+        { $sort: { avgSortField: order === "asc" ? 1 : -1 } }
       );
     }
 
-    const cities =  await City.aggregate(pipeline);
+    const cities = await City.aggregate(pipeline);
 
     res.json({ cities });
   } catch (err) {
