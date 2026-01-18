@@ -26,7 +26,6 @@ export const getRecommendedCities = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        // 1️⃣ Load user preferences + relations
         const user = await User.findById(userId)
             .select('following deletedCities favoriteCities onboardingPreferences');
 
@@ -34,7 +33,6 @@ export const getRecommendedCities = async (req, res) => {
 
         const { impressionPreference } = user.onboardingPreferences;
 
-        // 2️⃣ Aggregate friends reviews
         const friendsAgg = await CityReview.aggregate([
             { $match: { userId: { $in: user.following } } },
             {
@@ -55,12 +53,10 @@ export const getRecommendedCities = async (req, res) => {
             return acc;
         }, {});
 
-        // 3️⃣ Load ALL cities except removed ones
         const allCities = await City.find({
             _id: { $nin: [...user.deletedCities, ...user.favoriteCities] }
         });
 
-        // 4️⃣ Compute global averages once
         const globalAgg = await CityReview.aggregate([
             {
                 $group: {
@@ -79,14 +75,12 @@ export const getRecommendedCities = async (req, res) => {
             return acc;
         }, {});
 
-        // 5️⃣ Score cities
         const scoredCities = allCities.map(city => {
             const g = globalMap[city._id.toString()] || {};
             const f = friendMap[city._id.toString()] || null;
 
             let score = 0;
 
-            // Friends score dominates
             if (f) {
                 let friendScore = f.avgFriendImpression;
 
@@ -103,7 +97,6 @@ export const getRecommendedCities = async (req, res) => {
                 score += friendScore * 0.6 * visitBoost * dislikePenalty;
             }
 
-            // Global score secondary
             if (g.avgImpression) {
                 let globalScore = g.avgImpression;
 
@@ -115,10 +108,8 @@ export const getRecommendedCities = async (req, res) => {
                 score += (globalScore / 2) * 0.3;
             }
 
-            // Popularity baseline
             score += (city.popularity || 1) / 100 * 0.1;
 
-            // Preference multiplier
             score *= getPreferenceBoost(city, user.onboardingPreferences);
 
             return {
@@ -129,7 +120,6 @@ export const getRecommendedCities = async (req, res) => {
             };
         });
 
-        // 6️⃣ Sort all by score
         const sorted = scoredCities.sort((a, b) => b.recommendationScore - a.recommendationScore);
 
         res.status(200).json(sorted);
