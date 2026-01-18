@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/city.dart';
+import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_details_screen.dart';
 import 'package:frontend/services/api_service.dart';
@@ -29,12 +30,21 @@ class _RecommendedCitiesListState extends State<RecommendedCitiesList> {
     return (res as List).map((cityJson) => City.fromJson(cityJson)).toList();
   }
 
+  void _refreshCities() {
+    setState(() {
+      _citiesFuture = fetchRecommendedCities();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userProvider = context.watch<UserProvider>();
+    final socialProvider = context.watch<SocialProvider>();
+
+    // Trigger rebuild every time following changes
+    socialProvider.addListener(_refreshCities);
 
     return FutureBuilder<List<City>>(
-      future: _citiesFuture, // use the cached future
+      future: _citiesFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -78,5 +88,11 @@ class _RecommendedCitiesListState extends State<RecommendedCitiesList> {
       },
     );
   }
-}
 
+  @override
+  void dispose() {
+    final socialProvider = context.read<SocialProvider>();
+    socialProvider.removeListener(_refreshCities);
+    super.dispose();
+  }
+}
