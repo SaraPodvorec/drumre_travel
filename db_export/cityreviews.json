@@ -1,0 +1,1656 @@
+[{
+  "_id": {
+    "$oid": "6961125b9b45905cddfc1184"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc922"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "A dazzling blend of ultra-modern innovation and deep-rooted tradition, where neon streets meet ancient temples",
+  "createdAt": {
+    "$date": "2026-01-09T14:36:11.489Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:35:52.919Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696112da0ba46cf74084213a"
+  },
+  "userId": {
+    "$oid": "6931f53ab914ea03b63cf9e6"
+  },
+  "cityId": {
+    "$oid": "6960c400cc59bc7302bb4046"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-09T14:38:18.713Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:38:18.713Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963da96521b1fd099bb93e9"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "6937130c336c21550ee397a9"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Dinamo Zagreb",
+  "createdAt": {
+    "$date": "2026-01-11T17:15:02.579Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T23:01:43.099Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963dc03521b1fd099bb93f1"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "6933458ab914ea03b63dc920"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 4,
+  "safety": 5,
+  "affordability": 3,
+  "comments": "Paris has a rhythm that feels both elegant and intense. Wandering its streets reveals small details—cafés, bridges, quiet corners—that stay with you long after you leave. It can be crowded, but the atmosphere makes it feel timeless.",
+  "createdAt": {
+    "$date": "2026-01-11T17:21:07.640Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T23:01:20.239Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963dce6521b1fd099bb93ff"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "693715638c74fb588569bf99"
+  },
+  "impression": 4,
+  "people": 2,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 4,
+  "comments": "Rijeka feels raw and authentic, with a strong connection to the sea. The city has an understated character that grows on you the longer you stay. It’s not flashy, but it feels real and grounded.",
+  "createdAt": {
+    "$date": "2026-01-11T17:24:54.774Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T23:01:30.106Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963f6192f4ff4e02912a1f2"
+  },
+  "userId": {
+    "$oid": "69610be6fca0fb66bd32e34c"
+  },
+  "cityId": {
+    "$oid": "6933458ab914ea03b63dc920"
+  },
+  "impression": 2,
+  "people": 1,
+  "sights": 1,
+  "safety": 1,
+  "affordability": 1,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-11T19:12:25.136Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T19:12:25.136Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69647e82c84207ab2b172bad"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc923"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 3,
+  "safety": 2,
+  "affordability": 1,
+  "comments": "Dubai is bold, fast-paced, and visually striking. The city constantly pushes boundaries, creating an environment that feels ambitious and surreal at times. It’s intense, but undeniably impressive.",
+  "createdAt": {
+    "$date": "2026-01-12T04:54:26.150Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T23:01:53.445Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964f0193ba6e5f3ae7c5553"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "693939f1ef59d5e83dd3d6da"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Dubrovnik is one of the most stunning destinations in the Mediterranean, famous for its perfectly preserved medieval walls, historic Old Town, and crystal-clear Adriatic Sea. The city offers a unique atmosphere where rich cultural heritage meets natural beauty, with breathtaking views, charming stone streets, and a vibrant local lifestyle. Whether exploring its historical landmarks, enjoying the coastline, or simply soaking in the timeless ambiance, Dubrovnik provides an unforgettable experience that blends history, elegance, and Mediterranean charm.",
+  "createdAt": {
+    "$date": "2026-01-12T12:59:05.020Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T10:49:59.811Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964f4c73ba6e5f3ae7c556b"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "6937130c336c21550ee397a9"
+  },
+  "impression": 5,
+  "people": 3,
+  "sights": 3,
+  "safety": 5,
+  "affordability": 2,
+  "comments": "A charming Central European capital offering a relaxed atmosphere, vibrant culture, and historic streets.",
+  "createdAt": {
+    "$date": "2026-01-12T13:19:03.560Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:36:26.166Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964f4dc3ba6e5f3ae7c5572"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "693718ee0428e509c5e38cf7"
+  },
+  "impression": 2,
+  "people": 2,
+  "sights": 2,
+  "safety": 2,
+  "affordability": 2,
+  "comments": "A timeless city of canals and romance, famous for its unique architecture and artistic legacy",
+  "createdAt": {
+    "$date": "2026-01-12T13:19:24.567Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:36:39.069Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964f4ea3ba6e5f3ae7c5579"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "695f701936072e1957cc3346"
+  },
+  "impression": 3,
+  "people": 4,
+  "sights": 3,
+  "safety": 2,
+  "affordability": 1,
+  "comments": "A lively Mediterranean city built around an ancient Roman palace, combining history with seaside energy",
+  "createdAt": {
+    "$date": "2026-01-12T13:19:38.790Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:37:02.025Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696502fb3ba6e5f3ae7c559f"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "696501563ba6e5f3ae7c558c"
+  },
+  "impression": 4,
+  "people": 5,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 5,
+  "comments": "A city of stunning landscapes, iconic beaches, and an infectious rhythm of life and music",
+  "createdAt": {
+    "$date": "2026-01-12T14:19:39.406Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:37:13.006Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696503e13ba6e5f3ae7c55b2"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "693716690f9fee631b8e3a0e"
+  },
+  "impression": 5,
+  "people": 2,
+  "sights": 3,
+  "safety": 3,
+  "affordability": 3,
+  "comments": "A global metropolis full of energy, diversity, and endless opportunities around every corner",
+  "createdAt": {
+    "$date": "2026-01-12T14:23:29.298Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:37:33.887Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696567f574fe3506ed8c979f"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc923"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 1,
+  "comments": "Dubai feels like a city designed for the future. Everything is polished, efficient, and larger than life. From towering skyscrapers to quiet desert evenings, it constantly surprises you. It can feel intense at times, but the experience is unforgettable.",
+  "createdAt": {
+    "$date": "2026-01-12T21:30:29.139Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T22:52:14.640Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69657a25b16204c89d909ae6"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc922"
+  },
+  "impression": 3,
+  "people": 3,
+  "sights": 3,
+  "safety": 3,
+  "affordability": 3,
+  "comments": "Tokyo balances tradition and innovation in a way that feels effortless. One moment you’re in a peaceful temple area, the next you’re surrounded by neon lights and energy. It’s incredibly clean, well-organized, and endlessly fascinating.",
+  "createdAt": {
+    "$date": "2026-01-12T22:48:05.363Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T22:58:47.221Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6965882950b3648bef806924"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc922"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 4,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Tokyo is endlessly dynamic yet surprisingly calm. Despite its scale, everything feels purposeful and well-organized. The mix of tradition and modern life creates an experience that never feels repetitive.",
+  "createdAt": {
+    "$date": "2026-01-12T23:47:53.340Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T23:02:57.042Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6966021a73cc5f4f343059a9"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "6937130c336c21550ee397a9"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Zagreb has a warm, lived-in charm that makes you feel welcome quickly. The city is walkable, relaxed, and full of cozy cafés and green spaces. It may not be overwhelming, but that’s exactly what makes it special.",
+  "createdAt": {
+    "$date": "2026-01-13T08:28:10.598Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T22:59:33.643Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696624315b73562b37ed4d8c"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "69371331336c21550ee397ac"
+  },
+  "impression": 1,
+  "people": 2,
+  "sights": 4,
+  "safety": 4,
+  "affordability": 3,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-13T10:53:37.405Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-13T10:53:37.405Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696770e049f5fa069a006d1c"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "696770ac49f5fa069a006cf4"
+  },
+  "impression": 3,
+  "people": 3,
+  "sights": 4,
+  "safety": 3,
+  "affordability": 4,
+  "comments": "A sun-soaked city on Australia’s west coast, known for its beaches, outdoor lifestyle, and relaxed pace",
+  "createdAt": {
+    "$date": "2026-01-14T10:33:04.253Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:37:53.334Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6967ef512ff9bd81fe823cbd"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "6937156c8c74fb588569bf9c"
+  },
+  "impression": 3,
+  "people": 3,
+  "sights": 1,
+  "safety": 4,
+  "affordability": 4,
+  "comments": "A picturesque hilltop town offering panoramic views, medieval charm, and a taste of authentic Istria",
+  "createdAt": {
+    "$date": "2026-01-14T19:32:33.151Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:38:01.615Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6967ef672ff9bd81fe823cc6"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "693715bf8c74fb588569bfac"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 4,
+  "safety": 5,
+  "affordability": 4,
+  "comments": "Japan’s cultural heart, renowned for its serene temples, traditional gardens, and timeless beauty",
+  "createdAt": {
+    "$date": "2026-01-14T19:32:55.271Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:38:31.841Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69681b2eabc96c73260143c9"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "69334589b914ea03b63dc91f"
+  },
+  "impression": 1,
+  "people": 1,
+  "sights": 1,
+  "safety": 1,
+  "affordability": 1,
+  "comments": "London feels like many cities blended into one. Every neighborhood has its own personality, and there’s always something happening. It can be busy and unpredictable, but the history and diversity make it worth exploring.",
+  "createdAt": {
+    "$date": "2026-01-14T22:39:42.322Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T22:59:28.948Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968b73f5172eaf7272cb752"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc923"
+  },
+  "impression": 3,
+  "people": 2,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 3,
+  "comments": "A futuristic city rising from the desert, famous for luxury, innovation, and architectural wonders",
+  "createdAt": {
+    "$date": "2026-01-15T09:45:35.086Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:38:56.877Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c1365fd9899cd7b10ede"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "69682286a52e1c24496476ef"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 3,
+  "comments": "A dynamic city where towering skylines meet natural landscapes and vibrant street life",
+  "createdAt": {
+    "$date": "2026-01-15T10:28:06.285Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:39:17.406Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c1485fd9899cd7b10ef4"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "6933458eb914ea03b63dc926"
+  },
+  "impression": 3,
+  "people": 5,
+  "sights": 3,
+  "safety": 3,
+  "affordability": 4,
+  "comments": "A bustling capital full of contrasts, blending ornate temples, lively markets, and modern city life",
+  "createdAt": {
+    "$date": "2026-01-15T10:28:24.293Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:39:52.552Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c1555fd9899cd7b10eff"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "696823019dc3cb53eca6c043"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 2,
+  "safety": 3,
+  "affordability": 5,
+  "comments": "A historic capital where ancient landmarks and imperial history coexist with rapid modern development",
+  "createdAt": {
+    "$date": "2026-01-15T10:28:37.098Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T09:40:02.206Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c8b96fe1c7364e3204f6"
+  },
+  "userId": {
+    "$oid": "69610be6fca0fb66bd32e34c"
+  },
+  "cityId": {
+    "$oid": "6933458eb914ea03b63dc926"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 1,
+  "safety": 5,
+  "affordability": 3,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-15T11:00:09.256Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T11:00:09.256Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c8e46fe1c7364e320518"
+  },
+  "userId": {
+    "$oid": "69610be6fca0fb66bd32e34c"
+  },
+  "cityId": {
+    "$oid": "69682286a52e1c24496476ef"
+  },
+  "impression": 5,
+  "people": 3,
+  "sights": 1,
+  "safety": 1,
+  "affordability": 5,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-15T11:00:52.229Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T11:00:52.229Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c8fd6fe1c7364e320524"
+  },
+  "userId": {
+    "$oid": "69610be6fca0fb66bd32e34c"
+  },
+  "cityId": {
+    "$oid": "693715bf8c74fb588569bfac"
+  },
+  "impression": 3,
+  "people": 2,
+  "sights": 3,
+  "safety": 4,
+  "affordability": 2,
+  "comments": "A serene and elegant city known for its historic temples, traditional streets, and timeless Japanese culture, offering a peaceful contrast to modern urban life",
+  "createdAt": {
+    "$date": "2026-01-15T11:01:17.567Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T16:37:20.777Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69692b77d388717a5ef1db1a"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "69371469336c21550ee39843"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Varaždin is calm, elegant, and quietly beautiful. The old town has a strong sense of character, and everything feels close and approachable. It’s the kind of place where you slow down and truly enjoy your surroundings.",
+  "createdAt": {
+    "$date": "2026-01-15T18:01:27.160Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T22:57:32.213Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a9167c79c43ea317781a9"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "69699e93cb234133cd8aca9d"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "I love this city.",
+  "createdAt": {
+    "$date": "2026-01-16T19:28:39.044Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:28:39.044Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a97096d6a8ee137749dcb"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "693715588c74fb588569bf96"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 4,
+  "comments": "Beautiful old town, relaxed atmosphere, and unique seaside attractions like the Sea Organ.",
+  "createdAt": {
+    "$date": "2026-01-16T19:52:41.901Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:52:41.901Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a973b6d6a8ee137749dd6"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933458cb914ea03b63dc924"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 3,
+  "affordability": 3,
+  "comments": "Vibrant city with incredible architecture, nightlife, and food, but crowded and tourist-heavy.",
+  "createdAt": {
+    "$date": "2026-01-16T19:53:31.011Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:53:31.011Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a976c6d6a8ee137749e04"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933ffd6e12fb56cca0b74db"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 5,
+  "safety": 4,
+  "affordability": 1,
+  "comments": "Creative, diverse, and historically rich with a strong arts and music scene.",
+  "createdAt": {
+    "$date": "2026-01-16T19:54:20.122Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:54:20.122Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a97916d6a8ee137749e1b"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933458ab914ea03b63dc920"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 5,
+  "safety": 3,
+  "affordability": 2,
+  "comments": "Iconic landmarks and museums, but expensive and often overcrowded.",
+  "createdAt": {
+    "$date": "2026-01-16T19:54:57.040Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:54:57.040Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a97c56d6a8ee137749f8f"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "696a979f6d6a8ee137749e24"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 4,
+  "safety": 5,
+  "affordability": 4,
+  "comments": "Friendly locals, scenic viewpoints, and great value for food and accommodation.",
+  "createdAt": {
+    "$date": "2026-01-16T19:55:49.748Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:55:49.748Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a98406d6a8ee13774a1f9"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "696a98256d6a8ee13774a05d"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 1,
+  "comments": "Charming canals and museums, but accommodation costs are high.",
+  "createdAt": {
+    "$date": "2026-01-16T19:57:52.101Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:57:52.101Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a98656d6a8ee13774a206"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933458db914ea03b63dc925"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 5,
+  "safety": 3,
+  "affordability": 3,
+  "comments": "Unmatched history and food, though chaotic and busy in peak seasons.",
+  "createdAt": {
+    "$date": "2026-01-16T19:58:30.000Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:58:30.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a98876d6a8ee13774a31c"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6960c400cc59bc7302bb4046"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 3,
+  "comments": "Elegant, clean, and culturally rich with a calm, orderly feel.",
+  "createdAt": {
+    "$date": "2026-01-16T19:59:03.963Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:59:03.963Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a98a46d6a8ee13774a3be"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "695f742a7e1d9d8235b122ce"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 4,
+  "safety": 4,
+  "affordability": 5,
+  "comments": "Great value city with thermal baths, nightlife, and impressive architecture.",
+  "createdAt": {
+    "$date": "2026-01-16T19:59:32.437Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T19:59:32.437Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a98d66d6a8ee13774a3ca"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "69334589b914ea03b63dc91f"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 5,
+  "safety": 4,
+  "affordability": 2,
+  "comments": "World-class museums and neighborhoods, but daily costs are high.",
+  "createdAt": {
+    "$date": "2026-01-16T20:00:22.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:00:22.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a99056d6a8ee13774a3d9"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "69371db09cc53bb0683ff761"
+  },
+  "impression": 4,
+  "people": 5,
+  "sights": 4,
+  "safety": 4,
+  "affordability": 4,
+  "comments": "Lively social scene, great food, and a relaxed pace of life.",
+  "createdAt": {
+    "$date": "2026-01-16T20:01:09.477Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:01:09.477Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a99276d6a8ee13774a3e6"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc922"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 3,
+  "comments": "Ultra-clean, efficient, and endlessly interesting with deep cultural contrast.",
+  "createdAt": {
+    "$date": "2026-01-16T20:01:43.343Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:01:43.343Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a99516d6a8ee13774a3f2"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933458eb914ea03b63dc926"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 4,
+  "safety": 3,
+  "affordability": 5,
+  "comments": "Energetic, affordable, and chaotic with incredible street food.",
+  "createdAt": {
+    "$date": "2026-01-16T20:02:25.495Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:02:25.495Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a99876d6a8ee13774a404"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "69699efdcb234133cd8acaa3"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 4,
+  "safety": 5,
+  "affordability": 2,
+  "comments": "Minimalist, calm, and efficient with strong design culture.",
+  "createdAt": {
+    "$date": "2026-01-16T20:03:19.084Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:03:19.084Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a99a56d6a8ee13774a40f"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "696824778f75a6a3203bc42a"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 5,
+  "safety": 3,
+  "affordability": 4,
+  "comments": "Huge cultural depth, great cuisine, and diverse neighborhoods.",
+  "createdAt": {
+    "$date": "2026-01-16T20:03:49.622Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:03:49.622Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a99bd6d6a8ee13774a41a"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "69371a270428e509c5e39088"
+  },
+  "impression": 5,
+  "people": 4,
+  "sights": 5,
+  "safety": 3,
+  "affordability": 4,
+  "comments": "Historic crossroads with rich culture and dramatic architecture.",
+  "createdAt": {
+    "$date": "2026-01-16T20:04:13.248Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:04:13.248Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a9af36d6a8ee13774a464"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "693939f1ef59d5e83dd3d6da"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Dubrovnik is an outstanding city that makes a strong impression from the very first moment.The old town is remarkably beautiful, with perfectly preserved stone streets, historic buildings and breathtaking views of the Adriatic Sea. What truly sets Dubrovnik apart are the people. The locals are genuinely amazing. They are so friendly, welcoming and proud of their city in the best possible way. Interactions feel warm and sincere, whether you are asking for help, dining at a restaurant or simply passing by. The overall vibe of the city is positive and uplifting. It feels safe, clean, and well cared for, with a calm energy that encourages you to slow down and enjoy the moment. Combined with great food, stunning coastal views, and exceptional hospitality, Dubrovnik offers an experience that is memorable, uplifting and defined by the truly wonderful people who live there.",
+  "createdAt": {
+    "$date": "2026-01-16T20:09:23.034Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:09:23.034Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a9b646d6a8ee13774a499"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc923"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 3,
+  "safety": 5,
+  "affordability": 2,
+  "comments": "Modern, polished, and safe, but expensive and artificial-feeling.",
+  "createdAt": {
+    "$date": "2026-01-16T20:11:16.163Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:11:16.163Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a9bfa6d6a8ee13774a4a6"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "69371331336c21550ee397ac"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 3,
+  "safety": 5,
+  "affordability": 1,
+  "comments": "Reykjavik is a calm and charming city with a strong sense of character. It offers a peaceful, clean, and cozy atmosphere. The people are kind, open and thoughtful, making the city feel welcoming and safe, but the prices are awful!",
+  "createdAt": {
+    "$date": "2026-01-16T20:13:46.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:13:46.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a9c436d6a8ee13774a4e6"
+  },
+  "userId": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "cityId": {
+    "$oid": "6937130c336c21550ee397a9"
+  },
+  "impression": 4,
+  "people": 5,
+  "sights": 4,
+  "safety": 5,
+  "affordability": 2,
+  "comments": "Zagreb is a lively yet relaxed city that blends historic charm with modern energy. Cafés, parks, and walkable streets give it a very human feel. The people are friendly and approachable, creating a warm, comfortable atmosphere that makes visitors feel at home quickly.",
+  "createdAt": {
+    "$date": "2026-01-16T20:14:59.668Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T20:14:59.668Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696cacc7398abb057dabcfbf"
+  },
+  "userId": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "cityId": {
+    "$oid": "693939f1ef59d5e83dd3d6da"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "I looove it here.",
+  "createdAt": {
+    "$date": "2026-01-18T09:49:59.285Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T09:49:59.285Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696cc87d7244c2f271a2c844"
+  },
+  "userId": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "cityId": {
+    "$oid": "69371853223227458ad1626f"
+  },
+  "impression": 2,
+  "people": 3,
+  "sights": 2,
+  "safety": 1,
+  "affordability": 4,
+  "comments": "I saw someone steal a bike.",
+  "createdAt": {
+    "$date": "2026-01-18T11:48:13.891Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T11:48:13.891Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d0c26f3191f909544c14f"
+  },
+  "userId": {
+    "$oid": "69610be6fca0fb66bd32e34c"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc922"
+  },
+  "impression": 4,
+  "people": 5,
+  "sights": 2,
+  "safety": 4,
+  "affordability": 4,
+  "comments": "A vibrant metropolis where cutting-edge technology, fast-paced life, and centuries-old traditions coexist in perfect harmony, offering endless energy and discovery.",
+  "createdAt": {
+    "$date": "2026-01-18T16:36:54.503Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T16:36:54.503Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d0d04f3191f909544c1f2"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "69371db09cc53bb0683ff761"
+  },
+  "impression": 5,
+  "people": 1,
+  "sights": 4,
+  "safety": 3,
+  "affordability": 3,
+  "comments": "A lively capital full of energy, rich history, and vibrant street life, where world-class art, cuisine, and culture come together",
+  "createdAt": {
+    "$date": "2026-01-18T16:40:36.897Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T16:40:36.897Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d0d16f3191f909544c206"
+  },
+  "userId": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "cityId": {
+    "$oid": "6933458cb914ea03b63dc924"
+  },
+  "impression": 3,
+  "people": 3,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 2,
+  "comments": "A creative Mediterranean city known for its unique architecture, beautiful beaches, and dynamic atmosphere, blending art, design, and seaside lifestyle",
+  "createdAt": {
+    "$date": "2026-01-18T16:40:54.805Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T16:41:24.659Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d1372163c5a1cf5777782"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "69334589b914ea03b63dc91f"
+  },
+  "impression": 5,
+  "people": 3,
+  "sights": 4,
+  "safety": 2,
+  "affordability": 3,
+  "comments": "Fish n chips🔪🔪🔪🔪",
+  "createdAt": {
+    "$date": "2026-01-18T17:08:02.169Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:08:02.169Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d1397163c5a1cf57777ba"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6933458ab914ea03b63dc920"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Stinky.",
+  "createdAt": {
+    "$date": "2026-01-18T17:08:39.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:08:39.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d1410163c5a1cf57777c6"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc922"
+  },
+  "impression": 4,
+  "people": 3,
+  "sights": 3,
+  "safety": 5,
+  "affordability": 4,
+  "comments": "Tokyo, Tokyo, Tokyo drift🔥🔥🔥",
+  "createdAt": {
+    "$date": "2026-01-18T17:10:40.888Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:10:40.888Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d147e163c5a1cf57777d2"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6933458bb914ea03b63dc923"
+  },
+  "impression": 3,
+  "people": 3,
+  "sights": 2,
+  "safety": 5,
+  "affordability": 1,
+  "comments": "Skupo i suho🧆🥜💚",
+  "createdAt": {
+    "$date": "2026-01-18T17:12:30.558Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:12:30.558Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d14dc163c5a1cf57777e2"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6933458cb914ea03b63dc924"
+  },
+  "impression": 4,
+  "people": 5,
+  "sights": 4,
+  "safety": 4,
+  "affordability": 4,
+  "comments": "Želim si sagraditi familiju u Barceloni🙏",
+  "createdAt": {
+    "$date": "2026-01-18T17:14:04.152Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:14:04.152Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d152e163c5a1cf57777ee"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6933458db914ea03b63dc925"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Are you not entertained?!",
+  "createdAt": {
+    "$date": "2026-01-18T17:15:26.685Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:15:26.685Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d16d7163c5a1cf57777fa"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6933458eb914ea03b63dc926"
+  },
+  "impression": 3,
+  "people": 3,
+  "sights": 3,
+  "safety": 3,
+  "affordability": 3,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-18T17:22:31.326Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:22:31.326Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d1712163c5a1cf577780a"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "6937130c336c21550ee397a9"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Ray Ban Jelačić📣😎",
+  "createdAt": {
+    "$date": "2026-01-18T17:23:30.272Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:23:30.272Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d172b163c5a1cf5777820"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "69371331336c21550ee397ac"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 2,
+  "safety": 4,
+  "affordability": 4,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-18T17:23:55.053Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:23:55.053Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d174e163c5a1cf5777840"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "69371469336c21550ee39843"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 4,
+  "safety": 3,
+  "affordability": 5,
+  "comments": "",
+  "createdAt": {
+    "$date": "2026-01-18T17:24:30.796Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:24:30.796Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d175d163c5a1cf5777955"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "693718ee0428e509c5e38cf7"
+  },
+  "impression": 4,
+  "people": 4,
+  "sights": 4,
+  "safety": 4,
+  "affordability": 4,
+  "comments": "Poplava.",
+  "createdAt": {
+    "$date": "2026-01-18T17:24:45.914Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:24:45.914Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d1790163c5a1cf57779d9"
+  },
+  "userId": {
+    "$oid": "696bc365c007b774b3de0575"
+  },
+  "cityId": {
+    "$oid": "693939f1ef59d5e83dd3d6da"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "UNIDU📣📣📣",
+  "createdAt": {
+    "$date": "2026-01-18T17:25:36.432Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T17:25:36.432Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696d32d6b274ffe78070c732"
+  },
+  "userId": {
+    "$oid": "696d329ac007b774b3de3d8b"
+  },
+  "cityId": {
+    "$oid": "69334589b914ea03b63dc91f"
+  },
+  "impression": 5,
+  "people": 5,
+  "sights": 5,
+  "safety": 5,
+  "affordability": 5,
+  "comments": "Love, great!",
+  "createdAt": {
+    "$date": "2026-01-18T19:21:58.478Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-18T19:21:58.478Z"
+  },
+  "__v": 0
+}]

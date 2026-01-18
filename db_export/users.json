@@ -1,0 +1,404 @@
+[{
+  "_id": {
+    "$oid": "695f04e7fca0fb66bd31a1a1"
+  },
+  "googleId": "118385010497703858147",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-01-08T01:14:15.781Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "2003dona@gmail.com",
+  "favoriteCities": [],
+  "following": [
+    {
+      "$oid": "6931f53ab914ea03b63cf9e6"
+    },
+    {
+      "$oid": "69393bafb914ea03b6417093"
+    },
+    {
+      "$oid": "695bc739fca0fb66bd2ff7b2"
+    }
+  ],
+  "name": "Dona",
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "impressionPreference": "people",
+    "citySize": "large",
+    "continents": [
+      "Europe"
+    ]
+  },
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocL4vs91Dd7YQ-JoULTLfzrWvIwaIzXfBz9fqabB5YY5wUE81WQzlg=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-18T18:41:37.397Z"
+  },
+  "wishlistCities": []
+},
+{
+  "_id": {
+    "$oid": "696513335af760cc9b73da6a"
+  },
+  "googleId": "101322356890012887436",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-01-12T15:28:51.609Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "dominikpapes9@gmail.com",
+  "favoriteCities": [],
+  "following": [
+    {
+      "$oid": "695f054bfca0fb66bd31a269"
+    }
+  ],
+  "name": "Dominik Papeš",
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "climate": "mild",
+    "citySize": "medium",
+    "continents": [
+      "Europe"
+    ]
+  },
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocKkMlrhCsxmFD7g7vq84GAqCMJH3oHjcQQIt4h-EGxMIF8x6XOc=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-17T09:55:03.027Z"
+  },
+  "wishlistCities": []
+},
+{
+  "_id": {
+    "$oid": "696d329ac007b774b3de3d8b"
+  },
+  "googleId": "100641514507874438861",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-01-18T19:20:58.101Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "dona.weiner@eestec.hr",
+  "favoriteCities": [],
+  "following": [],
+  "name": "Dona Weiner",
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "impressionPreference": "sights",
+    "citySize": "medium",
+    "continents": [
+      "Europe",
+      "Asia"
+    ]
+  },
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocJLo9viNee4488kj6LVUJtG6g3pBI5aazr7UgBO255178kOjw=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-18T19:21:10.513Z"
+  },
+  "wishlistCities": []
+},
+{
+  "_id": {
+    "$oid": "695f054bfca0fb66bd31a269"
+  },
+  "googleId": "112118914018864808997",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-01-08T01:15:55.510Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "donaweiner1@gmail.com",
+  "favoriteCities": [
+    {
+      "$oid": "6933458bb914ea03b63dc923"
+    },
+    {
+      "$oid": "6933458ab914ea03b63dc920"
+    },
+    {
+      "$oid": "69334589b914ea03b63dc91f"
+    }
+  ],
+  "following": [],
+  "name": "Dona Weiner",
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "impressionPreference": "people",
+    "citySize": "medium",
+    "continents": [
+      "America",
+      "Europe"
+    ]
+  },
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocI5Chv4skk6cKXmd6XU4psLQmssusiV4hFb0ryHTxj5SXm2RMlhpg=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-18T19:10:59.520Z"
+  },
+  "wishlistCities": [
+    {
+      "$oid": "6933458cb914ea03b63dc924"
+    },
+    {
+      "$oid": "6933458ab914ea03b63dc920"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "695bc739fca0fb66bd2ff7b2"
+  },
+  "googleId": "105690880258802068032",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-01-05T14:14:14.925Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "filipmohler10@gmail.com",
+  "favoriteCities": [
+    {
+      "$oid": "6933458bb914ea03b63dc923"
+    },
+    {
+      "$oid": "6933458cb914ea03b63dc924"
+    },
+    {
+      "$oid": "69371469336c21550ee39843"
+    },
+    {
+      "$oid": "693939f1ef59d5e83dd3d6da"
+    }
+  ],
+  "name": "filip mohler",
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocKrGiOJU1wkSVyt9EK_CbUrN36YeFczh-mr-b3kzvXP8VDJnTA=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-18T16:46:12.558Z"
+  },
+  "wishlistCities": [
+    {
+      "$oid": "6937156c8c74fb588569bf9c"
+    },
+    {
+      "$oid": "6933458ab914ea03b63dc920"
+    },
+    {
+      "$oid": "693939f1ef59d5e83dd3d6da"
+    }
+  ],
+  "following": [
+    {
+      "$oid": "6931f53ab914ea03b63cf9e6"
+    },
+    {
+      "$oid": "69393bafb914ea03b6417093"
+    },
+    {
+      "$oid": "695f054bfca0fb66bd31a269"
+    },
+    {
+      "$oid": "69610be6fca0fb66bd32e34c"
+    },
+    {
+      "$oid": "695f04e7fca0fb66bd31a1a1"
+    }
+  ],
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "impressionPreference": "people",
+    "citySize": "medium",
+    "continents": [
+      "Australia",
+      "America",
+      "Asia"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "69610be6fca0fb66bd32e34c"
+  },
+  "googleId": "116715855626721282258",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-01-09T14:08:39.841Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "filipmohler123@gmail.com",
+  "favoriteCities": [
+    {
+      "$oid": "69334589b914ea03b63dc91f"
+    },
+    {
+      "$oid": "6933458ab914ea03b63dc920"
+    },
+    {
+      "$oid": "6933458bb914ea03b63dc922"
+    }
+  ],
+  "following": [],
+  "name": "Filip Mohler",
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "impressionPreference": "people",
+    "citySize": "medium",
+    "continents": [
+      "Europe",
+      "Africa"
+    ]
+  },
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocKpr3naKB0t6eFF1_tummSzDYgWUiov2WbHI6wx-JdgyajjjQ=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-18T16:35:10.941Z"
+  },
+  "wishlistCities": [
+    {
+      "$oid": "6960c7ab921bec18b65002f9"
+    },
+    {
+      "$oid": "6960c400cc59bc7302bb4046"
+    },
+    {
+      "$oid": "69602dc69ff8742c36e59311"
+    },
+    {
+      "$oid": "695f742a7e1d9d8235b122ce"
+    },
+    {
+      "$oid": "696770ac49f5fa069a006cf4"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6931f53ab914ea03b63cf9e6"
+  },
+  "googleId": "104581339689699886258",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-12-04T20:55:23.210Z"
+  },
+  "email": "spfers01@gmail.com",
+  "name": "sara fer",
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocLooX1P5mgEyQXQKpvebSbfvfaZDqZSOCwNJLXXtFIADoiviwI=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-15T10:31:22.430Z"
+  },
+  "deletedCities": [
+    {
+      "$oid": "6933458bb914ea03b63dc923"
+    },
+    {
+      "$oid": "6933ffd6e12fb56cca0b74db"
+    },
+    {
+      "$oid": "6933458eb914ea03b63dc926"
+    }
+  ],
+  "favoriteCities": [
+    {
+      "$oid": "6933458bb914ea03b63dc922"
+    },
+    {
+      "$oid": "6933458db914ea03b63dc925"
+    },
+    {
+      "$oid": "69371a470428e509c5e39149"
+    },
+    {
+      "$oid": "6937130c336c21550ee397a9"
+    },
+    {
+      "$oid": "69334589b914ea03b63dc91f"
+    },
+    {
+      "$oid": "6933458cb914ea03b63dc924"
+    }
+  ],
+  "wishlistCities": [],
+  "following": [],
+  "onboardingCompleted": false,
+  "onboardingPreferences": {
+    "climate": "mild",
+    "citySize": "medium",
+    "continents": [
+      "Asia",
+      "Europe"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "69393bafb914ea03b6417093"
+  },
+  "googleId": "118211732879175171004",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-12-10T09:21:51.055Z"
+  },
+  "deletedActivities": [],
+  "deletedCities": [],
+  "email": "spodvorec07@gmail.com",
+  "favoriteCities": [
+    {
+      "$oid": "6933458ab914ea03b63dc920"
+    },
+    {
+      "$oid": "6933458bb914ea03b63dc922"
+    },
+    {
+      "$oid": "6933458eb914ea03b63dc927"
+    },
+    {
+      "$oid": "69334589b914ea03b63dc91f"
+    }
+  ],
+  "name": "Sara Podvorec",
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocL0j-XBraxoKfrWcDBAgFwUj_OhKXplj8JqTKKS-H8nmWBZmw=s96-c",
+  "updatedAt": {
+    "$date": "2026-01-18T19:26:54.051Z"
+  },
+  "wishlistCities": [
+    {
+      "$oid": "6933458cb914ea03b63dc924"
+    },
+    {
+      "$oid": "69371331336c21550ee397ac"
+    },
+    {
+      "$oid": "693715bf8c74fb588569bfac"
+    },
+    {
+      "$oid": "693716690f9fee631b8e3a0e"
+    }
+  ],
+  "following": [
+    {
+      "$oid": "695bc739fca0fb66bd2ff7b2"
+    },
+    {
+      "$oid": "695f04e7fca0fb66bd31a1a1"
+    },
+    {
+      "$oid": "695f054bfca0fb66bd31a269"
+    },
+    {
+      "$oid": "69610be6fca0fb66bd32e34c"
+    },
+    {
+      "$oid": "6931f53ab914ea03b63cf9e6"
+    }
+  ],
+  "onboardingCompleted": true,
+  "onboardingPreferences": {
+    "impressionPreference": "sights",
+    "citySize": "medium",
+    "continents": [
+      "Europe"
+    ]
+  }
+}]
