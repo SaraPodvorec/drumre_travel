@@ -6,6 +6,7 @@ import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/city_activities_screen.dart';
 import 'package:frontend/screens/discover_users_screen.dart';
+import 'package:frontend/screens/friends_activity_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
@@ -159,7 +160,7 @@ class App extends StatelessWidget {
               },
               '/discover-users': (context) => const UsersScreen(),
               '/recommended-cities': (context) => RecommendedCitiesScreen(),
-              // '/friends-activity': (context) => Frien
+              '/friends-activity': (context) => FriendsActivityScreen()
             },
           ),
         );

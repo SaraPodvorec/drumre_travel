@@ -11,6 +11,7 @@ class CityReview {
   final int affordability;
   final String comments;
   final DateTime createdAt;
+  final String? cityImage;
 
   CityReview({
     required this.id,
@@ -24,7 +25,8 @@ class CityReview {
     required this.safety,
     required this.affordability,
     required this.comments,
-    required this.createdAt
+    required this.createdAt,
+    required this.cityImage
   });
 
   factory CityReview.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class CityReview {
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
+      cityImage: json['cityImage']
     );
   }
 }
