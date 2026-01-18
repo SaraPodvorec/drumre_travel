@@ -10,6 +10,7 @@ import review from './routes/review.js';
 import connectDB from './config/db.js';
 import user from './routes/user.js';
 import cityShorts from './routes/city_shorts.js';
+import recommendations from './routes/recommendation.js';
 import { fetchCityWeatherByName } from './services/openweather.js';
 
 
@@ -37,6 +38,7 @@ app.use("/api/topSights", topSights);
 app.use("/api/user", user);
 app.use("/api/review", review);
 app.use("/api/cityShorts", cityShorts);
+app.use("/api/recommendations", recommendations);
 
 app.get("/api/proxy-image", async (req, res) => {
   const imageUrl = req.query.url;

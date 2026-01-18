@@ -59,13 +59,13 @@ export async function getAllCities(req, res) {
   
   cities = await Promise.all(
     cities.map(async (city) => {
-      if (!city.currency || !city.language) {
+      if (!city.currency || !city.language || !city.population) {
         const countryData = await getCountryData(city.country);
         if (countryData) {
           city.currency = countryData.currency;
           city.language = countryData.language;
           console.log(`Updated country data for ${city.city}: ${city.currency}, ${city.language}`);
-          //city.population = countryData.population;
+          city.population = countryData.population;
           await city.save();
         }
       }
