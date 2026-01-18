@@ -2,25 +2,41 @@ import City from '../models/city.js';
 import CityReview from '../models/city_review.js';
 import User from '../models/user.js';
 
+function getPreferenceBoost(city, prefs) {
+    let boost = 1;
+
+    const { continents, citySize } = prefs;
+
+    if (continents?.length) {
+        if (continents.includes(city.continent)) boost += 0.35;
+        else boost -= 0.15;
+    }
+
+    if (citySize) {
+        if (citySize === 'small' && city.population < 1_000_000) boost += 0.25;
+        else if (citySize === 'medium' && city.population >= 1_000_000 && city.population < 4_000_000) boost += 0.25;
+        else if (citySize === 'large' && city.population >= 4_000_000) boost += 0.25;
+        else boost -= 0.1;
+    }
+
+    return boost;
+}
+
 export const getRecommendedCities = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        // 1. Fetch user and their following list
-        const user = await User.findById(userId).select('onboardingPreferences deletedCities favoriteCities following');
+        // 1️⃣ Load user preferences + relations
+        const user = await User.findById(userId)
+            .select('following deletedCities favoriteCities onboardingPreferences');
+
         if (!user) return res.status(404).json({ message: "User not found" });
 
-        const { continents, citySize, impressionPreference } = user.onboardingPreferences;
+        const { impressionPreference } = user.onboardingPreferences;
 
-        // 2. Aggregate friends' impressions and individual category scores
-        // We calculate the average of all metrics for friends who rated the city > 3
-        const friendStats = await CityReview.aggregate([
-            { 
-                $match: { 
-                    userId: { $in: user.following }, 
-                    impression: { $gt: 3 } 
-                } 
-            },
+        // 2️⃣ Aggregate friends reviews
+        const friendsAgg = await CityReview.aggregate([
+            { $match: { userId: { $in: user.following } } },
             {
                 $group: {
                     _id: "$cityId",
@@ -28,95 +44,103 @@ export const getRecommendedCities = async (req, res) => {
                     avgFriendPeople: { $avg: "$people" },
                     avgFriendSights: { $avg: "$sights" },
                     avgFriendSafety: { $avg: "$safety" },
-                    avgFriendAffordability: { $avg: "$affordability" }
+                    avgFriendAffordability: { $avg: "$affordability" },
+                    friendVisitCount: { $sum: 1 }
                 }
             }
         ]);
 
-        // Create a lookup map for easy access
-        const friendRatingMap = friendStats.reduce((acc, curr) => {
-            acc[curr._id.toString()] = curr;
+        const friendMap = friendsAgg.reduce((acc, c) => {
+            acc[c._id.toString()] = c;
             return acc;
         }, {});
 
-        let query = {
+        // 3️⃣ Load ALL cities except removed ones
+        const allCities = await City.find({
             _id: { $nin: [...user.deletedCities, ...user.favoriteCities] }
-        };
+        });
 
-        if (continents && continents.length > 0) {
-            query.continent = { $in: continents };
-        }
-
-        // Apply population filters
-        if (citySize === 'small') query.population = { $lt: 1000000 };
-        else if (citySize === 'medium') query.population = { $gte: 1000000, $lt: 4000000 };
-        else if (citySize === 'large') query.population = { $gte: 4000000 };
-
-        const potentialCities = await City.find(query).limit(50);
-
-        const recommendations = await Promise.all(potentialCities.map(async (city) => {
-            const stats = await CityReview.aggregate([
-                { $match: { cityId: city._id } },
-                {
-                    $group: {
-                        _id: "$cityId",
-                        avgImpression: { $avg: "$impression" },
-                        avgPeople: { $avg: "$people" },
-                        avgSights: { $avg: "$sights" },
-                        avgSafety: { $avg: "$safety" },
-                        avgAffordability: { $avg: "$affordability" }
-                    }
+        // 4️⃣ Compute global averages once
+        const globalAgg = await CityReview.aggregate([
+            {
+                $group: {
+                    _id: "$cityId",
+                    avgImpression: { $avg: "$impression" },
+                    avgPeople: { $avg: "$people" },
+                    avgSights: { $avg: "$sights" },
+                    avgSafety: { $avg: "$safety" },
+                    avgAffordability: { $avg: "$affordability" }
                 }
-            ]);
+            }
+        ]);
+
+        const globalMap = globalAgg.reduce((acc, g) => {
+            acc[g._id.toString()] = g;
+            return acc;
+        }, {});
+
+        // 5️⃣ Score cities
+        const scoredCities = allCities.map(city => {
+            const g = globalMap[city._id.toString()] || {};
+            const f = friendMap[city._id.toString()] || null;
 
             let score = 0;
-            if (stats.length > 0) {
-                const s = stats[0];
-                score += s.avgImpression;
 
-                if (impressionPreference === 'people') score += (s.avgPeople * 2);
-                if (impressionPreference === 'sights') score += (s.avgSights * 2);
-                if (impressionPreference === 'safety') score += (s.avgSafety * 2);
-                if (impressionPreference === 'affordability') score += (s.avgAffordability * 2);
-            } else {
-                score = city.popularity / 10;
+            // Friends score dominates
+            if (f) {
+                let friendScore = f.avgFriendImpression;
+
+                if (impressionPreference === 'people') friendScore += f.avgFriendPeople;
+                if (impressionPreference === 'sights') friendScore += f.avgFriendSights;
+                if (impressionPreference === 'safety') friendScore += f.avgFriendSafety;
+                if (impressionPreference === 'affordability') friendScore += f.avgFriendAffordability;
+
+                friendScore /= 2;
+
+                const visitBoost = 1 + Math.min(f.friendVisitCount / 5, 2);
+                const dislikePenalty = f.avgFriendImpression < 3 ? 0.5 : 1;
+
+                score += friendScore * 0.6 * visitBoost * dislikePenalty;
             }
 
-            // 3. Apply Social Bonus and attach Friend Data
-            const fData = friendRatingMap[city._id.toString()];
-            let friendsImpression = null;
+            // Global score secondary
+            if (g.avgImpression) {
+                let globalScore = g.avgImpression;
 
-            if (fData) {
-                // Calculation: Proportional boost based on how far above 3 the rating is
-                const multiplier = 1 + (fData.avgFriendImpression - 3) * 0.25;
-                score *= multiplier;
+                if (impressionPreference === 'people') globalScore += g.avgPeople;
+                if (impressionPreference === 'sights') globalScore += g.avgSights;
+                if (impressionPreference === 'safety') globalScore += g.avgSafety;
+                if (impressionPreference === 'affordability') globalScore += g.avgAffordability;
 
-                // Format the scores to return to the frontend
-                friendsImpression = {
-                    avgImpression: fData.avgFriendImpression,
-                    avgPeople: fData.avgFriendPeople,
-                    avgSights: fData.avgFriendSights,
-                    avgSafety: fData.avgFriendSafety,
-                    avgAffordability: fData.avgFriendAffordability
-                };
+                score += (globalScore / 2) * 0.3;
             }
 
-            return { 
-                ...city.toObject(), 
-                recommendationScore: score,
-                friendsImpression // This will be null if no friends rated it > 3
+            // Popularity baseline
+            score += (city.popularity || 1) / 100 * 0.1;
+
+            // Preference multiplier
+            score *= getPreferenceBoost(city, user.onboardingPreferences);
+
+            return {
+                ...city.toObject(),
+                recommendationScore: Number(score.toFixed(2)),
+                friendsData: f || null,
+                globalData: g || null
             };
-        }));
+        });
 
-        const sortedResults = recommendations
-            .sort((a, b) => b.recommendationScore - a.recommendationScore)
-            .slice(0, 10);
+        // 6️⃣ Sort all by score
+        const sorted = scoredCities.sort((a, b) => b.recommendationScore - a.recommendationScore);
 
-        res.status(200).json(sortedResults);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(200).json(sorted);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
     }
 };
+
+
 
 export const getFriendsActivity = async (req, res) => {
     try {
