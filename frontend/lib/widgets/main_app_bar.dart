@@ -20,6 +20,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final userProvider = context.watch<UserProvider>();
+    context.read<SocialProvider>().loadUsers;
 
     return AppBar(
       title: Text(title ?? ''),

@@ -35,6 +35,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> loadUserData() async {
+    print("loading user data");
     isLoading = true;
     notifyListeners();
     
@@ -159,6 +160,8 @@ class UserProvider extends ChangeNotifier {
     deletedCities = [];
     selecetedClimate = '';
     selectedCitySize = '';
+    currentUser = null;
+    currentUserId = null;
     selectedContinents.clear();
     _initialized = false;
     error = null;

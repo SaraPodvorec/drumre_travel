@@ -4,12 +4,32 @@ import 'package:frontend/screens/other_user_profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/services/api_service.dart';
 
-class UsersScreen extends StatelessWidget {
+class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
+
+  @override
+  State<UsersScreen> createState() => _UsersScreenState();
+}
+
+class _UsersScreenState extends State<UsersScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Trigger loading users once when the screen appears
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SocialProvider>().loadUsers();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SocialProvider>();
+    if (provider.isLoading) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Users')),
       body: ListView.builder(

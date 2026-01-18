@@ -49,7 +49,8 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
     super.initState();
     _fetchReviews();
     _fetchRatingsData();
-    // _fetchCurrentWeather(); otkomentirati za fetch
+    context.read<UserProvider>().loadUserData();
+    _fetchCurrentWeather(); //comment to not spend
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ActivityProvider>().loadActivities(
         widget.city.id,
@@ -654,8 +655,8 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 child: InkWell(
                   customBorder: const CircleBorder(),
                   onTap: () {
-                    if (currentUser != null &&
-                        review.userId != currentUser.id) {
+                    print("cureent user ${userProvider.currentUserId} i review.user ${review.userId}");
+                    if (review.userId != userProvider.currentUserId) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
