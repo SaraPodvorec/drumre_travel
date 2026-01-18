@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/city.dart';
+import 'package:frontend/providers/user_provider.dart';
+import 'package:frontend/screens/city_details_screen.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:provider/provider.dart';
-import '../providers/user_provider.dart';
-import 'city_details_screen.dart';
 
-class RecommendedCitiesScreen extends StatelessWidget {
-  const RecommendedCitiesScreen({super.key});
+class RecommendedCitiesList extends StatefulWidget {
+  const RecommendedCitiesList({super.key, required this.userId});
 
-  Future<List<City>> fetchRecommendedCities(String userId) async {
-    final res = await Api.getRequest('/recommendations/$userId');
+  final String userId;
+
+  @override
+  State<RecommendedCitiesList> createState() => _RecommendedCitiesListState();
+}
+
+class _RecommendedCitiesListState extends State<RecommendedCitiesList> {
+  late Future<List<City>> _citiesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _citiesFuture = fetchRecommendedCities();
+  }
+
+  Future<List<City>> fetchRecommendedCities() async {
+    final res = await Api.getRequest('/recommendations/${widget.userId}');
     return (res as List).map((cityJson) => City.fromJson(cityJson)).toList();
   }
 
@@ -18,56 +33,50 @@ class RecommendedCitiesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
 
-    if (userProvider.isLoading && !userProvider.isInitialized) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
+    return FutureBuilder<List<City>>(
+      future: _citiesFuture, // use the cached future
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
 
-    final userId = userProvider.currentUserId;
+        final citiesData = snapshot.data ?? [];
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Explore Cities'), centerTitle: true),
-      body: userId == null
-          ? const Center(child: Text("User not logged in"))
-          : FutureBuilder<List<City>>(
-              future: fetchRecommendedCities(userId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+        if (citiesData.isEmpty) {
+          return const Center(child: Text("No recommended cities yet"));
+        }
 
-                final citiesData = snapshot.data ?? [];
-
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  itemCount: citiesData.length,
-                  itemBuilder: (context, index) {
-                    final city = citiesData[index];
-                    return Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          child: CityCard(
-                            city: city,
-                            onViewCityDetails: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CityDetailsScreen(city: city),
-                                ),
-                              );
-                            },
-                          ),
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          itemCount: citiesData.length,
+          itemBuilder: (context, index) {
+            final city = citiesData[index];
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: CityCard(
+                    city: city,
+                    onViewCityDetails: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CityDetailsScreen(city: city),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
+

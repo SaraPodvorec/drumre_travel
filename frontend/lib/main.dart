@@ -159,7 +159,7 @@ class App extends StatelessWidget {
                 return LeaveReviewScreen(initialCityName: initialCity);
               },
               '/discover-users': (context) => const UsersScreen(),
-              '/recommended-cities': (context) => RecommendedCitiesScreen(),
+              // '/recommended-cities': (context) => RecommendedCitiesScreen(),
               '/friends-activity': (context) => FriendsActivityScreen()
             },
           ),

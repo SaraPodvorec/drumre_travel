@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/city_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
+import 'package:frontend/screens/recommended_cities_screen.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/widgets/main_app_bar.dart';
@@ -14,8 +15,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool showTopCities = true;
   final TextEditingController _searchController = TextEditingController();
-  String? _searchQuery; 
+  String? _searchQuery;
   bool _showFilters = false;
   Map<String, dynamic> _activeFilters = {};
 
@@ -33,13 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _searchController.dispose();
     super.dispose();
   }
-      int _calculateColumns(double width) {
-      if (width >= 1900) return 5; // ultrawide
-      if (width >= 1500) return 4; // 27"
-      if (width >= 1200) return 3; // 24"
-      if (width >= 600) return 2; // tablet
-      return 1; // mobile
-    }
+
+  int _calculateColumns(double width) {
+    if (width >= 1900) return 5; // ultrawide
+    if (width >= 1500) return 4; // 27"
+    if (width >= 1200) return 3; // 24"
+    if (width >= 600) return 2; // tablet
+    return 1; // mobile
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,18 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
           )
           .toList();
     }
-      final horizontalPadding = screenWidth >= 1600
-          ? 120.0
-          : screenWidth >= 1200
-              ? 80.0
-              : screenWidth >= 800
-                  ? 40.0
-                  : 16.0;
+    final horizontalPadding = screenWidth >= 1600
+        ? 120.0
+        : screenWidth >= 1200
+        ? 80.0
+        : screenWidth >= 800
+        ? 40.0
+        : 16.0;
     return Scaffold(
-      appBar: const MainAppBar(title: 'Traveler Cities'),
-      body:
-
-      Padding(
+      appBar: const MainAppBar(title: 'Traveler'),
+      body: Padding(
         padding: EdgeInsets.fromLTRB(
           horizontalPadding,
           0,
@@ -85,7 +86,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        showTopCities = true;
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: showTopCities
+                          ? Colors.white
+                          : Colors.blue,
+                      backgroundColor: showTopCities
+                          ? Colors.blue
+                          : Colors.transparent,
+                    ),
+                    child: const Text('Top Cities'),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        showTopCities = false;
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: showTopCities
+                          ? Colors.blue
+                          : Colors.white,
+                      backgroundColor: showTopCities
+                          ? Colors.transparent
+                          : Colors.blue,
+                    ),
+                    child: const Text('For You'),
+                  ),
+                ],
+              ),
+            ),
+
             // Search Box
+            if (showTopCities)
             Padding(
               padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Row(
@@ -235,67 +279,63 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             // Cities Grid
             Expanded(
-              child: cityProvider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : filteredCities.isEmpty
-                  ? const Center(
-                      child: Text('No cities available. Try searching!'),
-                    )
-                  : ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(
-                        context,
-                      ).copyWith(scrollbars: false),
-                      child: GridView.builder(
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: columns,
-                              crossAxisSpacing: 15.0,
-                              mainAxisSpacing: 15.0,
-                              // mainAxisExtent: 430,
-                              childAspectRatio: 0.8
+  child: showTopCities
+      // Top Cities Grid
+      ? (cityProvider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : filteredCities.isEmpty
+              ? const Center(child: Text('No cities available. Try searching!'))
+              : ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: columns,
+                      crossAxisSpacing: 15.0,
+                      mainAxisSpacing: 15.0,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemCount: filteredCities.length,
+                    itemBuilder: (context, index) {
+                      final city = filteredCities[index];
 
-                            ),
-                        itemCount: filteredCities.length,
-                        itemBuilder: (context, index) {
-                          final city = filteredCities[index];
-
-                          return CityCard(
-                            city: city,
-                            onFavoriteToggle: () {
-                              final isFavorite = userProvider.favoriteCities
-                                  .contains(city.id);
-                              if (isFavorite) {
-                                userProvider.removeFavorite(city.id);
-                              } else {
-                                userProvider.addFavorite(city.id);
-                              }
-                            },
-                            onBookmarkToggle: () {
-                              final isWishlisted = userProvider.wishlistCities
-                                  .contains(city.id);
-                              if (isWishlisted) {
-                                userProvider.removeWishlist(city.id);
-                              } else {
-                                userProvider.addWishlist(city.id);
-                              }
-                            },
-                            onDelete: () {
-                              userProvider.deleteCity(city.id);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('City hidden')),
-                              );
-                            },
-                            onViewCityDetails: () {
-                              context.read<CityProvider>().setSelectedCity(
-                                city,
-                              );
-                              Navigator.pushNamed(context, '/city-details');
-                            },
+                      return CityCard(
+                        city: city,
+                        onFavoriteToggle: () {
+                          final isFavorite = userProvider.favoriteCities.contains(city.id);
+                          if (isFavorite) {
+                            userProvider.removeFavorite(city.id);
+                          } else {
+                            userProvider.addFavorite(city.id);
+                          }
+                        },
+                        onBookmarkToggle: () {
+                          final isWishlisted = userProvider.wishlistCities.contains(city.id);
+                          if (isWishlisted) {
+                            userProvider.removeWishlist(city.id);
+                          } else {
+                            userProvider.addWishlist(city.id);
+                          }
+                        },
+                        onDelete: () {
+                          userProvider.deleteCity(city.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('City hidden')),
                           );
                         },
-                      ),
-                    ),
-            ),
+                        onViewCityDetails: () {
+                          context.read<CityProvider>().setSelectedCity(city);
+                          Navigator.pushNamed(context, '/city-details');
+                        },
+                      );
+                    },
+                  ),
+                ))
+      // Recommended Cities List/Grid
+      : userProvider.currentUserId != null
+          ? RecommendedCitiesList(userId: userProvider.currentUserId!)
+          : const Center(child: Text("User not logged in")),
+),
+
           ],
         ),
       ),
