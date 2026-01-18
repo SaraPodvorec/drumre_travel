@@ -4,6 +4,7 @@ import 'package:frontend/models/review.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/activity_provider.dart';
 import 'package:frontend/providers/city_provider.dart';
+import 'package:frontend/providers/social_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/other_user_profile_screen.dart';
@@ -654,9 +655,10 @@ class _CityDetailsScreenState extends State<CityDetailsScreen> {
                 shape: const CircleBorder(),
                 child: InkWell(
                   customBorder: const CircleBorder(),
-                  onTap: () {
+                  onTap: () async{
                     print("cureent user ${userProvider.currentUserId} i review.user ${review.userId}");
                     if (review.userId != userProvider.currentUserId) {
+                      await context.read<SocialProvider>().loadUsers();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
