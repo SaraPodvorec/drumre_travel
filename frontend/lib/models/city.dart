@@ -1,3 +1,5 @@
+import 'package:frontend/models/friends_impression.dart';
+
 class City {
   final String id;
   final String name; 
@@ -20,6 +22,8 @@ class City {
   final String? currency;
   final String? language;
 
+  final FriendsImpression? friendsImpression;
+  
   City({
     required this.id,
     required this.name,
@@ -41,6 +45,7 @@ class City {
     this.population,
     this.currency,
     this.language,
+    this.friendsImpression
   });
 
   factory City.fromJson(Map<String, dynamic> json) {
@@ -66,7 +71,10 @@ class City {
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', // MOCK
       population: (json['population'] as num?)?.toInt(), 
       currency: json['currency'] as String?,              
-      language: json['language'] as String?,        
+      language: json['language'] as String?,
+      friendsImpression: json['friendsImpression'] != null 
+          ? FriendsImpression.fromJson(json['friendsImpression']) 
+          : null,        
     );
   }
 

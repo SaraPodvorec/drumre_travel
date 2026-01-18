@@ -21,6 +21,19 @@ class CityCard extends StatelessWidget {
     this.onViewCityDetails,
   });
 
+  Widget _ratingItem(IconData icon, Color color, String value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 18, color: color),
+        const SizedBox(width: 4),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +49,9 @@ class CityCard extends StatelessWidget {
     final scale = accessibility.textScale;
 
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaler: TextScaler.linear(scale),
-      ),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: TextScaler.linear(scale)),
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -50,7 +63,7 @@ class CityCard extends StatelessWidget {
             children: [
               // Image
               AspectRatio(
-                aspectRatio: 4/3,
+                aspectRatio: 4 / 3,
                 child: Image.network(
                   city.imageUrl,
                   fit: BoxFit.cover,
@@ -60,7 +73,7 @@ class CityCard extends StatelessWidget {
                   ),
                 ),
               ),
-      
+
               // Content (scrollable if needed)
               Padding(
                 padding: const EdgeInsets.all(12),
@@ -74,9 +87,7 @@ class CityCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             city.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w600),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -115,9 +126,9 @@ class CityCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                
+
                     const SizedBox(height: 12),
-                
+
                     // Location + rating
                     Row(
                       children: [
@@ -142,9 +153,79 @@ class CityCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                
+
                     const SizedBox(height: 18),
-                
+                    const SizedBox(height: 18),
+                    if (city.friendsImpression != null) ...[
+                      const Divider(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 16.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.group,
+                                  size: 18,
+                                  color: Colors.blue,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "Average Friends' Impression",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.blue.shade700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              alignment: WrapAlignment.start,
+                              spacing: 20,
+                              runSpacing: 12,
+                              children: [
+                                _ratingItem(
+                                  Icons.star,
+                                  Colors.amber.shade600,
+                                  city.friendsImpression!.avgImpression
+                                      .toStringAsFixed(1),
+                                ),
+                                _ratingItem(
+                                  Icons.people,
+                                  Colors.cyan.shade600,
+                                  city.friendsImpression!.avgPeople
+                                      .toStringAsFixed(1),
+                                ),
+                                _ratingItem(
+                                  Icons.attractions,
+                                  Colors.deepPurpleAccent,
+                                  city.friendsImpression!.avgSights
+                                      .toStringAsFixed(1),
+                                ),
+                                _ratingItem(
+                                  Icons.security,
+                                  Colors.green.shade600,
+                                  city.friendsImpression!.avgSafety
+                                      .toStringAsFixed(1),
+                                ),
+                                _ratingItem(
+                                  Icons.attach_money,
+                                  Colors.orange.shade600,
+                                  city.friendsImpression!.avgAffordability
+                                      .toStringAsFixed(1),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     // View details button
                     SizedBox(
                       width: double.infinity,

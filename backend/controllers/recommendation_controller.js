@@ -6,10 +6,38 @@ export const getRecommendedCities = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        const user = await User.findById(userId);
+        // 1. Fetch user and their following list
+        const user = await User.findById(userId).select('onboardingPreferences deletedCities favoriteCities following');
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const { continents, citySize, impressionPreference } = user.onboardingPreferences;
+
+        // 2. Aggregate friends' impressions and individual category scores
+        // We calculate the average of all metrics for friends who rated the city > 3
+        const friendStats = await CityReview.aggregate([
+            { 
+                $match: { 
+                    userId: { $in: user.following }, 
+                    impression: { $gt: 3 } 
+                } 
+            },
+            {
+                $group: {
+                    _id: "$cityId",
+                    avgFriendImpression: { $avg: "$impression" },
+                    avgFriendPeople: { $avg: "$people" },
+                    avgFriendSights: { $avg: "$sights" },
+                    avgFriendSafety: { $avg: "$safety" },
+                    avgFriendAffordability: { $avg: "$affordability" }
+                }
+            }
+        ]);
+
+        // Create a lookup map for easy access
+        const friendRatingMap = friendStats.reduce((acc, curr) => {
+            acc[curr._id.toString()] = curr;
+            return acc;
+        }, {});
 
         let query = {
             _id: { $nin: [...user.deletedCities, ...user.favoriteCities] }
@@ -19,13 +47,12 @@ export const getRecommendedCities = async (req, res) => {
             query.continent = { $in: continents };
         }
 
+        // Apply population filters
         if (citySize === 'small') query.population = { $lt: 1000000 };
         else if (citySize === 'medium') query.population = { $gte: 1000000, $lt: 4000000 };
         else if (citySize === 'large') query.population = { $gte: 4000000 };
 
         const potentialCities = await City.find(query).limit(50);
-
-        console.log("Potential cities: ", potentialCities);
 
         const recommendations = await Promise.all(potentialCities.map(async (city) => {
             const stats = await CityReview.aggregate([
@@ -45,20 +72,40 @@ export const getRecommendedCities = async (req, res) => {
             let score = 0;
             if (stats.length > 0) {
                 const s = stats[0];
-                // Base score from general impression
                 score += s.avgImpression;
 
-                // Weighted score: Double the weight for the user's specific preference
                 if (impressionPreference === 'people') score += (s.avgPeople * 2);
                 if (impressionPreference === 'sights') score += (s.avgSights * 2);
                 if (impressionPreference === 'safety') score += (s.avgSafety * 2);
                 if (impressionPreference === 'affordability') score += (s.avgAffordability * 2);
             } else {
-                // If no reviews yet, use popularity as a fallback score
-                score = city.popularity / 10; 
+                score = city.popularity / 10;
             }
 
-            return { ...city.toObject(), recommendationScore: score };
+            // 3. Apply Social Bonus and attach Friend Data
+            const fData = friendRatingMap[city._id.toString()];
+            let friendsImpression = null;
+
+            if (fData) {
+                // Calculation: Proportional boost based on how far above 3 the rating is
+                const multiplier = 1 + (fData.avgFriendImpression - 3) * 0.25;
+                score *= multiplier;
+
+                // Format the scores to return to the frontend
+                friendsImpression = {
+                    avgImpression: fData.avgFriendImpression,
+                    avgPeople: fData.avgFriendPeople,
+                    avgSights: fData.avgFriendSights,
+                    avgSafety: fData.avgFriendSafety,
+                    avgAffordability: fData.avgFriendAffordability
+                };
+            }
+
+            return { 
+                ...city.toObject(), 
+                recommendationScore: score,
+                friendsImpression // This will be null if no friends rated it > 3
+            };
         }));
 
         const sortedResults = recommendations
