@@ -29,7 +29,7 @@ class _CityFilterPanelState extends State<CityFilterPanel> {
   ];
 
   final Map<String, String> sortOptions = {
-    'temperature': 'Temperature',
+    //'temperature': 'Temperature',
     //'popularity': 'Popularity',
     'impression': 'Impression',
     'people': 'People',
