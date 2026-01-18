@@ -4,6 +4,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/widgets/city_card.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
+import 'city_details_screen.dart';
 
 class RecommendedCitiesScreen extends StatelessWidget {
   const RecommendedCitiesScreen({super.key});
@@ -43,12 +44,23 @@ class RecommendedCitiesScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   itemCount: citiesData.length,
                   itemBuilder: (context, index) {
+                    final city = citiesData[index];
                     return Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 600),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          child: CityCard(city: citiesData[index]),
+                          child: CityCard(
+                            city: city,
+                            onViewCityDetails: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CityDetailsScreen(city: city),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );
