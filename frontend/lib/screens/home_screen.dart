@@ -130,131 +130,135 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Search Box
             if (showTopCities)
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search for a city...',
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: _searchQuery != null
-                            ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    _searchQuery = null;
-                                    _searchController.clear();
-                                  });
-                                },
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Search for a city...',
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: _searchQuery != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _searchQuery = null;
+                                      _searchController.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value.isEmpty ? null : value;
+                          });
+                        },
+                        onSubmitted: (value) async {
+                          if (value.isNotEmpty) {
+                            final city = await context
+                                .read<CityProvider>()
+                                .searchCity(value);
+                            if (city != null) {
+                              setState(() {
+                                _searchQuery = value;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('${city.name} added to list!'),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Failed to find city, check your spelling or try to search for another one!',
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      height: 56,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          if (_searchController.text.isNotEmpty) {
+                            final city = await context
+                                .read<CityProvider>()
+                                .searchCity(_searchController.text);
+                            if (city != null) {
+                              setState(() {
+                                _searchQuery = _searchController.text;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('${city.name} added to list!'),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Failed to find city, check your spelling or try to search for another one!',
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        icon: cityProvider.isSearching
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
-                            : null,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                            : const Icon(Icons.search),
+                        label: const Text('Search'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      height: 56,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _showFilters = !_showFilters;
+                          });
+                        },
+                        icon: Icon(
+                          _showFilters
+                              ? Icons.filter_alt_off
+                              : Icons.filter_alt,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
+                        label: Text(
+                          _showFilters ? 'Hide Filters' : 'Show Filters',
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _activeFilters.isEmpty
+                              ? null
+                              : Colors.blue,
                         ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value.isEmpty ? null : value;
-                        });
-                      },
-                      onSubmitted: (value) async {
-                        if (value.isNotEmpty) {
-                          final city = await context
-                              .read<CityProvider>()
-                              .searchCity(value);
-                          if (city != null) {
-                            setState(() {
-                              _searchQuery = value;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${city.name} added to list!'),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  cityProvider.error ?? 'Failed to find city',
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      },
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    height: 56,
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        if (_searchController.text.isNotEmpty) {
-                          final city = await context
-                              .read<CityProvider>()
-                              .searchCity(_searchController.text);
-                          if (city != null) {
-                            setState(() {
-                              _searchQuery = _searchController.text;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${city.name} added to list!'),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  cityProvider.error ?? 'Failed to find city',
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      icon: cityProvider.isSearching
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.search),
-                      label: const Text('Search'),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    height: 56,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _showFilters = !_showFilters;
-                        });
-                      },
-                      icon: Icon(
-                        _showFilters ? Icons.filter_alt_off : Icons.filter_alt,
-                      ),
-                      label: Text(
-                        _showFilters ? 'Hide Filters' : 'Show Filters',
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _activeFilters.isEmpty
-                            ? null
-                            : Colors.blue,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
             // Filter Panel
             if (_showFilters)
@@ -279,63 +283,78 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             // Cities Grid
             Expanded(
-  child: showTopCities
-      // Top Cities Grid
-      ? (cityProvider.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : filteredCities.isEmpty
-              ? const Center(child: Text('No cities available. Try searching!'))
-              : ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: columns,
-                      crossAxisSpacing: 15.0,
-                      mainAxisSpacing: 15.0,
-                      childAspectRatio: 0.8,
-                    ),
-                    itemCount: filteredCities.length,
-                    itemBuilder: (context, index) {
-                      final city = filteredCities[index];
+              child: showTopCities
+                  // Top Cities Grid
+                  ? (cityProvider.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : filteredCities.isEmpty
+                        ? const Center(
+                            child: Text('No cities available. Try searching!'),
+                          )
+                        : ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(
+                              context,
+                            ).copyWith(scrollbars: false),
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: columns,
+                                    crossAxisSpacing: 15.0,
+                                    mainAxisSpacing: 15.0,
+                                    childAspectRatio: 0.8,
+                                  ),
+                              itemCount: filteredCities.length,
+                              itemBuilder: (context, index) {
+                                final city = filteredCities[index];
 
-                      return CityCard(
-                        city: city,
-                        onFavoriteToggle: () {
-                          final isFavorite = userProvider.favoriteCities.contains(city.id);
-                          if (isFavorite) {
-                            userProvider.removeFavorite(city.id);
-                          } else {
-                            userProvider.addFavorite(city.id);
-                          }
-                        },
-                        onBookmarkToggle: () {
-                          final isWishlisted = userProvider.wishlistCities.contains(city.id);
-                          if (isWishlisted) {
-                            userProvider.removeWishlist(city.id);
-                          } else {
-                            userProvider.addWishlist(city.id);
-                          }
-                        },
-                        onDelete: () {
-                          userProvider.deleteCity(city.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('City hidden')),
-                          );
-                        },
-                        onViewCityDetails: () {
-                          context.read<CityProvider>().setSelectedCity(city);
-                          Navigator.pushNamed(context, '/city-details');
-                        },
-                      );
-                    },
-                  ),
-                ))
-      // Recommended Cities List/Grid
-      : userProvider.currentUserId != null
-          ? RecommendedCitiesList(userId: userProvider.currentUserId!)
-          : const Center(child: Text("User not logged in")),
-),
-
+                                return CityCard(
+                                  city: city,
+                                  onFavoriteToggle: () {
+                                    final isFavorite = userProvider
+                                        .favoriteCities
+                                        .contains(city.id);
+                                    if (isFavorite) {
+                                      userProvider.removeFavorite(city.id);
+                                    } else {
+                                      userProvider.addFavorite(city.id);
+                                    }
+                                  },
+                                  onBookmarkToggle: () {
+                                    final isWishlisted = userProvider
+                                        .wishlistCities
+                                        .contains(city.id);
+                                    if (isWishlisted) {
+                                      userProvider.removeWishlist(city.id);
+                                    } else {
+                                      userProvider.addWishlist(city.id);
+                                    }
+                                  },
+                                  onDelete: () {
+                                    userProvider.deleteCity(city.id);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('City hidden'),
+                                      ),
+                                    );
+                                  },
+                                  onViewCityDetails: () {
+                                    context
+                                        .read<CityProvider>()
+                                        .setSelectedCity(city);
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/city-details',
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ))
+                  // Recommended Cities List/Grid
+                  : userProvider.currentUserId != null
+                  ? RecommendedCitiesList(userId: userProvider.currentUserId!)
+                  : const Center(child: Text("User not logged in")),
+            ),
           ],
         ),
       ),
