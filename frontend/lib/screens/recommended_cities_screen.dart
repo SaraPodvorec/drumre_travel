@@ -39,12 +39,10 @@ class RecommendedCitiesScreen extends StatelessWidget {
 
                 final citiesData = snapshot.data ?? [];
 
-                // ListView now takes up the FULL width
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   itemCount: citiesData.length,
                   itemBuilder: (context, index) {
-                    // Every item is wrapped in a Center + ConstrainedBox
                     return Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 600),
