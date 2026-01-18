@@ -12,7 +12,8 @@ class UserProvider extends ChangeNotifier {
   bool isLoading = false;
   String? error;
 
- User? currentUser;
+  User? currentUser;
+  String? currentUserId;
 
   bool _onboardingCompleted = false;
   bool _initialized = false;
@@ -49,7 +50,7 @@ class UserProvider extends ChangeNotifier {
         (data['deletedCities'] as List?)?.map((c) => c.toString()) ?? []
       );
       _onboardingCompleted = data['onboardingCompleted'] == true;
-      currentUser = User.fromJson(data);
+      currentUserId = data['user_id'];
       error = null;
     } catch (e) {
       error = e.toString();

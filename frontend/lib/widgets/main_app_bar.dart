@@ -31,6 +31,54 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   TextButton(
                     onPressed: () {
+                      Navigator.pushNamed(context, '/friends-activity');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.white,
+                            width: 2.5, 
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Friends activity',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/recommended-cities');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.white,
+                            width: 2.5, 
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Cities for you',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  TextButton(
+                    onPressed: () {
                       Navigator.pushNamed(context, '/discover-users');
                     },
                     child: Container(

@@ -11,6 +11,7 @@ import 'package:frontend/screens/leave_review_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/onboarding_screen.dart';
 import 'package:frontend/screens/city_details_screen.dart';
+import 'package:frontend/screens/recommended_cities_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/city_provider.dart';
@@ -157,6 +158,8 @@ class App extends StatelessWidget {
                 return LeaveReviewScreen(initialCityName: initialCity);
               },
               '/discover-users': (context) => const UsersScreen(),
+              '/recommended-cities': (context) => RecommendedCitiesScreen(),
+              // '/friends-activity': (context) => Frien
             },
           ),
         );
