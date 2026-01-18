@@ -190,9 +190,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     continentCard('Europe', '🇪🇺'),
                     continentCard('Asia', '🌏'),
                     continentCard('Africa', '🌍'),
-                    continentCard('North America', '🌎'),
-                    continentCard('South America', '🗺️'),
-                    continentCard('Oceania', '🏝️'),
+                    continentCard('America', '🌎'),
+                    continentCard('Australia', '🏝️'),
                   ]),
 
                   const SizedBox(height: 32),
