@@ -96,7 +96,8 @@ export async function getReviewsByCity(req, res) {
       sights: review.sights,
       safety: review.safety,
       affordability: review.affordability,
-      comments: review.comments
+      comments: review.comments,
+      createdAt: review.createdAt
     }));
     res.status(200).json(response);
     } catch (error) {
