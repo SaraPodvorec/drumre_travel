@@ -132,4 +132,23 @@ class CityProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  Future<void> loadCitiesByImpressionDesc() async {
+  isLoading = true;
+  error = null;
+  notifyListeners();
+
+  try {
+    cities = await _cityService.fetchCitiesWithFilters({
+      'sort': 'impression',
+      'order': 'desc',
+    });
+  } catch (e) {
+    error = 'Failed to load cities: $e';
+    print('Error loading cities by impression: $e');
+  }
+
+  isLoading = false;
+  notifyListeners();
+}
+
 }
